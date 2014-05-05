@@ -4,6 +4,8 @@
  */
 package connectfour;
 
+import Gui.Lobby;
+
 /**
  *
  * @author bmoor
@@ -15,5 +17,6 @@ public class ConnectFour {
      */
     public static void main(String[] args) {
         // Open game connectFour
+        Lobby l = new Lobby();
     }
 }
