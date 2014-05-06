@@ -8,7 +8,7 @@ import Gui.Lobby;
 
 /**
  *
- * @author bmoor
+ * @author bmoor, ystuder and mleonini
  */
 public class ConnectFour {
 
