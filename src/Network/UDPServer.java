@@ -20,7 +20,7 @@ import javax.swing.Timer;
 public class UDPServer implements Runnable {
     public static int udpServerPortNb = 4444;
     public static int responseWaitTime = 3000;
-    public static String initCode = "Battleship";
+    public static String initCode = "Connectfour";
     public boolean running;
     public String gameName;
     public Lobby lobbyPtr;
@@ -102,9 +102,9 @@ public class UDPServer implements Runnable {
             InterfaceAddress netI = (InterfaceAddress)JOptionPane.showInputDialog(null, "Select Interface", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, networkInterface.getInterfaceAddresses().toArray(), null);
             int subnetPrefix = netI.getNetworkPrefixLength();
             int subnetMask = 0;
-            int networkAdr;
+            int networkAdr;            
             if(subnetPrefix < 0) {
-                String str = JOptionPane.showInputDialog("Enter Network Mask Prefix");
+                String str = JOptionPane.showInputDialog("Enter Network Mask Prefix"); //For Hslu network it should be 19, iguess?
                 Integer ii = new Integer(str);
                 subnetPrefix = ii.intValue();
             }

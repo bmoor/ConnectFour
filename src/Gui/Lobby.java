@@ -228,7 +228,8 @@ public class Lobby extends JFrame
     
     public void HostGame()
     {
-
+        String gameName = JOptionPane.showInputDialog("New Game Name:");
+        StartGameServer(gameName);
     }
     
     public void SetGUIMode(boolean enable)

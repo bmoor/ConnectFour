@@ -15,8 +15,7 @@ public class ConnectFour {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        //test
+    public static void main(String[] args) {        
         // Open game connectFour
         Lobby l = new Lobby();
     }
