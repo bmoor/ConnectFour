@@ -15,7 +15,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author HP
+ * 
  */
 public class UDPServer implements Runnable {
     public static int udpServerPortNb = 4444;
