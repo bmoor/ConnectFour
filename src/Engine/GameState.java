@@ -35,7 +35,7 @@ public class GameState
         return field[x][y];
     }
 
-    public void setField(int x, int y, State state)
+    public void setStone(int x, int y, State state)
     {
         field[x][y]=state;
     }
