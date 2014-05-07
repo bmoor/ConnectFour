@@ -8,7 +8,7 @@ import Engine.GameState.State;
 
 /**
  *
- * @author bmoor
+ * @author Yves Studer
  */
 public class Game
 {
@@ -23,7 +23,62 @@ public class Game
     {
         field = new GameState(fieldXsize, fieldYsize);
     }
-
+    
+    /**
+     * Method is used to inform about a new game-size
+     * @author Yves Studer
+     * @param newX new counts of x stones
+     * @param newY new counts of y stones
+     */ 
+    public void resizeField(int newX, int newY)
+    {
+        fieldXsize = newX;
+        fieldYsize = newY;
+        field = new GameState(fieldXsize, fieldYsize);
+    }
+    
+    /**
+     * Method is used to inform about the new turn from UI
+     * @author Yves Studer
+     * @param uiTurn DataTransport-Objet with the new turn
+     */    
+    public void UiTurnPreformed(DataTransport uiTurn)
+    {
+        int x = uiTurn.getX();
+        int y=0;
+        for( ; y<fieldYsize ; y++)
+        {
+            if(field.getStone(y, x) == State.EMPTY)
+                break;
+        }
+        field.setStone(y, x, State.MINE);
+        TestIfWon();
+    }
+      
+    /**
+     * Method is used to inform about the new turn from the other player
+     * @author Yves Studer
+     * @param tcpTurn DataTransport-Objet with the new turn
+     */  
+    public void TcpTurnPreformed(DataTransport tcpTurn)
+    {
+        int x = tcpTurn.getX();
+        int y=0;
+        for( ; y<fieldYsize ; y++)
+        {
+            if(field.getStone(y, x) == State.EMPTY)
+                break;
+        }
+        field.setStone(y, x, State.OTHER);
+        TestIfWon();
+    }
+    
+    /**
+     * Method to detect if a player has won. This method tests all cobinations:
+     * on X-Axis, on Y-Axis and both diagonal-directions
+     * @author Yves Studer
+     * @return returns -1 if we lost, 1 if we won and otherwise 0
+     */  
     private int TestIfWon()
     {
         int tmp = TestWinOnXaxis();
@@ -38,6 +93,11 @@ public class Game
         return tmp;
     }
 
+    /**
+     * Method to detect if a player has won with 4 in series on X-axis
+     * @author Yves Studer
+     * @return returns -1 if we lost, 1 if we won and otherwise 0
+     */ 
     private int TestWinOnXaxis()
     {
         int mySuccessCounter = 0;
@@ -87,6 +147,12 @@ public class Game
         return 0;
     }
 
+    
+    /**
+     * Method to detect if a player has won with 4 in series on Y-axis
+     * @author Yves Studer
+     * @return returns -1 if we lost, 1 if we won and otherwise 0
+     */
     private int TestWinOnYaxis()
     {
         int mySuccessCounter = 0;
@@ -135,6 +201,13 @@ public class Game
         return 0;
     }
 
+    
+    /**
+     * Method to detect if a player has won with 4 in diagonal direction.
+     * This Method tests both diagonal directions.
+     * @author Yves Studer
+     * @return returns -1 if we lost, 1 if we won and otherwise 0
+     */
     public int TestWinOnDiagAxis()
     {
         int mySuccessCounter = 0;
