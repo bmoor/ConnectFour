@@ -35,6 +35,7 @@ public class Lobby extends JFrame
     private JButton btnRefresh;
     private JButton btnRefreshIP;
     private JButton btnJoinGameAI;
+    private JButton btnLoadGame;
     private JButton btnJoinGameIP;
     private ArrayList<GameInfo> gameList;
     private UDPServer broadcastServer;
@@ -45,7 +46,7 @@ public class Lobby extends JFrame
     public Lobby()
     {
         //Window Settings
-        super("Lobby - ConnecFour");
+        super("Lobby - ConnectFour");
         
         //Initialize Components
         InitializeComponents();
@@ -147,6 +148,16 @@ public class Lobby extends JFrame
         });
         pnlButtons.add(btnJoinGameAI, BorderLayout.EAST);
         
+        // Button Load Game
+        btnLoadGame = new JButton("Load Game");
+        btnLoadGame.setSize(50, 250);
+        btnLoadGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               // TODO: Load Game here
+            }
+        });
+        pnlButtons.add(btnLoadGame, BorderLayout.EAST);
         
         // Button Refresh List
         btnRefresh = new JButton("Refresh List using Broadcast");

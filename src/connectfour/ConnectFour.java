@@ -9,7 +9,7 @@ import Gui.Field;
 
 /**
  *
- * @author bmoor
+ * @author bmoor, ystuder and mleonini
  */
 public class ConnectFour {
 
