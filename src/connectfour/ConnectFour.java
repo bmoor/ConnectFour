@@ -5,6 +5,7 @@
 package connectfour;
 
 import Gui.Lobby;
+import Gui.Field;
 
 /**
  *
@@ -16,7 +17,8 @@ public class ConnectFour {
      * @param args the command line arguments
      */
     public static void main(String[] args) {        
-        // Open game connectFour
+        //Open game connectFour
         Lobby l = new Lobby();
+        //Field f = new Field();
     }
 }
