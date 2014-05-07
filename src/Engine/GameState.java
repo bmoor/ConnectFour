@@ -30,7 +30,7 @@ public class GameState
         }
     }
     
-    public State getField(int x, int y)
+    public State getStone(int x, int y)
     {
         return field[x][y];
     }
