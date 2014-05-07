@@ -13,7 +13,12 @@ package Engine;
 public class DataTransport
 {
     private int x = 0;
-
+    
+    public DataTransport(int x)
+    {
+        this.x=x;
+    }
+    
     public int getX()
     {
         return x;
