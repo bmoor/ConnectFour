@@ -5,6 +5,7 @@
 package Engine;
 
 import Engine.GameState.State;
+import Gui.Field;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -23,6 +24,7 @@ public class Game
     }
     GameState field;
     Opponent opponent;
+    Field UI;
     int fieldXsize = 7;
     int fieldYsize = 6;
     boolean won = false;
@@ -32,6 +34,8 @@ public class Game
     {
         field = new GameState(fieldYsize, fieldXsize);
         this.opponent = opponent;
+        //ToDo    
+        //UI = new Field(this);
     }
 
     /**
@@ -97,6 +101,20 @@ public class Game
         //ToDo Inform the Field
     }
 
+    private void TurnPreformed(DataTransport uiTurn, State actor)
+    {        
+        int x = uiTurn.getX();
+        int y = 0;
+        for (; y < fieldYsize; y++)
+        {
+            if (field.getStone(y, x) == State.EMPTY)
+                break;
+        }
+        field.setStone(y, x, actor);
+        TestIfWon();
+        //ToDo inform Field if won / lost
+    
+    }
     /**
      * Method is used to inform about the new turn from UI
      *
@@ -105,18 +123,7 @@ public class Game
      */
     public void UiTurnPreformed(DataTransport uiTurn)
     {
-        int x = uiTurn.getX();
-        int y = 0;
-        for (; y < fieldYsize; y++)
-        {
-            if (field.getStone(y, x) == State.EMPTY)
-            {
-                break;
-            }
-        }
-        field.setStone(y, x, State.MINE);
-        TestIfWon();
-        //ToDo inform Field if won / lost
+        TurnPreformed(uiTurn, State.MINE);
     }
 
     /**
@@ -127,18 +134,7 @@ public class Game
      */
     public void TcpTurnPreformed(DataTransport tcpTurn)
     {
-        int x = tcpTurn.getX();
-        int y = 0;
-        for (; y < fieldYsize; y++)
-        {
-            if (field.getStone(y, x) == State.EMPTY)
-            {
-                break;
-            }
-        }
-        field.setStone(y, x, State.OTHER);
-        TestIfWon();
-        //ToDo inform Field if won / lost
+        TurnPreformed(tcpTurn, State.OTHER);
     }
 
     /**
