@@ -20,7 +20,6 @@ public class Game
 
     public enum Opponent
     {
-
         HUMAN, AI
     }
     GameState field;
@@ -37,9 +36,7 @@ public class Game
         field = new GameState(fieldYsize, fieldXsize);
         this.opponent = opponent;
         if (opponent == Opponent.AI)
-        {
             ai = new Ghost();
-        }
         else
         {
             //ToDo create TCP-Socket
@@ -71,9 +68,7 @@ public class Game
     public void storeGame(String path)
     {
         if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
-        {
             return;
-        }
 
         try (FileOutputStream aFileOutputStream = new FileOutputStream(path);
                 ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream))
@@ -96,10 +91,8 @@ public class Game
     public void restoreGame(String path)
     {
         if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
-        {
             return;
-        }
-
+ 
         try (FileInputStream aFileInputStream = new FileInputStream(path);
                 ObjectInputStream aObjectInputStream = new ObjectInputStream(aFileInputStream))
         {
@@ -151,7 +144,7 @@ public class Game
         TurnPreformed(uiTurn, State.MINE);
         if (opponent == Opponent.AI)
         {
-            TurnPreformed(ai.DoTurn(field), State.OTHER);
+            TurnPreformed(ai.DoTurn(field), State.OTHER); 
             field.setMyTurn(true);
             //ToDo inform the ui 
         }
@@ -334,13 +327,13 @@ public class Game
                             xx = (fieldXsize - 1) - x;
                         }
 
-                        if ((y > (fieldYsize - 1)))
+                        if (y > (fieldYsize - 1) )
                         {
                             continue;
                         }
 
                         System.out.print("" + xx + " " + yy + "   ");
-                        State currentFieldPart = field.getStone(xx, yy);
+                        State currentFieldPart = field.getStone(yy, xx);
                         if (currentFieldPart == State.OTHER)
                         {
                             otherSuccessCounter++;
