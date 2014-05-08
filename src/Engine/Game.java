@@ -26,14 +26,12 @@ public class Game
     Opponent opponent;
     Ghost ai;
     Field ui;
-    int fieldXsize = 7;
-    int fieldYsize = 6;
     boolean won = false;
     boolean lost = false;
 
     public Game(Opponent opponent)
     {
-        field = new GameState(fieldYsize, fieldXsize);
+        field = new GameState(6, 7);
         this.opponent = opponent;
         if (opponent == Opponent.AI)
             ai = new Ghost();
@@ -54,9 +52,7 @@ public class Game
      */
     public void resizeField(int newY, int newX)
     {
-        fieldXsize = newX;
-        fieldYsize = newY;
-        field = new GameState(fieldYsize, fieldXsize);
+        field = new GameState(newY, newX);
     }
 
     /**
@@ -119,7 +115,7 @@ public class Game
     {
         int x = uiTurn.getX();
         int y = 0;
-        for (; y < fieldYsize; y++)
+        for (; y < field.getYsize(); y++)
         {
             if (field.getStone(y, x) == State.EMPTY)
             {
@@ -198,9 +194,9 @@ public class Game
     {
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
-        for (int y = 0; y < fieldYsize; y++)
+        for (int y = 0; y < field.getYsize(); y++)
         {
-            for (int x = 0; x < fieldXsize; x++)
+            for (int x = 0; x < field.getXsize(); x++)
             {
                 System.out.print("" + x + " " + y + "   ");
                 State currentFieldPart = field.getStone(y, x);
@@ -253,9 +249,9 @@ public class Game
     {
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
-        for (int x = 0; x < fieldXsize; x++)
+        for (int x = 0; x < field.getXsize(); x++)
         {
-            for (int y = 0; y < fieldYsize; y++)
+            for (int y = 0; y < field.getYsize(); y++)
             {
                 State currentFieldPart = field.getStone(y, x);
                 if (currentFieldPart == State.OTHER)
@@ -305,16 +301,18 @@ public class Game
      */
     public int TestWinOnDiagAxis()
     {
+        final int xSize =  field.getXsize();
+        final int ySize =  field.getYsize();
         //ToDo optimise the mechanism by add -3 on y- and x-loop
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int i = 0; i < 2; i++) //used for both diagonal directions
         {
-            for (int yt = 0; yt < fieldYsize; yt++) // y-loop
+            for (int yt = 0; yt < ySize; yt++) // y-loop
             {
-                for (int xt = 0; xt < fieldXsize; xt++) // x-loop
+                for (int xt = 0; xt < xSize; xt++) // x-loop
                 {
-                    for (int y = yt, x = xt; x < fieldXsize; x++, y++) // diagonal-loop
+                    for (int y = yt, x = xt; x < xSize; x++, y++) // diagonal-loop
                     {
                         int yy = y;
                         int xx;
@@ -324,10 +322,10 @@ public class Game
                         }
                         else
                         {
-                            xx = (fieldXsize - 1) - x;
+                            xx = (xSize - 1) - x;
                         }
 
-                        if (y > (fieldYsize - 1) )
+                        if (y > (ySize - 1) )
                         {
                             continue;
                         }
