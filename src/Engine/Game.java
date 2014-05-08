@@ -88,7 +88,7 @@ public class Game
             Object o = aObjectInputStream.readObject();
             aObjectInputStream.close();
 
-            GameState field = (GameState) o;
+            field = (GameState) o;
         }
         catch (Exception e)
         {
