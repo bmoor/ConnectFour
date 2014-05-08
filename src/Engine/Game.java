@@ -101,6 +101,14 @@ public class Game
         //ToDo Inform the Field
     }
 
+    
+    /**
+     * Method is used to inform about the new turn from UI
+     *
+     * @author Yves Studer
+     * @param uiTurn DataTransport-Objet with the new turn
+     * @param actor Source identification
+     */
     private void TurnPreformed(DataTransport uiTurn, State actor)
     {        
         int x = uiTurn.getX();
@@ -115,6 +123,7 @@ public class Game
         //ToDo inform Field if won / lost
     
     }
+    
     /**
      * Method is used to inform about the new turn from UI
      *
@@ -123,6 +132,7 @@ public class Game
      */
     public void UiTurnPreformed(DataTransport uiTurn)
     {
+        field.setMyTurn(false);
         TurnPreformed(uiTurn, State.MINE);
     }
 
@@ -134,6 +144,7 @@ public class Game
      */
     public void TcpTurnPreformed(DataTransport tcpTurn)
     {
+        field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
     }
 
