@@ -16,15 +16,22 @@ import java.io.ObjectOutputStream;
  */
 public class Game
 {
+    
+    public enum Opponent
+    {
+        HUMAN, AI
+    }
     GameState field;
+    Opponent opponent;
     int fieldXsize = 7;
     int fieldYsize = 6;
     boolean won = false;
     boolean lost = false;
 
-    public Game()
+    public Game(Opponent opponent)
     {
         field = new GameState(fieldYsize, fieldXsize);
+        this.opponent = opponent;
     }
 
     /**
@@ -49,6 +56,9 @@ public class Game
      */
     public void storeGame(String path)
     {
+        if(opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+            return;
+            
         try (FileOutputStream aFileOutputStream = new FileOutputStream(path);
                 ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream) )
         {
@@ -69,6 +79,9 @@ public class Game
      */
     public void restoreGame(String path)
     {
+        if(opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+            return;
+        
         try (FileInputStream aFileInputStream = new FileInputStream(path);
                 ObjectInputStream aObjectInputStream = new ObjectInputStream(aFileInputStream) )
         {
@@ -81,7 +94,7 @@ public class Game
         {
             System.out.println("Exception: " + e.getMessage());
         }
-        //ToDo
+        //ToDo Inform the Field
     }
 
     /**
@@ -103,6 +116,7 @@ public class Game
         }
         field.setStone(y, x, State.MINE);
         TestIfWon();
+        //ToDo inform Field if won / lost
     }
 
     /**
@@ -124,6 +138,7 @@ public class Game
         }
         field.setStone(y, x, State.OTHER);
         TestIfWon();
+        //ToDo inform Field if won / lost
     }
 
     /**
@@ -212,7 +227,6 @@ public class Game
     {
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
-        // y-Richtungs-Checker
         for (int x = 0; x < fieldXsize; x++)
         {
             for (int y = 0; y < fieldYsize; y++)
@@ -265,15 +279,16 @@ public class Game
      */
     public int TestWinOnDiagAxis()
     {
+        //ToDo optimise the mechanism by add -3 on y- and x-loop
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int i = 0; i < 2; i++) //used for both diagonal directions
         {
-            for (int yt = 0; yt < fieldYsize; yt++)
+            for (int yt = 0; yt < fieldYsize; yt++) // y-loop
             {
-                for (int xt = 0; xt < fieldXsize; xt++)
+                for (int xt = 0; xt < fieldXsize; xt++) // x-loop
                 {
-                    for (int y = yt, x = xt; x < fieldXsize; x++, y++)
+                    for (int y = yt, x = xt; x < fieldXsize; x++, y++) // diagonal-loop
                     {
                         int yy = y;
                         int xx;
