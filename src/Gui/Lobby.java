@@ -145,7 +145,7 @@ public class Lobby extends JFrame
         btnJoinGameAI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // TODO: Start AI Game here
+                Game g= new Game(Game.Opponent.AI);
             }
         });
         pnlButtons.add(btnJoinGameAI, BorderLayout.EAST);
