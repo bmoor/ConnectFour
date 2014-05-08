@@ -20,24 +20,24 @@ public class GameState
     }
     private State[][] field;
     private boolean myTurn = false;
-    public GameState(int x, int y)
+    public GameState(int y, int x)
     {
-        field = new State[x][y];
+        field = new State[y][x];
         for(int i=0 ; i<x ; i++)
         {
             for(int j=0 ; j<y ; j++)
-                field[i][j]=State.EMPTY;
+                field[j][i]=State.EMPTY;
         }
     }
     
-    public State getStone(int x, int y)
+    public State getStone(int y, int x)
     {
-        return field[x][y];
+        return field[y][x];
     }
 
-    public void setStone(int x, int y, State state)
+    public void setStone(int y, int x, State state)
     {
-        field[x][y]=state;
+        field[y][x]=state;
     }
     
     public boolean isMyTurn()

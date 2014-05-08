@@ -21,7 +21,7 @@ public class Game
 
     public Game()
     {
-        field = new GameState(fieldXsize, fieldYsize);
+        field = new GameState(fieldYsize, fieldXsize);
     }
     
     /**
@@ -30,11 +30,11 @@ public class Game
      * @param newX new counts of x stones
      * @param newY new counts of y stones
      */ 
-    public void resizeField(int newX, int newY)
+    public void resizeField(int newY, int newX)
     {
         fieldXsize = newX;
         fieldYsize = newY;
-        field = new GameState(fieldXsize, fieldYsize);
+        field = new GameState(fieldYsize, fieldXsize);
     }
     
     /**
@@ -107,7 +107,7 @@ public class Game
             for (int x = 0; x < fieldXsize; x++)
             {
                 System.out.print("" + x + " " + y + "   ");
-                State currentFieldPart = field.getStone(x, y);
+                State currentFieldPart = field.getStone(y, x);
                 if (currentFieldPart == State.OTHER)
                 {
                     otherSuccessCounter++;
@@ -162,7 +162,7 @@ public class Game
         {
             for (int y = 0; y < fieldYsize; y++)
             {
-                State currentFieldPart = field.getStone(x, y);
+                State currentFieldPart = field.getStone(y, x);
                 if (currentFieldPart == State.OTHER)
                 {
                     otherSuccessCounter++;
@@ -220,12 +220,13 @@ public class Game
                 {
                     for (int y = yt, x = xt; x < fieldXsize; x++, y++)
                     {
+                        int yy=y;
                         int xx;
                         if(i==0)
                             xx=x;
                         else
                             xx=(fieldXsize-1)-x;
-                        int yy=y;
+                        
                         
                         if ( (y > (fieldYsize-1) ) )
                             continue;
