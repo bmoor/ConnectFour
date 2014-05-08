@@ -4,6 +4,7 @@
  */
 package Gui;
 
+import Engine.Game;
 import Network.GameInfo;
 import Network.UDPServer;
 import java.awt.BorderLayout;
@@ -16,6 +17,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JOptionPane;
@@ -154,7 +156,7 @@ public class Lobby extends JFrame
         btnLoadGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // TODO: Load Game here
+               LoadGame();      
             }
         });
         pnlButtons.add(btnLoadGame, BorderLayout.EAST);
@@ -185,6 +187,19 @@ public class Lobby extends JFrame
         //Set visibility
         setVisible(true);
         
+    }
+    public void LoadGame()
+    {
+        JFileChooser chooser = new JFileChooser(); 
+        int r = chooser.showOpenDialog(this); 
+        String s = "no File!"; 
+        if (r == JFileChooser.APPROVE_OPTION) 
+        {          
+            s= chooser.getSelectedFile().getPath();
+            System.out.println(s);
+            Game g= new Game(Game.Opponent.AI);
+            g.restoreGame(s);
+        } 
     }
     
     public void HandleUDPResponse(InetAddress address, String gameName)
