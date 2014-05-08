@@ -14,20 +14,39 @@ import java.io.Serializable;
 public class GameState implements Serializable
 {
 
+    GameState(int i)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public enum State
     {
         EMPTY, MINE, OTHER
     }
     private State[][] field;
     private boolean myTurn = false;
+    private int x;
+    private int y;
     public GameState(int y, int x)
     {
+        this.x=x;
+        this.y=y;
         field = new State[y][x];
         for(int i=0 ; i<x ; i++)
         {
             for(int j=0 ; j<y ; j++)
                 field[j][i]=State.EMPTY;
         }
+    }
+    
+    public int getXsize()
+    {
+        return x;
+    }
+    
+    public int getYsize()
+    {
+        return y;
     }
     
     public State getStone(int y, int x)

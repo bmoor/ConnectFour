@@ -17,14 +17,16 @@ import java.io.ObjectOutputStream;
  */
 public class Game
 {
-    
+
     public enum Opponent
     {
+
         HUMAN, AI
     }
     GameState field;
     Opponent opponent;
-    Field UI;
+    Ghost ai;
+    Field ui;
     int fieldXsize = 7;
     int fieldYsize = 6;
     boolean won = false;
@@ -34,6 +36,14 @@ public class Game
     {
         field = new GameState(fieldYsize, fieldXsize);
         this.opponent = opponent;
+        if (opponent == Opponent.AI)
+        {
+            ai = new Ghost();
+        }
+        else
+        {
+            //ToDo create TCP-Socket
+        }
         //ToDo    
         //UI = new Field(this);
     }
@@ -56,15 +66,17 @@ public class Game
      * Method is used to store the current game
      *
      * @author Yves Studer
-     * @param path Path to soring 
+     * @param path Path to soring
      */
     public void storeGame(String path)
     {
-        if(opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        {
             return;
-            
+        }
+
         try (FileOutputStream aFileOutputStream = new FileOutputStream(path);
-                ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream) )
+                ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream))
         {
             aObjectOutputStream.writeObject(field);
             aObjectOutputStream.close();
@@ -79,15 +91,17 @@ public class Game
      * Method is used to load a old game
      *
      * @author Yves Studer
-     * @param path Path to soring 
+     * @param path Path to soring
      */
     public void restoreGame(String path)
     {
-        if(opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        {
             return;
-        
+        }
+
         try (FileInputStream aFileInputStream = new FileInputStream(path);
-                ObjectInputStream aObjectInputStream = new ObjectInputStream(aFileInputStream) )
+                ObjectInputStream aObjectInputStream = new ObjectInputStream(aFileInputStream))
         {
             Object o = aObjectInputStream.readObject();
             aObjectInputStream.close();
@@ -101,7 +115,6 @@ public class Game
         //ToDo Inform the Field
     }
 
-    
     /**
      * Method is used to inform about the new turn from UI
      *
@@ -110,20 +123,22 @@ public class Game
      * @param actor Source identification
      */
     private void TurnPreformed(DataTransport uiTurn, State actor)
-    {        
+    {
         int x = uiTurn.getX();
         int y = 0;
         for (; y < fieldYsize; y++)
         {
             if (field.getStone(y, x) == State.EMPTY)
+            {
                 break;
+            }
         }
         field.setStone(y, x, actor);
         TestIfWon();
         //ToDo inform Field if won / lost
-    
+
     }
-    
+
     /**
      * Method is used to inform about the new turn from UI
      *
@@ -134,6 +149,16 @@ public class Game
     {
         field.setMyTurn(false);
         TurnPreformed(uiTurn, State.MINE);
+        if (opponent == Opponent.AI)
+        {
+            TurnPreformed(ai.DoTurn(field), State.OTHER);
+            field.setMyTurn(true);
+            //ToDo inform the ui 
+        }
+        else
+        {
+            //ToDo send to TCP
+        }
     }
 
     /**
@@ -146,6 +171,7 @@ public class Game
     {
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
+        //ToDo inform the ui 
     }
 
     /**
