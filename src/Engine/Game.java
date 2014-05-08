@@ -5,6 +5,10 @@
 package Engine;
 
 import Engine.GameState.State;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  *
@@ -12,7 +16,6 @@ import Engine.GameState.State;
  */
 public class Game
 {
-
     GameState field;
     int fieldXsize = 7;
     int fieldYsize = 6;
@@ -23,62 +26,113 @@ public class Game
     {
         field = new GameState(fieldYsize, fieldXsize);
     }
-    
+
     /**
      * Method is used to inform about a new game-size
+     *
      * @author Yves Studer
      * @param newX new counts of x stones
      * @param newY new counts of y stones
-     */ 
+     */
     public void resizeField(int newY, int newX)
     {
         fieldXsize = newX;
         fieldYsize = newY;
         field = new GameState(fieldYsize, fieldXsize);
     }
-    
+
+    /**
+     * Method is used to store the current game
+     *
+     * @author Yves Studer
+     * @param path Path to soring 
+     */
+    public void storeGame(String path)
+    {
+        try (FileOutputStream aFileOutputStream = new FileOutputStream(path);
+                ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream) )
+        {
+            aObjectOutputStream.writeObject(field);
+            aObjectOutputStream.close();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Exception: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Method is used to load a old game
+     *
+     * @author Yves Studer
+     * @param path Path to soring 
+     */
+    public void restoreGame(String path)
+    {
+        try (FileInputStream aFileInputStream = new FileInputStream(path);
+                ObjectInputStream aObjectInputStream = new ObjectInputStream(aFileInputStream) )
+        {
+            Object o = aObjectInputStream.readObject();
+            aObjectInputStream.close();
+
+            GameState field = (GameState) o;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Exception: " + e.getMessage());
+        }
+        //ToDo
+    }
+
     /**
      * Method is used to inform about the new turn from UI
+     *
      * @author Yves Studer
      * @param uiTurn DataTransport-Objet with the new turn
-     */    
+     */
     public void UiTurnPreformed(DataTransport uiTurn)
     {
         int x = uiTurn.getX();
-        int y=0;
-        for( ; y<fieldYsize ; y++)
+        int y = 0;
+        for (; y < fieldYsize; y++)
         {
-            if(field.getStone(y, x) == State.EMPTY)
+            if (field.getStone(y, x) == State.EMPTY)
+            {
                 break;
+            }
         }
         field.setStone(y, x, State.MINE);
         TestIfWon();
     }
-      
+
     /**
      * Method is used to inform about the new turn from the other player
+     *
      * @author Yves Studer
      * @param tcpTurn DataTransport-Objet with the new turn
-     */  
+     */
     public void TcpTurnPreformed(DataTransport tcpTurn)
     {
         int x = tcpTurn.getX();
-        int y=0;
-        for( ; y<fieldYsize ; y++)
+        int y = 0;
+        for (; y < fieldYsize; y++)
         {
-            if(field.getStone(y, x) == State.EMPTY)
+            if (field.getStone(y, x) == State.EMPTY)
+            {
                 break;
+            }
         }
         field.setStone(y, x, State.OTHER);
         TestIfWon();
     }
-    
+
     /**
      * Method to detect if a player has won. This method tests all cobinations:
      * on X-Axis, on Y-Axis and both diagonal-directions
+     *
      * @author Yves Studer
      * @return returns -1 if we lost, 1 if we won and otherwise 0
-     */  
+     */
     private int TestIfWon()
     {
         int tmp = TestWinOnXaxis();
@@ -95,9 +149,10 @@ public class Game
 
     /**
      * Method to detect if a player has won with 4 in series on X-axis
+     *
      * @author Yves Studer
      * @return returns -1 if we lost, 1 if we won and otherwise 0
-     */ 
+     */
     private int TestWinOnXaxis()
     {
         int mySuccessCounter = 0;
@@ -147,9 +202,9 @@ public class Game
         return 0;
     }
 
-    
     /**
      * Method to detect if a player has won with 4 in series on Y-axis
+     *
      * @author Yves Studer
      * @return returns -1 if we lost, 1 if we won and otherwise 0
      */
@@ -201,10 +256,10 @@ public class Game
         return 0;
     }
 
-    
     /**
-     * Method to detect if a player has won with 4 in diagonal direction.
-     * This Method tests both diagonal directions.
+     * Method to detect if a player has won with 4 in diagonal direction. This
+     * Method tests both diagonal directions.
+     *
      * @author Yves Studer
      * @return returns -1 if we lost, 1 if we won and otherwise 0
      */
@@ -220,17 +275,22 @@ public class Game
                 {
                     for (int y = yt, x = xt; x < fieldXsize; x++, y++)
                     {
-                        int yy=y;
+                        int yy = y;
                         int xx;
-                        if(i==0)
-                            xx=x;
+                        if (i == 0)
+                        {
+                            xx = x;
+                        }
                         else
-                            xx=(fieldXsize-1)-x;
-                        
-                        
-                        if ( (y > (fieldYsize-1) ) )
+                        {
+                            xx = (fieldXsize - 1) - x;
+                        }
+
+                        if ((y > (fieldYsize - 1)))
+                        {
                             continue;
-                        
+                        }
+
                         System.out.print("" + xx + " " + yy + "   ");
                         State currentFieldPart = field.getStone(xx, yy);
                         if (currentFieldPart == State.OTHER)

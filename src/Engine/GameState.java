@@ -5,13 +5,13 @@
  */
 package Engine;
 
-import java.util.Enumeration;
+import java.io.Serializable;
 
 /**
  *
  * @author Yves
  */
-public class GameState
+public class GameState implements Serializable
 {
 
     public enum State
