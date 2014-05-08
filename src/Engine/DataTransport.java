@@ -12,9 +12,9 @@ package Engine;
  */
 public class DataTransport
 {
-    private int x = 0;
+    private final int x;
     
-    public DataTransport(int x)
+    public DataTransport(final int x)
     {
         this.x=x;
     }
@@ -22,10 +22,5 @@ public class DataTransport
     public int getX()
     {
         return x;
-    }
-
-    public void setX(int x)
-    {
-        this.x = x;
     }
 }

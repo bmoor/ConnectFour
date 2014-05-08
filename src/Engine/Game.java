@@ -50,7 +50,7 @@ public class Game
      * @param newX new counts of x stones
      * @param newY new counts of y stones
      */
-    public void resizeField(int newY, int newX)
+    public void resizeField(final int newY, final int newX)
     {
         field = new GameState(newY, newX);
     }
@@ -61,7 +61,7 @@ public class Game
      * @author Yves Studer
      * @param path Path to soring
      */
-    public void storeGame(String path)
+    public void storeGame(final String path)
     {
         if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
             return;
@@ -74,7 +74,7 @@ public class Game
         }
         catch (Exception e)
         {
-            System.out.println("Exception: " + e.getMessage());
+            System.out.println("Exception: " + e.getMessage() + "\nvoid storeGame(final String path)");
         }
     }
 
@@ -84,7 +84,7 @@ public class Game
      * @author Yves Studer
      * @param path Path to soring
      */
-    public void restoreGame(String path)
+    public void restoreGame(final String path)
     {
         if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
             return;
@@ -99,7 +99,7 @@ public class Game
         }
         catch (Exception e)
         {
-            System.out.println("Exception: " + e.getMessage());
+            System.out.println("Exception: " + e.getMessage() + "\nvoid restoreGame(final String path)");
         }
         //ToDo Inform the Field
     }
@@ -111,9 +111,9 @@ public class Game
      * @param uiTurn DataTransport-Objet with the new turn
      * @param actor Source identification
      */
-    private void TurnPreformed(DataTransport uiTurn, State actor)
+    private void TurnPreformed(final DataTransport uiTurn, final State actor)
     {
-        int x = uiTurn.getX();
+        final int x = uiTurn.getX();
         int y = 0;
         for (; y < field.getYsize(); y++)
         {
@@ -134,13 +134,14 @@ public class Game
      * @author Yves Studer
      * @param uiTurn DataTransport-Objet with the new turn
      */
-    public void UiTurnPreformed(DataTransport uiTurn)
+    public void UiTurnPreformed(final DataTransport uiTurn)
     {
         field.setMyTurn(false);
         TurnPreformed(uiTurn, State.MINE);
         if (opponent == Opponent.AI)
         {
-            TurnPreformed(ai.DoTurn(field), State.OTHER); 
+            final DataTransport tmp = ai.DoTurn(field);
+            TurnPreformed(tmp, State.OTHER); 
             field.setMyTurn(true);
             //ToDo inform the ui 
         }
@@ -156,7 +157,7 @@ public class Game
      * @author Yves Studer
      * @param tcpTurn DataTransport-Objet with the new turn
      */
-    public void TcpTurnPreformed(DataTransport tcpTurn)
+    public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
