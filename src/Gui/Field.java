@@ -5,6 +5,8 @@
  */
 package Gui;
 
+import Engine.DataTransport;
+import Engine.Game;
 import Engine.GameState;
 import Engine.GameState.State;
 import static Engine.GameState.State.*;
@@ -52,11 +54,13 @@ public class Field
     private final int BOARD_HEIGHT = 500;
     private int rows = 6;
     private int columns = 7;
+    private Game game;
 
     private boolean isMyTurn;
 
-    public Field()
+    public Field(Game ga)
     {
+        game = ga;
         /**
         this.isMyTurn = isMyTurn;
         if(isMyTurn)
@@ -75,14 +79,14 @@ public class Field
         
         //Nur zum testen
         board = new State[rows][columns];
-        GameState gs = new GameState(rows, columns);
-        gs.setMyTurn(true);
-        gs.setStone(0, 0, State.OTHER);
-        gs.setStone(0, 1, State.OTHER);
-        gs.setStone(1, 1, State.OTHER);
+        //GameState gs = new GameState(rows, columns);
+        //gs.setMyTurn(true);
+        //gs.setStone(0, 0, State.OTHER);
+        //gs.setStone(0, 1, State.OTHER);
+        //gs.setStone(1, 1, State.OTHER);
         createGUI();
         createBoard(rows, columns);
-        setStone(gs);
+        //setStone(gs);
     }
 
     private void createGUI()
@@ -388,6 +392,8 @@ public class Field
 
     private void sendMyStone(int col)
     {
+        DataTransport dt = new DataTransport(col);
+        game.UiTurnPreformed(dt);
         isMyTurn = false;
         buttonController();
         setTextTurn();

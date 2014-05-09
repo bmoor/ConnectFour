@@ -40,7 +40,7 @@ public class Game
             //ToDo create TCP-Socket
         }
         //ToDo    
-        //UI = new Field(this);
+        ui = new Field(this);
     }
 
     /**
@@ -143,6 +143,7 @@ public class Game
             final DataTransport tmp = ai.DoTurn(field);
             TurnPreformed(tmp, State.OTHER); 
             field.setMyTurn(true);
+            ui.setStone(field);
             //ToDo inform the ui 
         }
         else
