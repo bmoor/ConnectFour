@@ -21,16 +21,24 @@ public class GameState implements Serializable
     private boolean myTurn = false;
     private final int x;
     private final int y;
+    private int turnsCounter;
+
     public GameState(int y, int x)
     {
         this.x=x;
         this.y=y;
+        turnsCounter = 0;
         field = new State[y][x];
         for(int i=0 ; i<x ; i++)
         {
             for(int j=0 ; j<y ; j++)
                 field[j][i]=State.EMPTY;
         }
+    }
+    
+    public int getRemainingTurns()
+    {
+        return y*x-turnsCounter;
     }
     
     public int getXsize()
@@ -51,6 +59,7 @@ public class GameState implements Serializable
     public void setStone(final int y, final int x, final State state)
     {
         field[y][x]=state;
+        turnsCounter++;
     }
     
     public boolean isMyTurn()

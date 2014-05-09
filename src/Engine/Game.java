@@ -26,20 +26,19 @@ public class Game
     Opponent opponent;
     Ghost ai;
     Field ui;
-    boolean won = false;
-    boolean lost = false;
 
     public Game(Opponent opponent)
     {
         field = new GameState(6, 7);
         this.opponent = opponent;
         if (opponent == Opponent.AI)
+        {
             ai = new Ghost();
+        }
         else
         {
             //ToDo create TCP-Socket
         }
-        //ToDo    
         ui = new Field(this);
     }
 
@@ -64,7 +63,9 @@ public class Game
     public void storeGame(final String path)
     {
         if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        {
             return;
+        }
 
         try (FileOutputStream aFileOutputStream = new FileOutputStream(path);
                 ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream))
@@ -87,8 +88,10 @@ public class Game
     public void restoreGame(final String path)
     {
         if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        {
             return;
- 
+        }
+
         try (FileInputStream aFileInputStream = new FileInputStream(path);
                 ObjectInputStream aObjectInputStream = new ObjectInputStream(aFileInputStream))
         {
@@ -125,6 +128,9 @@ public class Game
         }
         field.setStone(y, x, actor);
         TestIfWon();
+        System.out.println("verbleibend "+field.getRemainingTurns());
+        if(field.getRemainingTurns()<=0)
+            System.out.println("------------------------------\nUnentschieden\n------------------------------------");
         //ToDo inform Field if won / lost
 
     }
@@ -142,7 +148,7 @@ public class Game
         if (opponent == Opponent.AI)
         {
             final DataTransport tmp = ai.DoTurn(field);
-            TurnPreformed(tmp, State.OTHER); 
+            TurnPreformed(tmp, State.OTHER);
             field.setMyTurn(true);
             ui.setStone(field);
         }
@@ -194,13 +200,16 @@ public class Game
      */
     private int TestWinOnXaxis()
     {
+        System.out.println("x-Axis-Checker");
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int y = 0; y < field.getYsize(); y++)
         {
+            otherSuccessCounter = 0;
+            mySuccessCounter = 0;
             for (int x = 0; x < field.getXsize(); x++)
             {
-                System.out.print("" + x + " " + y + "   ");
+                //System.out.print("" + x + " " + y + "   ");
                 State currentFieldPart = field.getStone(y, x);
                 if (currentFieldPart == State.OTHER)
                 {
@@ -218,12 +227,10 @@ public class Game
                 {
                     otherSuccessCounter = 0;
                     mySuccessCounter = 0;
-                    System.out.println("diag-Checker test x=" + x + " y= " + y + " EMPTY");
                 }
                 if (mySuccessCounter == 4)
                 {
                     System.out.println("I won");
-                    won = true;
                     otherSuccessCounter = 0;
                     mySuccessCounter = 0;
                     return 1;
@@ -231,7 +238,6 @@ public class Game
                 if (otherSuccessCounter == 4)
                 {
                     System.out.println("I lost");
-                    lost = true;
                     otherSuccessCounter = 0;
                     mySuccessCounter = 0;
                     return -1;
@@ -249,10 +255,13 @@ public class Game
      */
     private int TestWinOnYaxis()
     {
+        System.out.println("y-Axis-Checker");
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int x = 0; x < field.getXsize(); x++)
         {
+            otherSuccessCounter = 0;
+            mySuccessCounter = 0;
             for (int y = 0; y < field.getYsize(); y++)
             {
                 State currentFieldPart = field.getStone(y, x);
@@ -276,7 +285,6 @@ public class Game
                 if (mySuccessCounter == 4)
                 {
                     System.out.println("I won");
-                    won = true;
                     otherSuccessCounter = 0;
                     mySuccessCounter = 0;
                     return 1;
@@ -284,7 +292,6 @@ public class Game
                 if (otherSuccessCounter == 4)
                 {
                     System.out.println("I lost");
-                    lost = true;
                     otherSuccessCounter = 0;
                     mySuccessCounter = 0;
                     return -1;
@@ -303,17 +310,24 @@ public class Game
      */
     public int TestWinOnDiagAxis()
     {
-        final int xSize =  field.getXsize();
-        final int ySize =  field.getYsize();
+        System.out.println("xy-Axis-Checker");
+        final int xSize = field.getXsize();
+        final int ySize = field.getYsize();
         //ToDo optimise the mechanism by add -3 on y- and x-loop
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int i = 0; i < 2; i++) //used for both diagonal directions
         {
+            otherSuccessCounter = 0;
+            mySuccessCounter = 0;
             for (int yt = 0; yt < ySize; yt++) // y-loop
             {
+                otherSuccessCounter = 0;
+                mySuccessCounter = 0;
                 for (int xt = 0; xt < xSize; xt++) // x-loop
                 {
+                    otherSuccessCounter = 0;
+                    mySuccessCounter = 0;
                     for (int y = yt, x = xt; x < xSize; x++, y++) // diagonal-loop
                     {
                         int yy = y;
@@ -327,12 +341,12 @@ public class Game
                             xx = (xSize - 1) - x;
                         }
 
-                        if (y > (ySize - 1) )
+                        if (y > (ySize - 1))
                         {
                             continue;
                         }
 
-                        System.out.print("" + xx + " " + yy + "   ");
+                        //System.out.print("" + xx + " " + yy + "   ");
                         State currentFieldPart = field.getStone(yy, xx);
                         if (currentFieldPart == State.OTHER)
                         {
@@ -350,12 +364,11 @@ public class Game
                         {
                             otherSuccessCounter = 0;
                             mySuccessCounter = 0;
-                            System.out.println("diag-Checker test x=" + xx + " y= " + yy + " EMPTY");
+                            //System.out.println("diag-Checker test x=" + xx + " y= " + yy + " EMPTY");
                         }
                         if (mySuccessCounter == 4)
                         {
                             System.out.println("I won");
-                            won = true;
                             otherSuccessCounter = 0;
                             mySuccessCounter = 0;
                             return 1;
@@ -363,7 +376,6 @@ public class Game
                         if (otherSuccessCounter == 4)
                         {
                             System.out.println("I lost");
-                            lost = true;
                             otherSuccessCounter = 0;
                             mySuccessCounter = 0;
                             return -1;
