@@ -146,6 +146,7 @@ public class Lobby extends JFrame
             @Override
             public void actionPerformed(ActionEvent e) {
                 Game g= new Game(Game.Opponent.AI);
+                setVisible(false);
             }
         });
         pnlButtons.add(btnJoinGameAI, BorderLayout.EAST);
@@ -199,6 +200,7 @@ public class Lobby extends JFrame
             System.out.println(s);
             Game g= new Game(Game.Opponent.AI);
             g.restoreGame(s);
+            setVisible(false);
         } 
     }
     
