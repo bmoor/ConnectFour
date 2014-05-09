@@ -96,6 +96,7 @@ public class Game
             aObjectInputStream.close();
 
             field = (GameState) o;
+            ui.setStone(field);
         }
         catch (Exception e)
         {
@@ -144,7 +145,6 @@ public class Game
             TurnPreformed(tmp, State.OTHER); 
             field.setMyTurn(true);
             ui.setStone(field);
-            //ToDo inform the ui 
         }
         else
         {
@@ -162,7 +162,7 @@ public class Game
     {
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
-        //ToDo inform the ui 
+        ui.setStone(field);
     }
 
     /**
