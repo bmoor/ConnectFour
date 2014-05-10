@@ -20,6 +20,7 @@ public class Game
 
     public enum Opponent
     {
+
         HUMAN, AI
     }
     private GameState field;
@@ -129,10 +130,24 @@ public class Game
             }
         }
         field.setStone(y, x, actor);
-        if (TestIfWon() != 0)
+        final int decision = TestIfWon();
+        switch (decision)
         {
-            gameDecided = true;
-            //ToDo inform Field if won / lost
+            case -2:
+                gameDecided = true;
+                //ToDo inform Field we made a draw
+                break;
+            case -1:
+                gameDecided = true;
+                //ToDo inform Field we lost
+                break;
+            case 1:
+                gameDecided = true;
+                //ToDo inform Field we won
+                break;
+            default:
+                // do nothing
+                break;
         }
     }
 
