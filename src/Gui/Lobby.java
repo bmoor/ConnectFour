@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -192,6 +193,7 @@ public class Lobby extends JFrame
     public void LoadGame()
     {
         JFileChooser chooser = new JFileChooser(); 
+        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.cofo)", "cofo"));
         int r = chooser.showOpenDialog(this); 
         String s = "no File!"; 
         if (r == JFileChooser.APPROVE_OPTION) 
