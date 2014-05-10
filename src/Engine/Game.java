@@ -338,7 +338,7 @@ public class Game
      * @author Yves Studer
      * @return returns -1 if we lost, 1 if we won and otherwise 0
      */
-    public int TestWinOnDiagAxis()
+    private int TestWinOnDiagAxis()
     {
         System.out.println("xy-Axis-Checker");
         final int xSize = field.getXsize();
