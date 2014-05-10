@@ -166,7 +166,7 @@ public class Game
 
         field.setMyTurn(false);
         TurnPreformed(uiTurn, State.MINE);
-        if (opponent == Opponent.AI)
+        if( (opponent == Opponent.AI) && (gameDecided == false) )
         {
             final DataTransport tmp = ai.DoTurn(field);
             TurnPreformed(tmp, State.OTHER);
