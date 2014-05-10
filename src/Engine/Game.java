@@ -18,30 +18,42 @@ import java.io.ObjectOutputStream;
 public class Game
 {
 
-    public enum Opponent
-    {
-
-        HUMAN, AI
-    }
-    private GameState field;
-    private Opponent opponent;
-    private Ghost ai;
     private Field ui;
+    private GameState field;
+    private Ghost ai;
     private boolean gameDecided;
 
-    public Game(Opponent opponent)
+    /**
+     * Constructor for a game against an AI
+     *
+     * @author Yves Studer
+     */
+    public Game()
     {
-        field = new GameState(6, 7);
-        this.opponent = opponent;
+        ai = new Ghost();
+        Init();
+    }
+
+    /**
+     * Constructor for a game against human
+     *
+     * @author Yves Studer
+     * @param address IP-address
+     */
+    public Game(String address)
+    {
+        Init();
+    }
+
+    /**
+     * Common initialization method
+     *
+     * @author Yves Studer
+     */
+    private void Init()
+    {
         gameDecided = false;
-        if (opponent == Opponent.AI)
-        {
-            ai = new Ghost();
-        }
-        else
-        {
-            //ToDo create TCP-Socket
-        }
+        field = new GameState(6, 7);
         ui = new Field(this);
     }
 
@@ -66,7 +78,7 @@ public class Game
      */
     public void storeGame(final String path)
     {
-        if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        if (ai == null) //disable storing mechanism during a game against humans
         {
             return;
         }
@@ -91,7 +103,7 @@ public class Game
      */
     public void restoreGame(final String path)
     {
-        if (opponent == Opponent.HUMAN) //disable storing mechanism during a game against humans
+        if (ai == null) //disable storing mechanism during a game against humans
         {
             return;
         }
@@ -166,7 +178,7 @@ public class Game
 
         field.setMyTurn(false);
         TurnPreformed(uiTurn, State.MINE);
-        if( (opponent == Opponent.AI) && (gameDecided == false) )
+        if ((ai != null) && (gameDecided == false))
         {
             final DataTransport tmp = ai.DoTurn(field);
             TurnPreformed(tmp, State.OTHER);

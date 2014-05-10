@@ -146,7 +146,7 @@ public class Lobby extends JFrame
         btnJoinGameAI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game g= new Game(Game.Opponent.AI);
+                Game g= new Game();
                 setVisible(false);
             }
         });
@@ -200,7 +200,7 @@ public class Lobby extends JFrame
         {          
             s= chooser.getSelectedFile().getPath();
             System.out.println(s);
-            Game g= new Game(Game.Opponent.AI);
+            Game g= new Game();
             g.restoreGame(s);
             setVisible(false);
         } 
