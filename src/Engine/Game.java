@@ -24,7 +24,7 @@ public class Game
     private boolean gameDecided;
 
     /**
-     * Constructor for a game against an AI
+     * Constructor for a game against AI
      *
      * @author Yves Studer
      */
@@ -40,7 +40,7 @@ public class Game
      * @author Yves Studer
      * @param address IP-address
      */
-    public Game(String address)
+    public Game(final String address)
     {
         Init();
     }
@@ -251,7 +251,6 @@ public class Game
             mySuccessCounter = 0;
             for (int x = 0; x < field.getXsize(); x++)
             {
-                //System.out.print("" + x + " " + y + "   ");
                 State currentFieldPart = field.getStone(y, x);
                 if (currentFieldPart == State.OTHER)
                 {
@@ -355,24 +354,27 @@ public class Game
         System.out.println("xy-Axis-Checker");
         final int xSize = field.getXsize();
         final int ySize = field.getYsize();
-        //ToDo optimise the mechanism by add -3 on y- and x-loop
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
-        for (int i = 0; i < 2; i++) //used for both diagonal directions
+        for (int i = 0; i < 2; i++) 
         {
+            //used for both diagonal directions
             otherSuccessCounter = 0;
             mySuccessCounter = 0;
-            for (int yt = 0; yt < ySize; yt++) // y-loop
+            for (int yt = 0; yt < ySize - 3; yt++) 
             {
+                // y-loop
                 otherSuccessCounter = 0;
                 mySuccessCounter = 0;
-                for (int xt = 0; xt < xSize; xt++) // x-loop
+                for (int xt = 0; xt < xSize - 3; xt++) 
                 {
+                    // x-loop
                     otherSuccessCounter = 0;
                     mySuccessCounter = 0;
-                    for (int y = yt, x = xt; x < xSize; x++, y++) // diagonal-loop
+                    for (int y = yt, x = xt; x < xSize; x++, y++)
                     {
-                        int yy = y;
+                        // diagonal-loop
+                        int yy = y; 
                         int xx;
                         if (i == 0)
                         {
@@ -387,8 +389,6 @@ public class Game
                         {
                             continue;
                         }
-
-                        //System.out.print("" + xx + " " + yy + "   ");
                         State currentFieldPart = field.getStone(yy, xx);
                         if (currentFieldPart == State.OTHER)
                         {
@@ -406,7 +406,6 @@ public class Game
                         {
                             otherSuccessCounter = 0;
                             mySuccessCounter = 0;
-                            //System.out.println("diag-Checker test x=" + xx + " y= " + yy + " EMPTY");
                         }
                         if (mySuccessCounter == 4)
                         {
