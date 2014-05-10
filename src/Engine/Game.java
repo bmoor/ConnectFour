@@ -54,6 +54,7 @@ public class Game
     public void resizeField(final int newY, final int newX)
     {
         field = new GameState(newY, newX);
+        gameDecided = false;
     }
 
     /**
