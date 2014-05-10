@@ -22,15 +22,17 @@ public class Game
     {
         HUMAN, AI
     }
-    GameState field;
-    Opponent opponent;
-    Ghost ai;
-    Field ui;
+    private GameState field;
+    private Opponent opponent;
+    private Ghost ai;
+    private Field ui;
+    private boolean gameDecided;
 
     public Game(Opponent opponent)
     {
         field = new GameState(6, 7);
         this.opponent = opponent;
+        gameDecided = false;
         if (opponent == Opponent.AI)
         {
             ai = new Ghost();
@@ -67,7 +69,7 @@ public class Game
             return;
         }
 
-        try (FileOutputStream aFileOutputStream = new FileOutputStream(path);
+        try (FileOutputStream aFileOutputStream = new FileOutputStream(path + ".cofo");
                 ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream))
         {
             aObjectOutputStream.writeObject(field);
@@ -105,7 +107,6 @@ public class Game
         {
             System.out.println("Exception: " + e.getMessage() + "\nvoid restoreGame(final String path)");
         }
-        //ToDo Inform the Field
     }
 
     /**
@@ -127,12 +128,11 @@ public class Game
             }
         }
         field.setStone(y, x, actor);
-        TestIfWon();
-        System.out.println("verbleibend "+field.getRemainingTurns());
-        if(field.getRemainingTurns()<=0)
-            System.out.println("------------------------------\nUnentschieden\n------------------------------------");
-        //ToDo inform Field if won / lost
-
+        if (TestIfWon() != 0)
+        {
+            gameDecided = true;
+            //ToDo inform Field if won / lost
+        }
     }
 
     /**
@@ -143,6 +143,11 @@ public class Game
      */
     public void UiTurnPreformed(final DataTransport uiTurn)
     {
+        if (gameDecided == true)
+        {
+            return;
+        }
+
         field.setMyTurn(false);
         TurnPreformed(uiTurn, State.MINE);
         if (opponent == Opponent.AI)
@@ -176,7 +181,8 @@ public class Game
      * on X-Axis, on Y-Axis and both diagonal-directions
      *
      * @author Yves Studer
-     * @return returns -1 if we lost, 1 if we won and otherwise 0
+     * @return returns -1 if we lost, 1 if we won -2 if the game ended tie and
+     * otherwise 0
      */
     private int TestIfWon()
     {
@@ -187,6 +193,14 @@ public class Game
             if (tmp == 0)
             {
                 tmp = TestWinOnDiagAxis();
+                if (tmp == 0)
+                {
+                    if (field.getRemainingTurns() <= 0)
+                    {
+                        tmp = -2;
+                        System.out.println("------------------------------\nUnentschieden\n------------------------------------");
+                    }
+                }
             }
         }
         return tmp;
