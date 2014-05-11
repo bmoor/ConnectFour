@@ -201,6 +201,7 @@ public class Game
         else
         {
             //ToDo send to TCP
+            opponent.sendMessage(uiTurn);
         }
     }
 

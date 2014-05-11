@@ -35,8 +35,7 @@ public class TcpRead extends Thread {
                 objectReader = new ObjectInputStream(socket.getInputStream());
                 tmp = objectReader.readObject();
                 if (tmp != null && tmp instanceof DataTransport){
-                    //Todo: Handle DataTransport Object, in game? 
-                    //this.game.handleOpponentMessage((DataTransport)tmp);
+                    game.TcpTurnPreformed((DataTransport)tmp);                    
                 }
             }
         } catch(Exception e) {
