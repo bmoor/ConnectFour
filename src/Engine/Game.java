@@ -22,9 +22,9 @@ public class Game
 
     private Field ui;
     private GameState field;
-    private Ghost ai;
+    private Ghost ai = null;
     private boolean gameDecided;
-    private Player opponent;
+    private Player opponent = null;
     private Lobby lobby;
 
     /**
@@ -199,7 +199,7 @@ public class Game
             field.setMyTurn(true);
             ui.setStone(field);
         }
-        else
+        if(opponent != null)
         {
             //ToDo send to TCP
             opponent.sendMessage(uiTurn);
