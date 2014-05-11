@@ -6,6 +6,7 @@ package Engine;
 
 import Engine.GameState.State;
 import Gui.Field;
+import Network.Player;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -22,6 +23,7 @@ public class Game
     private GameState field;
     private Ghost ai;
     private boolean gameDecided;
+    private Player opponent;
 
     /**
      * Constructor for a game against AI
@@ -33,15 +35,17 @@ public class Game
         ai = new Ghost();
         Init();
     }
-
+        
+    
     /**
      * Constructor for a game against human
      *
      * @author Yves Studer
-     * @param address IP-address
+     * @param player Handle network
      */
-    public Game(final String address)
+    public Game(Player aPlayer)
     {
+        opponent = aPlayer;
         Init();
     }
 

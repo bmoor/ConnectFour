@@ -6,6 +6,7 @@ package Gui;
 
 import Engine.Game;
 import Network.GameInfo;
+import Network.Player;
 import Network.UDPServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -248,12 +249,26 @@ public class Lobby extends JFrame
     
     public void JoinGame(InetAddress adr)
     {
-
+        Player player = new Player();
+        if(player.connect(adr)){
+            StartGame(player);
+        } else {
+            JOptionPane.showMessageDialog(null, "Could not connect to: "+adr, "IP conflict", WIDTH);
+            try{
+                player.disconnect();
+            }
+            catch (Exception e) {
+                System.out.println("Exception Lobby player.disconnect(): "+e.getMessage());
+            }
+        }
     }
     
-    public void StartGame()
-    {
-
+    /*
+     * create Player / start game
+     */
+    public void StartGame(Player player)
+    {        
+        Game game = new Game(player);
     }
     
     public void HostGame()
