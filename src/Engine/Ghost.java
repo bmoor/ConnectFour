@@ -22,6 +22,7 @@ public class Ghost
             z = (int) (Math.random() * (to - from + 1) + from);
         }
         while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
+        System.out.println("Random " + z);
         return z;
     }
 
@@ -168,7 +169,7 @@ public class Ghost
                         }
                         else
                         {
-                            xx = (field.getXsize() - 1) - x;
+                            xx = (field.getXsize() - 1) - dx;
                         }
                         if (dy > (field.getYsize() - 1))
                         {
@@ -183,6 +184,7 @@ public class Ghost
                     }
                     if (c == 3)
                     {
+                        System.out.println("3 detected");
                         for (int dx = x, dy = y; dx < x + 4; dx++, dy++)
                         {
                             int yy = dy;
@@ -193,7 +195,7 @@ public class Ghost
                             }
                             else
                             {
-                                xx = (field.getXsize() - 1) - x;
+                                xx = (field.getXsize() - 1) - dx;
                             }
                             if (isEmptyStone(field, yy, xx))
                             {
@@ -204,7 +206,7 @@ public class Ghost
                                 }
                                 if (isEmptyStone(field, yy - offset, xx) == false)
                                 {
-                                    return new DataTransport(dx);
+                                    return new DataTransport(xx);
                                 }
                             }
                         }
@@ -219,14 +221,14 @@ public class Ghost
     {
         DataTransport tmp = checkXaxisPattern(field);
         if (tmp != null)
-         {
-         return tmp;
-         }
-         tmp = checkYaxisPattern(field);
-         if (tmp != null)
-         {
-         return tmp;
-         }
+        {
+            return tmp;
+        }
+        tmp = checkYaxisPattern(field);
+        if (tmp != null)
+        {
+            return tmp;
+        }
         tmp = checkXYaxisPattern(field);
         if (tmp != null)
         {
