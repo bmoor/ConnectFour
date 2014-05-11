@@ -45,6 +45,7 @@ public class Lobby extends JFrame
     private UDPServer broadcastServer;
     private UDPServer responseServer;
     private boolean waitMode;
+    private Player player;
     
     
     public Lobby()
@@ -220,15 +221,7 @@ public class Lobby extends JFrame
         }
         
     }
-    
-    public void StartGameServer(String gameName)
-    {
-        if(broadcastServer.running)
-            broadcastServer.stopServer();
-        
-        broadcastServer.startServer(gameName);
-    }
-    
+       
     public void PerformBroadcast()
     {
         if(!responseServer.running) {
@@ -249,7 +242,7 @@ public class Lobby extends JFrame
     
     public void JoinGame(InetAddress adr)
     {
-        Player player = new Player();
+        player = new Player();
         if(player.connect(adr)){
             StartGame(player);
         } else {
@@ -265,6 +258,7 @@ public class Lobby extends JFrame
     
     /*
      * create Player / start game
+     * client
      */
     public void StartGame(Player player)
     {        
@@ -275,6 +269,17 @@ public class Lobby extends JFrame
     {
         String gameName = JOptionPane.showInputDialog("New Game Name:");
         StartGameServer(gameName);
+        Player player = new Player();
+        player.host(this);
+        SetGUIMode(false);
+    }
+    
+    public void StartGameServer(String gameName)
+    {
+        if(broadcastServer.running)
+            broadcastServer.stopServer();
+        
+        broadcastServer.startServer(gameName);
     }
     
     public void SetGUIMode(boolean enable)
