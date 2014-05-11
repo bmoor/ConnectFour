@@ -12,9 +12,9 @@ package Engine;
  */
 public class DataTransport implements java.io.Serializable
 {
-    private final int x;
+    private int x;
     
-    public DataTransport(final int x)
+    public DataTransport(int x)
     {
         this.x=x;
     }
