@@ -35,6 +35,7 @@ public class Player extends Thread {
     private TcpRead tcpRead;
 
     private Game game;        
+    private Lobby lobby;
     
     
     
@@ -55,9 +56,10 @@ public class Player extends Thread {
     /*
      * Setup a game as host
      */
-    public boolean host(Lobby alobby) {        
+    public boolean host(Lobby aLobby) {        
         waitforclient = true;
         ishost = true;
+        lobby = aLobby;
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException ex) {
@@ -120,7 +122,7 @@ public class Player extends Thread {
                             connectionSocket = serverSocket.accept();
                             
                             //Startgame
-                            //game.StartGame(this);
+                            lobby.StartGame(this);
 
                             tcpRead = new TcpRead(connectionSocket, game);
                                                                          
@@ -164,5 +166,10 @@ public class Player extends Thread {
         }                
     }
     
-    
+    /*
+     * Getter isHost
+     */
+    public boolean isHost(){
+        return this.ishost;
+    }
 }

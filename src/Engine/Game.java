@@ -24,6 +24,7 @@ public class Game
     private GameState field;
     private Ghost ai;
     private boolean gameDecided;
+    private boolean isMyTurn = false;
     private Player opponent;
     private Lobby lobby;
 
@@ -50,6 +51,10 @@ public class Game
         opponent = aPlayer;
         lobby = alobby;
         lobby.setVisible(false);
+        //Check for beginner
+        if (opponent.isHost()){
+            isMyTurn = true;
+        }
         Init();
     }
 

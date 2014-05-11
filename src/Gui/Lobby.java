@@ -258,7 +258,7 @@ public class Lobby extends JFrame
     
     /*
      * create Player / start game
-     * client
+     * 
      */
     public void StartGame(Player player)
     {        
@@ -294,5 +294,6 @@ public class Lobby extends JFrame
         btnJoinGameAI.setEnabled(enable);
         btnJoinGameIP.setEnabled(enable);
         btnRefreshIP.setEnabled(enable);
+        btnLoadGame.setEnabled(enable);
     }
 }
