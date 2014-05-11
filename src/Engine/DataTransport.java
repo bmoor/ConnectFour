@@ -10,7 +10,7 @@ package Engine;
  *
  * @author Yves
  */
-public class DataTransport
+public class DataTransport implements java.io.Serializable
 {
     private final int x;
     
@@ -23,4 +23,6 @@ public class DataTransport
     {
         return x;
     }
+    
+    
 }
