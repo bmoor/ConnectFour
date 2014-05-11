@@ -172,4 +172,8 @@ public class Player extends Thread {
     public boolean isHost(){
         return this.ishost;
     }
+    
+    public void registerGame(Game game){
+        this.game = game;
+    }
 }
