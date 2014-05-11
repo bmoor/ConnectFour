@@ -24,7 +24,6 @@ public class Game
     private GameState field;
     private Ghost ai;
     private boolean gameDecided;
-    private boolean isMyTurn = false;
     private Player opponent;
     private Lobby lobby;
 
@@ -36,7 +35,7 @@ public class Game
     public Game()
     {
         ai = new Ghost();
-        Init();
+        Init(false);
     }
         
     
@@ -52,10 +51,11 @@ public class Game
         lobby = alobby;
         lobby.setVisible(false);
         //Check for beginner
+        boolean myTurn = false;
         if (opponent.isHost()){
-            isMyTurn = true;
+            myTurn = true;
         }
-        Init();
+        Init(myTurn);
     }
 
     /**
@@ -63,10 +63,11 @@ public class Game
      *
      * @author Yves Studer
      */
-    private void Init()
+    private void Init(boolean myTurn)
     {
         gameDecided = false;
         field = new GameState(6, 7);
+        field.setMyTurn(myTurn);
         ui = new Field(this);
     }
 
