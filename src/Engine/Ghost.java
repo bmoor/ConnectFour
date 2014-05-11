@@ -149,14 +149,85 @@ public class Ghost
         return null;
     }
 
+    private DataTransport checkXYaxisPattern(final GameState field)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            for (int y = 0; y < field.getYsize() - 3; y++)
+            {
+                for (int x = 0; x < field.getXsize() - 3; x++)
+                {
+                    int c = 0;
+                    for (int dy = y, dx = x; dx < x + 4; dy++, dx++)
+                    {
+                        int yy = dy;
+                        int xx;
+                        if (i == 0)
+                        {
+                            xx = dx;
+                        }
+                        else
+                        {
+                            xx = (field.getXsize() - 1) - x;
+                        }
+                        if (dy > (field.getYsize() - 1))
+                        {
+                            continue;
+                        }
+
+                        if (isHumanStone(field, yy, xx))
+                        {
+                            // count all human stone
+                            c++;
+                        }
+                    }
+                    if (c == 3)
+                    {
+                        for (int dx = x, dy = y; dx < x + 4; dx++, dy++)
+                        {
+                            int yy = dy;
+                            int xx;
+                            if (i == 0)
+                            {
+                                xx = dx;
+                            }
+                            else
+                            {
+                                xx = (field.getXsize() - 1) - x;
+                            }
+                            if (isEmptyStone(field, yy, xx))
+                            {
+                                int offset = 1;
+                                if (dy == 0)
+                                {
+                                    offset = 0;
+                                }
+                                if (isEmptyStone(field, yy - offset, xx) == false)
+                                {
+                                    return new DataTransport(dx);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public DataTransport DoTurn(final GameState field)
     {
         DataTransport tmp = checkXaxisPattern(field);
         if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkYaxisPattern(field);
+         {
+         return tmp;
+         }
+         tmp = checkYaxisPattern(field);
+         if (tmp != null)
+         {
+         return tmp;
+         }
+        tmp = checkXYaxisPattern(field);
         if (tmp != null)
         {
             return tmp;
