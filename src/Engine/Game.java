@@ -6,6 +6,8 @@ package Engine;
 
 import Engine.GameState.State;
 import Gui.Field;
+import Gui.Lobby;
+import Network.Player;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -22,6 +24,9 @@ public class Game
     private GameState field;
     private Ghost ai;
     private boolean gameDecided;
+    private boolean isMyTurn = false;
+    private Player opponent;
+    private Lobby lobby;
 
     /**
      * Constructor for a game against AI
@@ -33,15 +38,23 @@ public class Game
         ai = new Ghost();
         Init();
     }
-
+        
+    
     /**
      * Constructor for a game against human
      *
      * @author Yves Studer
-     * @param address IP-address
+     * @param player Handle network
      */
-    public Game(final String address)
+    public Game(Player aPlayer, Lobby alobby)
     {
+        opponent = aPlayer;
+        lobby = alobby;
+        lobby.setVisible(false);
+        //Check for beginner
+        if (opponent.isHost()){
+            isMyTurn = true;
+        }
         Init();
     }
 
@@ -188,6 +201,7 @@ public class Game
         else
         {
             //ToDo send to TCP
+            opponent.sendMessage(uiTurn);
         }
     }
 

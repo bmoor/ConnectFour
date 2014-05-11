@@ -6,6 +6,7 @@ package Gui;
 
 import Engine.Game;
 import Network.GameInfo;
+import Network.Player;
 import Network.UDPServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -44,6 +45,7 @@ public class Lobby extends JFrame
     private UDPServer broadcastServer;
     private UDPServer responseServer;
     private boolean waitMode;
+    private Player player;
     
     
     public Lobby()
@@ -219,15 +221,7 @@ public class Lobby extends JFrame
         }
         
     }
-    
-    public void StartGameServer(String gameName)
-    {
-        if(broadcastServer.running)
-            broadcastServer.stopServer();
-        
-        broadcastServer.startServer(gameName);
-    }
-    
+       
     public void PerformBroadcast()
     {
         if(!responseServer.running) {
@@ -248,18 +242,44 @@ public class Lobby extends JFrame
     
     public void JoinGame(InetAddress adr)
     {
-
+        player = new Player();
+        if(player.connect(adr)){
+            StartGame(player);
+        } else {
+            JOptionPane.showMessageDialog(null, "Could not connect to: "+adr, "IP conflict", WIDTH);
+            try{
+                player.disconnect();
+            }
+            catch (Exception e) {
+                System.out.println("Exception Lobby player.disconnect(): "+e.getMessage());
+            }
+        }
     }
     
-    public void StartGame()
-    {
-
+    /*
+     * create Player / start game
+     * 
+     */
+    public void StartGame(Player player)
+    {        
+        Game game = new Game(player, this);
     }
     
     public void HostGame()
     {
         String gameName = JOptionPane.showInputDialog("New Game Name:");
         StartGameServer(gameName);
+        Player player = new Player();
+        player.host(this);
+        SetGUIMode(false);
+    }
+    
+    public void StartGameServer(String gameName)
+    {
+        if(broadcastServer.running)
+            broadcastServer.stopServer();
+        
+        broadcastServer.startServer(gameName);
     }
     
     public void SetGUIMode(boolean enable)
@@ -274,5 +294,6 @@ public class Lobby extends JFrame
         btnJoinGameAI.setEnabled(enable);
         btnJoinGameIP.setEnabled(enable);
         btnRefreshIP.setEnabled(enable);
+        btnLoadGame.setEnabled(enable);
     }
 }

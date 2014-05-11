@@ -6,7 +6,7 @@ package Network;
 
 import java.net.InetAddress;
 /**
- * Game info class thx to hp
+ * Game info class 
  *
  */
 public class GameInfo
