@@ -103,7 +103,14 @@ public class Ghost
                     {
                         if (isEmptyStone(field, y, xx))
                         {
-                            return new DataTransport(xx);
+                            if (y == 0)
+                            {
+                                return new DataTransport(xx);
+                            }
+                            if (!isEmptyStone(field, y - 1, xx))
+                            {
+                                return new DataTransport(xx);
+                            }
                         }
                     }
                 }
