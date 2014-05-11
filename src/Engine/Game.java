@@ -6,6 +6,7 @@ package Engine;
 
 import Engine.GameState.State;
 import Gui.Field;
+import Gui.Lobby;
 import Network.Player;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,6 +25,7 @@ public class Game
     private Ghost ai;
     private boolean gameDecided;
     private Player opponent;
+    private Lobby lobby;
 
     /**
      * Constructor for a game against AI
@@ -43,9 +45,11 @@ public class Game
      * @author Yves Studer
      * @param player Handle network
      */
-    public Game(Player aPlayer)
+    public Game(Player aPlayer, Lobby alobby)
     {
         opponent = aPlayer;
+        lobby = alobby;
+        lobby.setVisible(false);
         Init();
     }
 

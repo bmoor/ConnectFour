@@ -268,7 +268,7 @@ public class Lobby extends JFrame
      */
     public void StartGame(Player player)
     {        
-        Game game = new Game(player);
+        Game game = new Game(player, this);
     }
     
     public void HostGame()
