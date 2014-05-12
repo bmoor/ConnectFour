@@ -14,8 +14,9 @@ public class DataTransport implements java.io.Serializable
 
     private int x;
     private String chat;
-    private int xSize;
-
+    private int xSize = 0;
+    private int ySize = 0;
+    
     public DataTransport(int x)
     {
         this.x = x;
@@ -59,8 +60,7 @@ public class DataTransport implements java.io.Serializable
     public void setySize(int ySize)
     {
         this.ySize = ySize;
-    }
-    private int ySize;
+    }    
 
     @Override
     public String toString()
