@@ -173,7 +173,7 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                resizeBoard(6, 7);
+                resizeBoard(6,7);
             }
         });
         menuResize.add(menuItemSize1);
@@ -183,7 +183,7 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                resizeBoard(9, 10);
+                resizeBoard(9,10);
             }
         });
         menuResize.add(menuItemSize2);
@@ -193,7 +193,7 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                resizeBoard(12, 13);
+                resizeBoard(12,13);
             }
         });
         menuResize.add(menuItemSize3);
@@ -530,6 +530,8 @@ public class Field
                     (int) ((BOARD_HEIGHT / rows) * 0.1),
                     (int) ((BOARD_WIDTH / columns) * 0.75),
                     (int) ((BOARD_WIDTH / columns) * 0.75));
+            repaint();
+            
         }
 
         public void setColor(Color col)
