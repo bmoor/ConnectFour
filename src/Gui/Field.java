@@ -560,6 +560,11 @@ public class Field
         buttonController();
         setLabelText();
     }
+    
+    public void receiveMessage(String text)
+    {
+        
+    }
 
     private void createNewGame()
     {
@@ -616,7 +621,7 @@ public class Field
                     (int) ((BOARD_HEIGHT / rows) * 0.1),
                     (int) ((BOARD_WIDTH / columns) * 0.75),
                     (int) ((BOARD_WIDTH / columns) * 0.75));
-            repaint();
+            //repaint();
 
         }
 
