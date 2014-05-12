@@ -93,7 +93,7 @@ public class Lobby extends JFrame
                 if(waitMode) {
                     try {                        
                         broadcastServer.stopServer();                                                
-                        
+                        destroyOldGame();
                     } catch(Exception ex) {
                         System.out.println(ex.getMessage());
                     }
