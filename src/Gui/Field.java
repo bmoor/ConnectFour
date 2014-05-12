@@ -67,7 +67,7 @@ public class Field
     {
         game = ga;
         isMyTurn = myTurn;
-        this.isMyTurn = isMyTurn;
+        //isMyTurn = game.getIsMyTurn();
         if (isMyTurn)
         {
             myColor = Color.RED;
@@ -132,7 +132,7 @@ public class Field
         });
 
         //Save if game against AI   
-        if (true)  //Info, dass gegen AI gespielt wird
+        if (true)  //Info, dass gegen AI gespielt wird   game.isAiOpponent();
         {
             menuItemSave = new JMenuItem("Save");
             menuFile.add(menuItemSave);
