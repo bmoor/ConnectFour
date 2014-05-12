@@ -113,11 +113,13 @@ public class Player extends Thread {
             while(running) {
                 Thread.sleep(10);
                 if(playing == true) {
-                    if (isClient == true){
-                            tcpRead = new TcpRead(clientSocket, game);
-                            isClient = false;
-                            System.out.println("is Client");   
-                            running = false;
+                    if (isClient == true){                            
+                            if (game != null){
+                                tcpRead = new TcpRead(clientSocket, game);
+                                isClient = false;
+                                System.out.println("is Client");   
+                                running = false;
+                            }
                     }
                     
                     if(ishost == true) {

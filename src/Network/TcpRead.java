@@ -41,5 +41,5 @@ public class TcpRead extends Thread {
         } catch(Exception e) {
             System.out.println("TcpCommunication Exception ReadObject: "+e.getMessage());
         }
-    }
+    }        
 }
