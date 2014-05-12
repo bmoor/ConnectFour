@@ -36,7 +36,7 @@ public class TcpRead extends Thread {
                 tmp = objectReader.readObject();
                 if (tmp != null && tmp instanceof DataTransport){
                     game.TcpTurnPreformed((DataTransport)tmp);                    
-                }
+                }                
             }
         } catch(Exception e) {
             System.out.println("TcpCommunication Exception ReadObject: "+e.getMessage());

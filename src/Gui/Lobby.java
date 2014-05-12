@@ -266,6 +266,7 @@ public class Lobby extends JFrame
     {        
         game = new Game(player, this);
         player.registerGame(game);
+        setVisible(false);
     }
     
     public void HostGame()
@@ -311,6 +312,10 @@ public class Lobby extends JFrame
         }
         game = null;
         player = null;
+        if (waitMode){
+            this.SetGUIMode(true);            
+        }
+        setVisible(true);
         System.gc();
     }
     
