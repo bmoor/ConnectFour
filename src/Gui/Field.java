@@ -112,7 +112,7 @@ public class Field
             @Override
             public void windowOpened(WindowEvent e)
             {
-                
+
             }
 
             @Override
@@ -162,11 +162,8 @@ public class Field
         menuFile = new JMenu("File");
         menuGame = new JMenu("Game");
         menuHelp = new JMenu("Help");
-
         menuBar.add(menuFile);
-
         menuBar.add(menuGame);
-
         menuBar.add(menuHelp);
 
         //Create items in menu "File"
@@ -201,7 +198,7 @@ public class Field
                 }
             });
         }
-        
+
         menuItemBackToLobby = new JMenuItem("Back to lobby");
         menuItemBackToLobby.addActionListener(new ActionListener()
         {
@@ -212,7 +209,7 @@ public class Field
                 frame.setVisible(false);
                 game.finish();
             }
-            
+
         });
         menuFile.add(menuItemBackToLobby);
 
@@ -221,7 +218,6 @@ public class Field
 
         //Exit
         menuItemExit = new JMenuItem("Exit");
-
         menuItemExit.addActionListener(
                 new ActionListener()
                 {
@@ -230,19 +226,16 @@ public class Field
                     )
                     {
                         System.exit(0);
-
                     }
-                }
-        );
+                });
         menuFile.add(menuItemExit);
 
         //Create menu "Game"
         menuResize = new JMenu("Resize Field");
-
         menuGame.add(menuResize);
+
         //Create submenus in "Resize"
         menuItemSize1 = new JMenuItem("6 x 7");
-
         menuItemSize1.addActionListener(
                 new ActionListener()
                 {
@@ -252,11 +245,10 @@ public class Field
                     {
                         resizeBoard(6, 7);
                     }
-                }
-        );
+                });
         menuResize.add(menuItemSize1);
-        menuItemSize2 = new JMenuItem("9 x 10");
 
+        menuItemSize2 = new JMenuItem("9 x 10");
         menuItemSize2.addActionListener(
                 new ActionListener()
                 {
@@ -269,8 +261,8 @@ public class Field
                 }
         );
         menuResize.add(menuItemSize2);
-        menuItemSize3 = new JMenuItem("12 x 13");
 
+        menuItemSize3 = new JMenuItem("12 x 13");
         menuItemSize3.addActionListener(
                 new ActionListener()
                 {
@@ -280,16 +272,13 @@ public class Field
                     {
                         resizeBoard(12, 13);
                     }
-                }
-        );
+                });
         menuResize.add(menuItemSize3);
 
         //Create items in menu "Help"
         //Info
         menuItemInfo = new JMenuItem("Info");
-
         menuHelp.add(menuItemInfo);
-
         menuItemInfo.addActionListener(
                 new ActionListener()
                 {
@@ -299,27 +288,21 @@ public class Field
                     {
                         createInfoDialog();
                     }
-                }
-        );
+                });
 
         //Create the label, that indicates who has to play
         labelTurn = new JLabel();
-
         labelTurn.setBounds(
                 680, 100, 300, 35);
         Font schrift = new Font("Serif", Font.BOLD + Font.ITALIC, 25);
-
         labelTurn.setFont(schrift);
-
         setLabelText();
-
         frame.add(labelTurn);
 
         createButtons();
 
         //Set visibility
-        frame.setVisible(
-                true);
+        frame.setVisible(true);
     }
 
     private void exitGame()
