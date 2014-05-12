@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -77,11 +78,7 @@ public class Game
 
     public boolean againstAi()
     {
-        if (ai != null)
-        {
-            return true;
-        }
-        return false;
+        return ai != null;
     }
 
     /**
@@ -96,7 +93,7 @@ public class Game
         field = new GameState(newY, newX);
         gameDecided = false;
     }
-    
+
     public void finish()
     {
         lobby.destroyOldGame();
@@ -108,14 +105,23 @@ public class Game
      * @author Yves Studer
      * @param path Path to soring
      */
-    public void storeGame(final String path)
+    public void storeGame(String path)
     {
         if (ai == null) //disable storing mechanism during a game against humans
         {
             return;
         }
+        String[] pathPice = path.split(Pattern.quote( "." ) );
+        String newPath=pathPice[0];
+        for (int i = 1; i < pathPice.length; i++)
+        {
+            if(!pathPice[i].contains("c4") )
+            {
+                newPath +="."+pathPice[i];
+            }
+        }
 
-        try (FileOutputStream aFileOutputStream = new FileOutputStream(path + ".cofo");
+        try (FileOutputStream aFileOutputStream = new FileOutputStream(newPath + ".c4");
                 ObjectOutputStream aObjectOutputStream = new ObjectOutputStream(aFileOutputStream))
         {
             aObjectOutputStream.writeObject(field);
@@ -230,7 +236,6 @@ public class Game
      */
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
-        System.out.println("TcpTurnPreformed " + tcpTurn.toString());
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
         ui.setStone(field);
@@ -274,7 +279,6 @@ public class Game
      */
     private int TestWinOnXaxis()
     {
-        System.out.println("x-Axis-Checker");
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int y = 0; y < field.getYsize(); y++)
@@ -288,13 +292,11 @@ public class Game
                 {
                     otherSuccessCounter++;
                     mySuccessCounter = 0;
-                    System.out.println("x-Checker test x=" + x + " y= " + y + " OTHER");
                 }
                 else if (currentFieldPart == State.MINE)
                 {
                     otherSuccessCounter = 0;
                     mySuccessCounter++;
-                    System.out.println("x-Checker test x=" + x + " y= " + y + " MINE");
                 }
                 else
                 {
@@ -328,7 +330,6 @@ public class Game
      */
     private int TestWinOnYaxis()
     {
-        System.out.println("y-Axis-Checker");
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
         for (int x = 0; x < field.getXsize(); x++)
@@ -342,13 +343,11 @@ public class Game
                 {
                     otherSuccessCounter++;
                     mySuccessCounter = 0;
-                    System.out.println("y-Checker test x=" + x + " y= " + y + " OTHER");
                 }
                 else if (currentFieldPart == State.MINE)
                 {
                     otherSuccessCounter = 0;
                     mySuccessCounter++;
-                    System.out.println("y-Checker test x=" + x + " y= " + y + " MINE");
                 }
                 else
                 {
@@ -383,7 +382,6 @@ public class Game
      */
     private int TestWinOnDiagAxis()
     {
-        System.out.println("xy-Axis-Checker");
         final int xSize = field.getXsize();
         final int ySize = field.getYsize();
         int mySuccessCounter = 0;
@@ -426,13 +424,11 @@ public class Game
                         {
                             otherSuccessCounter++;
                             mySuccessCounter = 0;
-                            System.out.println("diag-Checker test x=" + xx + " y= " + yy + " OTHER");
                         }
                         else if (currentFieldPart == State.MINE)
                         {
                             otherSuccessCounter = 0;
                             mySuccessCounter++;
-                            System.out.println("diag-Checker test x=" + xx + " y= " + yy + " MINE");
                         }
                         else
                         {
