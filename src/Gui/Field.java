@@ -156,9 +156,8 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                //System.exit(0);
                 frame.setVisible(false);
-                //game.finish()
+                game.finish();
                 
             }
         });
