@@ -150,9 +150,8 @@ public class Lobby extends JFrame
         btnJoinGameAI.setSize(50, 250);
         btnJoinGameAI.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                game = new Game(this);
-                setVisible(false);
+            public void actionPerformed(ActionEvent e) {                                
+                startAi();                
             }
         });
         pnlButtons.add(btnJoinGameAI, BorderLayout.EAST);
@@ -306,5 +305,10 @@ public class Lobby extends JFrame
     
     public void destroyOldGame(){
         //kill old games
+    }
+    
+    public void startAi(){
+        game = new Game(this);                
+        setVisible(false);
     }
 }
