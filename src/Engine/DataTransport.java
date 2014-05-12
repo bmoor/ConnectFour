@@ -16,22 +16,27 @@ public class DataTransport implements java.io.Serializable
     private String chat;
     private int xSize;
 
-    public DataTransport(int x)
+    public DataTransport(final int x)
     {
         this.x = x;
+    }
+
+    public DataTransport(final String text)
+    {
+        this.chat = text;
     }
 
     public int getX()
     {
         return x;
     }
-    
+
     public String getChat()
     {
         return chat;
     }
 
-    public void setChat(String chat)
+    public void setChat(final String chat)
     {
         this.chat = chat;
     }
@@ -41,7 +46,7 @@ public class DataTransport implements java.io.Serializable
         return xSize;
     }
 
-    public void setxSize(int xSize)
+    public void setxSize(final int xSize)
     {
         this.xSize = xSize;
     }
@@ -51,10 +56,11 @@ public class DataTransport implements java.io.Serializable
         return ySize;
     }
 
-    public void setySize(int ySize)
+    public void setySize(final int ySize)
     {
         this.ySize = ySize;
     }
+
     private int ySize;
 
     @Override
