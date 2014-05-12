@@ -14,8 +14,8 @@ public class DataTransport implements java.io.Serializable
 
     private int x;
     private String chat;
-    private int xSize;
-    private int ySize;
+    private int xSize = 0;
+    private int ySize = 0;
     
     public DataTransport(int x)
     {

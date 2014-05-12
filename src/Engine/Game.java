@@ -92,6 +92,13 @@ public class Game
     {
         field = new GameState(newY, newX);
         gameDecided = false;
+        if (opponent != null)
+        {
+            DataTransport configMob = new DataTransport(0);
+            configMob.setxSize(newX);
+            configMob.setySize(newY);
+            opponent.sendMessage(configMob);
+        }
     }
 
     public void finish()
@@ -111,13 +118,13 @@ public class Game
         {
             return;
         }
-        String[] pathPice = path.split(Pattern.quote( "." ) );
-        String newPath=pathPice[0];
+        String[] pathPice = path.split(Pattern.quote("."));
+        String newPath = pathPice[0];
         for (int i = 1; i < pathPice.length; i++)
         {
-            if(!pathPice[i].contains("c4") )
+            if (!pathPice[i].contains("c4"))
             {
-                newPath +="."+pathPice[i];
+                newPath += "." + pathPice[i];
             }
         }
 
@@ -237,8 +244,15 @@ public class Game
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
         field.setMyTurn(true);
-        TurnPreformed(tcpTurn, State.OTHER);
-        ui.setStone(field);
+        if (tcpTurn.getxSize() != 0)
+        {
+            ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getySize());
+        }
+        else
+        {
+            TurnPreformed(tcpTurn, State.OTHER);
+            ui.setStone(field);
+        }
     }
 
     /**
