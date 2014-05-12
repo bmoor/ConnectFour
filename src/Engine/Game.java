@@ -69,6 +69,7 @@ public class Game
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
         ui = new Field(this, myTurn);
+        //ui.setStone(field);
     }
 
     /**
@@ -214,6 +215,7 @@ public class Game
      */
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
+        System.out.println("TcpTurnPreformed "+tcpTurn.toString());
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
         ui.setStone(field);
