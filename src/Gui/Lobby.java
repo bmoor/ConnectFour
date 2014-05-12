@@ -91,7 +91,7 @@ public class Lobby extends JFrame
             public void actionPerformed(ActionEvent e){
                 if(waitMode) {
                     try {                        
-                        broadcastServer.stopServer();
+                        broadcastServer.stopServer();                                                
                     } catch(Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -112,8 +112,9 @@ public class Lobby extends JFrame
             @Override
             public void actionPerformed(ActionEvent e) {
                 int index = lstGames.getSelectedIndex();
-                if(index<0)
+                if(index<0) {
                     return;
+                }
                 try {
                     JoinGame(gameList.get(index).getAddress());
                 } catch(Exception ex) {

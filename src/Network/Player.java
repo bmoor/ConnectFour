@@ -96,9 +96,13 @@ public class Player extends Thread {
     public void disconnect() throws IOException {
         running = false;
         if(ishost == true) {
-            serverSocket.close();
+            if (serverSocket != null){
+                serverSocket.close();
+            }
         } else {
-            clientSocket.close();
+            if (clientSocket != null){
+                clientSocket.close();
+            }
         }
         ishost = false;
         playing = false;        

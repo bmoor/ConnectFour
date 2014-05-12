@@ -31,10 +31,12 @@ public class UDPServer implements Runnable {
     public UDPServer(Lobby lobbyPtr, boolean broadcastServer) {
         this.lobbyPtr = lobbyPtr;
         try {
-            if(broadcastServer)
+            if(broadcastServer) {
                 socket = new DatagramSocket(udpServerPortNb);
-            else
+            }
+            else {
                 socket = new DatagramSocket();
+            }
         } catch(Exception e) {
             System.out.println(e.getMessage());
         }
@@ -44,8 +46,9 @@ public class UDPServer implements Runnable {
     
     public void startServer(String gameName) {
         // start as broadcast listener
-        if(running)
+        if(running) {
             return;
+        }
         
         running = true;
         this.gameName = gameName;
@@ -54,8 +57,9 @@ public class UDPServer implements Runnable {
     
     public void startServerBroadcast() {
         // send broadcast and start as response listener
-        if(running) 
+        if(running) {
             return;
+        }
         
         running = true;
         byte[] buffer = initCode.getBytes();
@@ -111,8 +115,9 @@ public class UDPServer implements Runnable {
             int nbHosts = (int)Math.pow(2, (32-subnetPrefix)) -2;
             for(int i = 0; i < 32; i++) {
                 subnetMask = subnetMask << 1;
-                if(i<subnetPrefix)
+                if(i<subnetPrefix) {
                     subnetMask += 1;
+                }
             }
             networkAdr = ownIP & subnetMask;
             for(int i = 1; i <= nbHosts; i++) {
