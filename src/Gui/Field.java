@@ -521,6 +521,11 @@ public class Field
         setLabelText();
         game.UiTurnPreformed(dt);
     }
+    
+     private void sendMessage()
+    {
+        //DataTransport dt = new DataTransport(String text);
+    }
 
     public void setStone(GameState gs)
     {
@@ -565,6 +570,8 @@ public class Field
     {
         
     }
+    
+   
 
     private void createNewGame()
     {
