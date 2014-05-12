@@ -161,15 +161,15 @@ public class Game
         {
             case -2:
                 gameDecided = true;
-                //ToDo inform Field we made a draw
+                ui.drawn();
                 break;
             case -1:
                 gameDecided = true;
-                //ToDo inform Field we lost
+                ui.lost();
                 break;
             case 1:
                 gameDecided = true;
-                //ToDo inform Field we won
+                ui.won();
                 break;
             default:
                 // do nothing
