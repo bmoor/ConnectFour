@@ -228,14 +228,6 @@ public class Field
     //Create dialog when "Save" was pressed in "File"
     private void createSaveDialog()
     {
-        dialogSave = new JDialog();
-        dialogSave.setTitle("Save game");
-        dialogSave.setSize(200, 200);
-        dialogSave.setLocationRelativeTo(frame);
-        dialogSave.setResizable(false);
-        dialogSave.setVisible(true);
-        
-        
         JFileChooser chooser = new JFileChooser(); 
         chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.cofo)", "cofo"));
         int r = chooser.showSaveDialog(dialogSave); 
