@@ -50,9 +50,9 @@ public class Ghost
         return true;
     }
 
-    private boolean isHumanStone(final GameState field, final int y, final int x)
+    private boolean isThisStone(final GameState field, final State stone, final int y, final int x)
     {
-        if (field.getStone(y, x) == State.MINE)
+        if (field.getStone(y, x) == stone)
         {
             return true;
         }
@@ -74,7 +74,7 @@ public class Ghost
         }
     }
 
-    private DataTransport checkXaxisPattern(final GameState field)
+    private DataTransport checkXaxisPattern(final GameState field, final State stone)
     {
         for (int y = 0; y < field.getYsize(); y++)
         {
@@ -90,7 +90,7 @@ public class Ghost
                 for (int xx = x; xx < x + 4; xx++)
                 {
                     //x-axis pattern loop
-                    if (isHumanStone(field, y, xx))
+                    if (isThisStone(field, stone, y, xx))
                     {
                         // count all human stone
                         c++;
@@ -119,7 +119,7 @@ public class Ghost
         return null;
     }
 
-    private DataTransport checkYaxisPattern(final GameState field)
+    private DataTransport checkYaxisPattern(final GameState field, final State stone)
     {
         for (int x = 0; x < field.getXsize(); x++)
         {
@@ -135,7 +135,7 @@ public class Ghost
                 for (int yy = y; yy < y + 4; yy++)
                 {
                     //x-axis pattern loop
-                    if (isHumanStone(field, yy, x))
+                    if (isThisStone(field, stone, yy, x))
                     {
                         // count all human stone
                         c++;
@@ -157,7 +157,7 @@ public class Ghost
         return null;
     }
 
-    private DataTransport checkXYaxisPattern(final GameState field)
+    private DataTransport checkXYaxisPattern(final GameState field, final State stone)
     {
         for (int i = 0; i < 2; i++)
         {
@@ -183,7 +183,7 @@ public class Ghost
                             continue;
                         }
 
-                        if (isHumanStone(field, yy, xx))
+                        if (isThisStone(field, stone, yy, xx))
                         {
                             // count all human stone
                             c++;
@@ -191,7 +191,6 @@ public class Ghost
                     }
                     if (c == 3)
                     {
-                        System.out.println("3 detected");
                         for (int dx = x, dy = y; dx < x + 4; dx++, dy++)
                         {
                             int yy = dy;
@@ -226,17 +225,33 @@ public class Ghost
 
     public DataTransport DoTurn(final GameState field)
     {
-        DataTransport tmp = checkXaxisPattern(field);
+        DataTransport tmp;
+        tmp = checkXaxisPattern(field,State.OTHER);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkYaxisPattern(field);
+        tmp = checkYaxisPattern(field,State.OTHER);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkXYaxisPattern(field);
+        tmp = checkXYaxisPattern(field,State.OTHER);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkXaxisPattern(field,State.MINE);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkYaxisPattern(field,State.MINE);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkXYaxisPattern(field,State.MINE);
         if (tmp != null)
         {
             return tmp;
