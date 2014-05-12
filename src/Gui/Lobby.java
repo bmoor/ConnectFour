@@ -46,6 +46,7 @@ public class Lobby extends JFrame
     private UDPServer responseServer;
     private boolean waitMode;
     private Player player;
+    private Game game;
     
     
     public Lobby()
@@ -92,6 +93,7 @@ public class Lobby extends JFrame
                 if(waitMode) {
                     try {                        
                         broadcastServer.stopServer();                                                
+                        
                     } catch(Exception ex) {
                         System.out.println(ex.getMessage());
                     }
@@ -148,9 +150,8 @@ public class Lobby extends JFrame
         btnJoinGameAI.setSize(50, 250);
         btnJoinGameAI.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                Game g= new Game();
-                setVisible(false);
+            public void actionPerformed(ActionEvent e) {                                
+                startAi();                
             }
         });
         pnlButtons.add(btnJoinGameAI, BorderLayout.EAST);
@@ -203,8 +204,8 @@ public class Lobby extends JFrame
         {          
             s= chooser.getSelectedFile().getPath();
             System.out.println(s);
-            Game g= new Game();
-            g.restoreGame(s);
+            game = new Game(this);
+            game.restoreGame(s);
             setVisible(false);
         } 
     }
@@ -263,7 +264,7 @@ public class Lobby extends JFrame
      */
     public void StartGame(Player player)
     {        
-        Game game = new Game(player, this);
+        game = new Game(player, this);
         player.registerGame(game);
     }
     
@@ -300,5 +301,21 @@ public class Lobby extends JFrame
         btnJoinGameIP.setEnabled(enable);
         btnRefreshIP.setEnabled(enable);
         btnLoadGame.setEnabled(enable);
+    }
+    
+    public void destroyOldGame(){
+        try {
+            player.disconnect();
+        } catch(Exception e){
+            System.out.println("Exception destroyOldGame: " +e);
+        }
+        game = null;
+        player = null;
+        System.gc();
+    }
+    
+    public void startAi(){
+        game = new Game(this);                
+        setVisible(false);
     }
 }

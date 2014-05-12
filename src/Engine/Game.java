@@ -31,10 +31,12 @@ public class Game
      * Constructor for a game against AI
      *
      * @author Yves Studer
+     * @param aLobby the poiter to the lobby
      */
-    public Game()
+    public Game(Lobby aLobby)
     {
         ai = new Ghost();
+        lobby = aLobby;
         init(true);
     }
 
@@ -42,12 +44,13 @@ public class Game
      * Constructor for a game against human
      *
      * @author Yves Studer
-     * @param player Handle network
+     * @param aPlayer Handle network
+     * @param aLobby pointer to the lobby
      */
-    public Game(Player aPlayer, Lobby alobby)
+    public Game(Player aPlayer, Lobby aLobby)
     {
         opponent = aPlayer;
-        lobby = alobby;
+        lobby = aLobby;
         lobby.setVisible(false);
         //Check for beginner
         boolean myTurn = false;
@@ -69,7 +72,7 @@ public class Game
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
         ui = new Field(this, myTurn);
-        ui.setStone(field);
+        //ui.setStone(field);
     }
 
     public boolean againstAi()
@@ -92,6 +95,11 @@ public class Game
     {
         field = new GameState(newY, newX);
         gameDecided = false;
+    }
+    
+    public void finish()
+    {
+        lobby.destroyOldGame();
     }
 
     /**
