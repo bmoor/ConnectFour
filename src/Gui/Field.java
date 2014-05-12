@@ -29,6 +29,8 @@ public class Field
     private JFrame frame;
     private JPanel panelBoard;
     private JPanel panelButtons;
+    private JScrollPane scrollPane;
+    private JTextPane messageTextPane;
     private JButton[] buttonSelectList;
     private JMenuBar menuBar;
     private JMenu menuFile;
@@ -38,14 +40,12 @@ public class Field
     private JMenuItem menuItemNew;
     private JMenuItem menuItemExit;
     private JMenuItem menuItemBackToLobby;
-    private JMenuItem menuItemOpen;
     private JMenuItem menuItemSave;
     private JMenuItem menuItemSize1;
     private JMenuItem menuItemSize2;
     private JMenuItem menuItemSize3;
     private JMenuItem menuItemInfo;
     private JDialog dialogSave;
-    private JDialog dialogOpen;
     private JDialog dialogInfo;
     private JLabel infoText;
     private JLabel labelTurn;
@@ -64,6 +64,7 @@ public class Field
     private boolean lost;
     private boolean drawn;
     private boolean isMyTurn;
+    private String messageText;
 
     public Field(Game ga, boolean myTurn)
     {
@@ -152,6 +153,20 @@ public class Field
             }
 
         });
+        
+        //Create ScrollPane with white TextPane
+        messageTextPane = new JTextPane();
+        
+        
+        scrollPane = new JScrollPane(messageTextPane);
+        scrollPane.setBounds(680,150,250,370);
+        messageTextPane.setBounds(0,0,250,370);
+        messageTextPane.setBackground(Color.WHITE);
+        
+        
+        
+        
+        frame.add(scrollPane);
 
         //Create menubar
         menuBar = new JMenuBar();
@@ -222,8 +237,7 @@ public class Field
                 new ActionListener()
                 {
                     @Override
-                    public void actionPerformed(ActionEvent e
-                    )
+                    public void actionPerformed(ActionEvent e)
                     {
                         System.exit(0);
                     }
@@ -243,7 +257,7 @@ public class Field
                     public void actionPerformed(ActionEvent e
                     )
                     {
-                        resizeBoard(6, 7);
+                        resizePressed(6, 7);
                     }
                 });
         menuResize.add(menuItemSize1);
@@ -256,7 +270,7 @@ public class Field
                     public void actionPerformed(ActionEvent e
                     )
                     {
-                        resizeBoard(9, 10);
+                        resizePressed(9, 10);
                     }
                 }
         );
@@ -270,7 +284,7 @@ public class Field
                     public void actionPerformed(ActionEvent e
                     )
                     {
-                        resizeBoard(12, 13);
+                        resizePressed(12, 13);
                     }
                 });
         menuResize.add(menuItemSize3);
@@ -429,6 +443,12 @@ public class Field
         updateBoard();
         panelBoard.setVisible(true);
     }
+    
+    private void resizePressed(int ro, int co)
+    {
+        resizeBoard(ro, co);
+        sendNewBoardsizeToOther(rows, columns);
+    }
 
     public void resizeBoard(int ro, int co)
     {
@@ -449,7 +469,7 @@ public class Field
         createButtons();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
-        sendNewBoardsizeToOther(rows, columns);
+        
 
         //Abfragen ob Änderung möglich
         //Info an Klasse Game (neues GUI)
@@ -459,6 +479,8 @@ public class Field
     {
         game.resizeField(ro, co);
     }
+    
+    
 
     private void buttonController()
     {
@@ -521,15 +543,16 @@ public class Field
         setLabelText();
         game.UiTurnPreformed(dt);
     }
-    
-     private void sendMessage()
+
+    private void sendMessage()
     {
-        //DataTransport dt = new DataTransport(String text);
+        DataTransport dt = new DataTransport(messageText);
+        game.UiTurnPreformed(dt);
     }
 
     public void setStone(GameState gs)
     {
-        
+
         int myRow = rows - 1;
         for (int r = 0; r < rows; r++)
         {
@@ -565,20 +588,18 @@ public class Field
         buttonController();
         setLabelText();
     }
-    
+
     public void receiveMessage(String text)
     {
-        
+
     }
-    
-   
 
     private void createNewGame()
     {
         won = false;
         lost = false;
         drawn = false;
-        resizeBoard(rows, columns);
+        resizeBoard(rows,columns);
         game.resizeField(rows, columns);
     }
 
