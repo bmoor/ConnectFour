@@ -229,15 +229,14 @@ public class Field
     private void createSaveDialog()
     {
         JFileChooser chooser = new JFileChooser(); 
-        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.cofo)", "cofo"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.c4)", "c4"));
         int r = chooser.showSaveDialog(dialogSave); 
         String s = "no File!";
         if (r == JFileChooser.APPROVE_OPTION) 
         {          
             s = chooser.getSelectedFile().getPath();
             System.out.println(s);
-            Game g= new Game();
-            g.restoreGame(s);
+            game.storeGame(s);
             dialogSave.setVisible(false);
         } 
     }
