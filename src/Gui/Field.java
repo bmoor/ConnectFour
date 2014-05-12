@@ -456,7 +456,6 @@ public class Field
         columns = co;
         stones = new Stone[rows][columns];
         board = new State[rows][columns];
-
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < columns; c++)
@@ -464,15 +463,11 @@ public class Field
                 board[r][c] = EMPTY;
             }
         }
-
         panelButtons.setVisible(false);
         createButtons();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
-        
-
-        //Abfragen ob Änderung möglich
-        //Info an Klasse Game (neues GUI)
+        System.gc();
     }
 
     private void sendNewBoardsizeToOther(int ro, int co)
