@@ -12,7 +12,7 @@ package Engine;
 public class DataTransport implements java.io.Serializable
 {
 
-    private final int x;
+    private int x;
     private String chat;
     private int xSize;
 
