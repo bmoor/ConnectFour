@@ -32,9 +32,10 @@ public class Game
      *
      * @author Yves Studer
      */
-    public Game()
+    public Game(Lobby alobby)
     {
         ai = new Ghost();
+        lobby = alobby;
         init(true);
     }
 
@@ -69,7 +70,7 @@ public class Game
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
         ui = new Field(this, myTurn);
-        ui.setStone(field);
+        //ui.setStone(field);
     }
 
     public boolean againstAi()
@@ -92,6 +93,10 @@ public class Game
     {
         field = new GameState(newY, newX);
         gameDecided = false;
+    }
+    
+    public void finish()
+    {
     }
 
     /**
