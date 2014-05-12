@@ -15,8 +15,9 @@ import java.awt.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.*;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -102,34 +103,88 @@ public class Field
         frame = new JFrame("Connect four");
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setResizable(false);
+        frame.addWindowListener(new WindowListener()
+        {
+
+            @Override
+            public void windowOpened(WindowEvent e)
+            {
+                
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                exitGame();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e)
+            {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e)
+            {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e)
+            {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e)
+            {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e)
+            {
+
+            }
+
+        });
 
         //Create menubar
         menuBar = new JMenuBar();
+
         frame.setJMenuBar(menuBar);
 
         //Create menus in the menubar
         menuFile = new JMenu("File");
         menuGame = new JMenu("Game");
         menuHelp = new JMenu("Help");
+
         menuBar.add(menuFile);
+
         menuBar.add(menuGame);
+
         menuBar.add(menuHelp);
 
         //Create items in menu "File"
         //New
         menuItemNew = new JMenuItem("New");
+
         menuFile.add(menuItemNew);
-        menuItemNew.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                createNewGame();
-            }
-        });
+
+        menuItemNew.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e
+                    )
+                    {
+                        createNewGame();
+                    }
+                }
+        );
 
         //Save if game against AI   
         if (game.againstAi())
@@ -151,94 +206,127 @@ public class Field
 
         //Exit
         menuItemExit = new JMenuItem("Exit");
-        menuItemExit.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                //System.exit(0);
-                frame.setVisible(false);
-                
-            }
-        });
+
+        menuItemExit.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e
+                    )
+                    {
+                        frame.setVisible(false);
+                        exitGame();
+
+                    }
+                }
+        );
         menuFile.add(menuItemExit);
 
         //Create menu "Game"
         menuResize = new JMenu("Resize Field");
+
         menuGame.add(menuResize);
         //Create submenus in "Resize"
         menuItemSize1 = new JMenuItem("6 x 7");
-        menuItemSize1.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                resizeBoard(6,7);
-            }
-        });
+
+        menuItemSize1.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e
+                    )
+                    {
+                        resizeBoard(6, 7);
+                    }
+                }
+        );
         menuResize.add(menuItemSize1);
         menuItemSize2 = new JMenuItem("9 x 10");
-        menuItemSize2.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                resizeBoard(9,10);
-            }
-        });
+
+        menuItemSize2.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e
+                    )
+                    {
+                        resizeBoard(9, 10);
+                    }
+                }
+        );
         menuResize.add(menuItemSize2);
         menuItemSize3 = new JMenuItem("12 x 13");
-        menuItemSize3.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                resizeBoard(12,13);
-            }
-        });
+
+        menuItemSize3.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e
+                    )
+                    {
+                        resizeBoard(12, 13);
+                    }
+                }
+        );
         menuResize.add(menuItemSize3);
 
         //Create items in menu "Help"
         //Info
         menuItemInfo = new JMenuItem("Info");
+
         menuHelp.add(menuItemInfo);
-        menuItemInfo.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                createInfoDialog();
-            }
-        });
+
+        menuItemInfo.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e
+                    )
+                    {
+                        createInfoDialog();
+                    }
+                }
+        );
 
         //Create the label, that indicates who has to play
         labelTurn = new JLabel();
-        labelTurn.setBounds(680, 100, 300, 35);
+
+        labelTurn.setBounds(
+                680, 100, 300, 35);
         Font schrift = new Font("Serif", Font.BOLD + Font.ITALIC, 25);
+
         labelTurn.setFont(schrift);
+
         setLabelText();
+
         frame.add(labelTurn);
 
         createButtons();
 
         //Set visibility
-        frame.setVisible(true);
+        frame.setVisible(
+                true);
+    }
+
+    private void exitGame()
+    {
+        game.finish();
     }
 
     //Create dialog when "Save" was pressed in "File"
     private void createSaveDialog()
     {
-        JFileChooser chooser = new JFileChooser(); 
+        JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.c4)", "c4"));
-        int r = chooser.showSaveDialog(dialogSave); 
+        int r = chooser.showSaveDialog(dialogSave);
         String s = "no File!";
-        if (r == JFileChooser.APPROVE_OPTION) 
-        {          
+        if (r == JFileChooser.APPROVE_OPTION)
+        {
             s = chooser.getSelectedFile().getPath();
             System.out.println(s);
             game.storeGame(s);
             dialogSave.setVisible(false);
-        } 
+        }
     }
 
     //Create dialog when "Info" was pressed in "Help"
@@ -504,6 +592,7 @@ public class Field
                 else if (board[r][c] == OTHER)
                 {
                     stones[r][c].setColor(otherColor);
+
                 }
             }
         }
@@ -531,7 +620,7 @@ public class Field
                     (int) ((BOARD_WIDTH / columns) * 0.75),
                     (int) ((BOARD_WIDTH / columns) * 0.75));
             repaint();
-            
+
         }
 
         public void setColor(Color col)
