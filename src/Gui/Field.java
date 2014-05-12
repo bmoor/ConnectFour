@@ -28,13 +28,12 @@ public class Field
     private JPanel panelBoard;
     private JPanel panelButtons;
     private JButton[] buttonSelectList;
-    private Icon arrowRed;
-    private Icon arrowGreen;
     private JMenuBar menuBar;
     private JMenu menuFile;
     private JMenu menuGame;
     private JMenu menuResize;
     private JMenu menuHelp;
+    private JMenuItem menuItemNew;
     private JMenuItem menuItemExit;
     private JMenuItem menuItemOpen;
     private JMenuItem menuItemSave;
@@ -42,51 +41,55 @@ public class Field
     private JMenuItem menuItemSize2;
     private JMenuItem menuItemSize3;
     private JMenuItem menuItemInfo;
+    private JDialog dialogSave;
     private JDialog dialogOpen;
     private JDialog dialogInfo;
+    private JLabel infoText;
     private JLabel labelTurn;
 
     private Stone[][] stones;
     private State[][] board;
-    private Color myColor = Color.RED;
-    private Color otherColor = Color.YELLOW;
+    private final Color myColor;
+    private final Color otherColor;
     private final int BOARD_WIDTH = 600;
     private final int BOARD_HEIGHT = 500;
     private int rows = 6;
     private int columns = 7;
-    private Game game;
+    private final Game game;
 
+    private boolean won;
+    private boolean lost;
+    private boolean drawn;
     private boolean isMyTurn;
 
     public Field(Game ga)
     {
         game = ga;
+        //nur zum testen
+        isMyTurn = true;
+        otherColor = Color.YELLOW;
+        myColor = Color.RED;
         /**
-        this.isMyTurn = isMyTurn;
-        if(isMyTurn)
-        {
-            myColor = Color.RED;
-            otherColor = Color.YELLOW;
-        }
-        else
-        {
-            myColor = Color.YELLOW;
-            otherColor = Color.RED;
-        }
-        */
-        
+         * this.isMyTurn = isMyTurn; if(isMyTurn) { myColor = Color.RED;
+         * otherColor = Color.YELLOW; } else { myColor = Color.YELLOW;
+         * otherColor = Color.RED; }
+         */
+        won = false;
+        lost = false;
+        drawn = false;
+
         stones = new Stone[rows][columns];
-        
-        //Nur zum testen
         board = new State[rows][columns];
-        //GameState gs = new GameState(rows, columns);
-        //gs.setMyTurn(true);
-        //gs.setStone(0, 0, State.OTHER);
-        //gs.setStone(0, 1, State.OTHER);
-        //gs.setStone(1, 1, State.OTHER);
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                board[r][c] = EMPTY;
+            }
+        }
+
         createGUI();
         createBoard(rows, columns);
-        //setStone(gs);
     }
 
     private void createGUI()
@@ -112,31 +115,33 @@ public class Field
         menuBar.add(menuHelp);
 
         //Create items in menu "File"
-        //Open
-        menuItemOpen = new JMenuItem("Open");
-        menuFile.add(menuItemOpen);
-        menuItemOpen.addActionListener(new ActionListener()
+        //New
+        menuItemNew = new JMenuItem("New");
+        menuFile.add(menuItemNew);
+        menuItemNew.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                createOpenDialog();
+                createNewGame();
             }
         });
 
-        //Save
-        menuItemSave = new JMenuItem("Save");
+        //Save if game against AI   
+        if(true)  //Info, dass gegen AI gespielt wird
+        {
+            menuItemSave = new JMenuItem("Save");
         menuFile.add(menuItemSave);
         menuItemSave.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                isMyTurn = true;
-                buttonController();
-                setTextTurn();
+                createSaveDialog();
             }
         });
+        }
+        
 
         //Separate exit from the other items
         menuFile.addSeparator();
@@ -203,42 +208,27 @@ public class Field
 
         //Create the label, that indicates who has to play
         labelTurn = new JLabel();
-        setTextTurn();
         labelTurn.setBounds(680, 100, 300, 35);
         Font schrift = new Font("Serif", Font.BOLD + Font.ITALIC, 25);
         labelTurn.setFont(schrift);
+        setLabelText();
         frame.add(labelTurn);
 
         createButtons();
 
         //Set visibility
         frame.setVisible(true);
-
     }
 
-    private void setTextTurn()
+    //Create dialog when "Save" was pressed in "File"
+    private void createSaveDialog()
     {
-        if (isMyTurn)
-        {
-            labelTurn.setForeground(Color.GREEN);
-            labelTurn.setText("It's your turn!");
-        }
-        else
-        {
-            labelTurn.setForeground(Color.RED);
-            labelTurn.setText("Waiting for other player...");
-        }
-
-    }
-
-    //Create dialog when "Open" was pressed in "File"
-    private void createOpenDialog()
-    {
-        dialogOpen = new JDialog();
-        dialogOpen.setTitle("Open file");
-        dialogOpen.setSize(200, 200);
-        dialogOpen.setLocationRelativeTo(frame);
-        dialogOpen.setVisible(true);
+        dialogSave = new JDialog();
+        dialogSave.setTitle("Save game");
+        dialogSave.setSize(200,200);
+        dialogSave.setLocationRelativeTo(frame);
+        dialogSave.setResizable(false);
+        dialogSave.setVisible(true);
     }
 
     //Create dialog when "Info" was pressed in "Help"
@@ -246,8 +236,14 @@ public class Field
     {
         dialogInfo = new JDialog();
         dialogInfo.setTitle("Information");
-        dialogInfo.setSize(200, 200);
+        dialogInfo.setSize(400, 300);
         dialogInfo.setLocationRelativeTo(frame);
+        
+        infoText = new JLabel();
+        //infoText.setLayout(new BorderLayout());
+        infoText.setText("alsduihgfajh asdlkfjh kjh sdfj");
+        dialogInfo.add(infoText);
+        infoText.setBounds(50,50,300,200);
         dialogInfo.setVisible(true);
 
     }
@@ -259,13 +255,6 @@ public class Field
         panelButtons.setBounds(65, 35, BOARD_WIDTH - 30, 45);
         panelButtons.setLayout(new GridLayout(1, columns, 20, 0));
 
-        //Create icons
-        /**
-         * arrowRed = new ImageIcon(getClass().getResource("PfeilRot.jpg"));
-         * arrowRed. arrowGreen = new
-         * ImageIcon(getClass().getResource("PfeilGrün.jpg"));
-         */
-        
         //Create buttons and add them to panel
         buttonSelectList = new JButton[columns];
         for (int i = 0; i < columns; i++)
@@ -279,12 +268,14 @@ public class Field
                 public void actionPerformed(ActionEvent e)
                 {
                     columnSelected(j);
+
                 }
             });
             panelButtons.add(buttonSelectList[i]);
 
         }
         frame.add(panelButtons);
+        //buttonController();
         panelButtons.setVisible(true);
     }
 
@@ -294,7 +285,7 @@ public class Field
         boolean done = false;
         do
         {
-            if (board[index][col] == EMPTY)
+            if (board[index][col] == (EMPTY))
             {
                 board[index][col] = MINE;
                 done = true;
@@ -349,7 +340,6 @@ public class Field
     {
         rows = ro;
         columns = co;
-        sendNewBoardsizeToOther(rows,columns);
         stones = new Stone[rows][columns];
         board = new State[rows][columns];
 
@@ -365,11 +355,12 @@ public class Field
         createButtons();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
+        sendNewBoardsizeToOther(rows, columns);
 
         //Abfragen ob Änderung möglich
         //Info an Klasse Game (neues GUI)
     }
-    
+
     private void sendNewBoardsizeToOther(int ro, int co)
     {
         System.out.println(ro + " " + co);
@@ -377,11 +368,16 @@ public class Field
 
     private void buttonController()
     {
+        boolean b = isMyTurn;
+        if (won || lost || drawn)
+        {
+            b = false;
+        }
         for (int i = 0; i < columns; i++)
         {
             if (!isColumnFull(i))
             {
-                buttonSelectList[i].setEnabled(isMyTurn);
+                buttonSelectList[i].setEnabled(b);
             }
             else
             {
@@ -390,13 +386,46 @@ public class Field
         }
     }
 
+    private void setLabelText()
+    {
+        if (won)
+        {
+            labelTurn.setText("You won!");
+            labelTurn.setForeground(Color.GREEN);
+        }
+        else if (lost)
+        {
+            labelTurn.setText("You lost...");
+            labelTurn.setForeground(Color.RED);
+        }
+        else if (drawn)
+        {
+            labelTurn.setText("Drawn");
+            labelTurn.setForeground(Color.BLACK);
+        }
+        else
+        {
+            if (isMyTurn)
+            {
+                labelTurn.setText("It's your turn!");
+                labelTurn.setForeground(Color.GREEN);
+            }
+            else
+            {
+                labelTurn.setText("Waiting for other player...");
+                labelTurn.setForeground(Color.RED);
+            }
+        }
+
+    }
+
     private void sendMyStone(int col)
     {
         DataTransport dt = new DataTransport(col);
-        game.UiTurnPreformed(dt);
         isMyTurn = false;
         buttonController();
-        setTextTurn();
+        setLabelText();
+        game.UiTurnPreformed(dt);
     }
 
     public void setStone(GameState gs)
@@ -413,8 +442,39 @@ public class Field
         isMyTurn = gs.isMyTurn();
         updateBoard();
         buttonController();
-        setTextTurn();
+        setLabelText();
+    }
 
+    public void won()
+    {
+        won = true;
+        buttonController();
+        setLabelText();
+        
+
+    }
+
+    public void lost()
+    {
+        lost = true;
+        buttonController();
+        setLabelText();
+    }
+
+    public void drawn()
+    {
+        drawn = true;
+        buttonController();
+        setLabelText();
+    }
+
+    private void createNewGame()
+    {
+        won = false;
+        lost = false;
+        drawn = false;
+        //Gegner informieren, dass ein neues Spiel gestartet wurde!
+        resizeBoard(rows, columns);
     }
 
     //Check each entry in "board", create a new circle
