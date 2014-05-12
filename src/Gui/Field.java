@@ -512,6 +512,11 @@ public class Field
         }
 
     }
+    
+    private void sendMessage(String text)
+    {
+        DataTransport dt = new DataTransport(text);
+    }
 
     private void sendMyStone(int col)
     {
