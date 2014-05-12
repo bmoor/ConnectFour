@@ -93,6 +93,7 @@ public class Field
         createGUI();
         createBoard(rows, columns);
         buttonController();
+        setLabelText();
     }
 
     private void createGUI()
