@@ -196,7 +196,7 @@ public class Lobby extends JFrame
     public void LoadGame()
     {
         JFileChooser chooser = new JFileChooser(); 
-        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.cofo)", "cofo"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.c4)", "c4"));
         int r = chooser.showOpenDialog(this); 
         String s = "no File!"; 
         if (r == JFileChooser.APPROVE_OPTION) 
@@ -258,7 +258,7 @@ public class Lobby extends JFrame
     }
     
     /*
-     * create Player / start game
+     * create game
      * 
      */
     public void StartGame(Player player)
@@ -271,15 +271,16 @@ public class Lobby extends JFrame
     {
         String gameName = JOptionPane.showInputDialog("New Game Name:");
         StartGameServer(gameName);
-        Player player = new Player();
+        player = new Player();
         player.host(this);
         SetGUIMode(false);
     }
     
     public void StartGameServer(String gameName)
     {
-        if(broadcastServer.running)
+        if(broadcastServer.running) {
             broadcastServer.stopServer();
+        }
         
         broadcastServer.startServer(gameName);
     }
@@ -287,10 +288,12 @@ public class Lobby extends JFrame
     public void SetGUIMode(boolean enable)
     {
         waitMode = !enable;
-        if(waitMode)
+        if(waitMode) {
             btnCreateGame.setText("Cancel");
-        else
+        }
+        else {
             btnCreateGame.setText("Create Game");
+        }
         btnJoinGame.setEnabled(enable);
         btnRefresh.setEnabled(enable);
         btnJoinGameAI.setEnabled(enable);

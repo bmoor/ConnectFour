@@ -24,5 +24,8 @@ public class DataTransport implements java.io.Serializable
         return x;
     }
     
+    public String toString(){
+        return "DataTransport: "+x;
+    }
     
 }
