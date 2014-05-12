@@ -25,7 +25,7 @@ public class Game
     private Ghost ai = null;
     private boolean gameDecided;
     private Player opponent = null;
-    private Lobby lobby;
+    private final Lobby lobby;
 
     /**
      * Constructor for a game against AI
@@ -51,7 +51,6 @@ public class Game
     {
         opponent = aPlayer;
         lobby = aLobby;
-        lobby.setVisible(false);
         //Check for beginner
         boolean myTurn = false;
         if (opponent.isHost())
@@ -99,6 +98,7 @@ public class Game
     
     public void finish()
     {
+        //ToDo send game is finished or aborded if the game ist against humans
         lobby.destroyOldGame();
     }
 
@@ -217,7 +217,6 @@ public class Game
         }
         if (opponent != null)
         {
-            //ToDo send to TCP
             opponent.sendMessage(uiTurn);
         }
     }
@@ -230,7 +229,6 @@ public class Game
      */
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
-        System.out.println("TcpTurnPreformed " + tcpTurn.toString());
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
         ui.setStone(field);

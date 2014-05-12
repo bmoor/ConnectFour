@@ -5,7 +5,6 @@
 package connectfour;
 
 import Gui.Lobby;
-import Gui.Field;
 
 /**
  *
@@ -19,6 +18,5 @@ public class ConnectFour {
     public static void main(String[] args) {        
         //Open game connectFour
         Lobby l = new Lobby();
-        //Field f = new Field();
     }
 }
