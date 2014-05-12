@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * @author Mario
@@ -62,21 +63,23 @@ public class Field
     private boolean drawn;
     private boolean isMyTurn;
 
-    public Field(Game ga)
+    public Field(Game ga, boolean myTurn)
     {
         game = ga;
-        
-        
-        
-        //nur zum testen
-        isMyTurn = true;
-        otherColor = Color.YELLOW;
-        myColor = Color.RED;
-        /**
-         * this.isMyTurn = isMyTurn; if(isMyTurn) { myColor = Color.RED;
-         * otherColor = Color.YELLOW; } else { myColor = Color.YELLOW;
-         * otherColor = Color.RED; }
-         */
+        isMyTurn = myTurn;
+
+        this.isMyTurn = isMyTurn;
+        if (isMyTurn)
+        {
+            myColor = Color.RED;
+            otherColor = Color.YELLOW;
+        }
+        else
+        {
+            myColor = Color.YELLOW;
+            otherColor = Color.RED;
+        }
+
         won = false;
         lost = false;
         drawn = false;
@@ -131,20 +134,19 @@ public class Field
         });
 
         //Save if game against AI   
-        if(true)  //Info, dass gegen AI gespielt wird
+        if (true)  //Info, dass gegen AI gespielt wird
         {
             menuItemSave = new JMenuItem("Save");
-        menuFile.add(menuItemSave);
-        menuItemSave.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+            menuFile.add(menuItemSave);
+            menuItemSave.addActionListener(new ActionListener()
             {
-                createSaveDialog();
-            }
-        });
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    createSaveDialog();
+                }
+            });
         }
-        
 
         //Separate exit from the other items
         menuFile.addSeparator();
@@ -228,10 +230,24 @@ public class Field
     {
         dialogSave = new JDialog();
         dialogSave.setTitle("Save game");
-        dialogSave.setSize(200,200);
+        dialogSave.setSize(200, 200);
         dialogSave.setLocationRelativeTo(frame);
         dialogSave.setResizable(false);
         dialogSave.setVisible(true);
+        
+        
+        JFileChooser chooser = new JFileChooser(); 
+        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.cofo)", "cofo"));
+        int r = chooser.showSaveDialog(dialogSave); 
+        String s = "no File!";
+        if (r == JFileChooser.APPROVE_OPTION) 
+        {          
+            s = chooser.getSelectedFile().getPath();
+            System.out.println(s);
+            Game g= new Game();
+            g.restoreGame(s);
+            dialogSave.setVisible(false);
+        } 
     }
 
     //Create dialog when "Info" was pressed in "Help"
@@ -241,12 +257,12 @@ public class Field
         dialogInfo.setTitle("Information");
         dialogInfo.setSize(400, 300);
         dialogInfo.setLocationRelativeTo(frame);
-        
+
         infoText = new JLabel();
         //infoText.setLayout(new BorderLayout());
         infoText.setText("alsduihgfajh asdlkfjh kjh sdfj");
         dialogInfo.add(infoText);
-        infoText.setBounds(50,50,300,200);
+        infoText.setBounds(50, 50, 300, 200);
         dialogInfo.setVisible(true);
 
     }
@@ -366,8 +382,9 @@ public class Field
 
     private void sendNewBoardsizeToOther(int ro, int co)
     {
-        game.resizeField(ro,co);
+        game.resizeField(ro, co);
     }
+
     private void buttonController()
     {
         boolean b = isMyTurn;
@@ -474,7 +491,7 @@ public class Field
         lost = false;
         drawn = false;
         resizeBoard(rows, columns);
-        game.resizeField(rows,columns);
+        game.resizeField(rows, columns);
     }
 
     //Check each entry in "board", create a new circle

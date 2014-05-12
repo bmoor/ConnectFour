@@ -37,8 +37,7 @@ public class Game
         ai = new Ghost();
         Init(false);
     }
-        
-    
+
     /**
      * Constructor for a game against human
      *
@@ -52,7 +51,8 @@ public class Game
         lobby.setVisible(false);
         //Check for beginner
         boolean myTurn = false;
-        if (opponent.isHost()){
+        if (opponent.isHost())
+        {
             myTurn = true;
         }
         Init(myTurn);
@@ -68,7 +68,7 @@ public class Game
         gameDecided = false;
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
-        ui = new Field(this);
+        ui = new Field(this, myTurn);
     }
 
     /**
@@ -199,7 +199,7 @@ public class Game
             field.setMyTurn(true);
             ui.setStone(field);
         }
-        if(opponent != null)
+        if (opponent != null)
         {
             //ToDo send to TCP
             opponent.sendMessage(uiTurn);
@@ -371,17 +371,17 @@ public class Game
         final int ySize = field.getYsize();
         int mySuccessCounter = 0;
         int otherSuccessCounter = 0;
-        for (int i = 0; i < 2; i++) 
+        for (int i = 0; i < 2; i++)
         {
             //used for both diagonal directions
             otherSuccessCounter = 0;
             mySuccessCounter = 0;
-            for (int yt = 0; yt < ySize - 3; yt++) 
+            for (int yt = 0; yt < ySize - 3; yt++)
             {
                 // y-loop
                 otherSuccessCounter = 0;
                 mySuccessCounter = 0;
-                for (int xt = 0; xt < xSize - 3; xt++) 
+                for (int xt = 0; xt < xSize - 3; xt++)
                 {
                     // x-loop
                     otherSuccessCounter = 0;
@@ -389,7 +389,7 @@ public class Game
                     for (int y = yt, x = xt; x < xSize; x++, y++)
                     {
                         // diagonal-loop
-                        int yy = y; 
+                        int yy = y;
                         int xx;
                         if (i == 0)
                         {
