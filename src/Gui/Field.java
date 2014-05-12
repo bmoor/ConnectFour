@@ -322,7 +322,6 @@ public class Field
             s = chooser.getSelectedFile().getPath();
             System.out.println(s);
             game.storeGame(s);
-            dialogSave.setVisible(false);
         }
     }
 
@@ -525,6 +524,7 @@ public class Field
 
     public void setStone(GameState gs)
     {
+        
         int myRow = rows - 1;
         for (int r = 0; r < rows; r++)
         {
