@@ -304,7 +304,14 @@ public class Lobby extends JFrame
     }
     
     public void destroyOldGame(){
-        //kill old games
+        try {
+            player.disconnect();
+        } catch(Exception e){
+            System.out.println("Exception destroyOldGame: " +e);
+        }
+        game = null;
+        player = null;
+        System.gc();
     }
     
     public void startAi(){
