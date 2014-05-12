@@ -243,13 +243,14 @@ public class Game
      */
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
-        field.setMyTurn(true);
         if (tcpTurn.getxSize() != 0)
         {
+            field.setMyTurn(false);
             ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getySize());
         }
         else
         {
+            field.setMyTurn(true);
             TurnPreformed(tcpTurn, State.OTHER);
             ui.setStone(field);
         }
