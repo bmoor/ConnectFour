@@ -35,7 +35,7 @@ public class Game
     public Game()
     {
         ai = new Ghost();
-        init(false);
+        init(true);
     }
 
     /**
@@ -69,7 +69,7 @@ public class Game
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
         ui = new Field(this, myTurn);
-        //ui.setStone(field);
+        ui.setStone(field);
     }
 
     public boolean againstAi()
