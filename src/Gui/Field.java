@@ -65,6 +65,9 @@ public class Field
     public Field(Game ga)
     {
         game = ga;
+        
+        
+        
         //nur zum testen
         isMyTurn = true;
         otherColor = Color.YELLOW;
@@ -363,9 +366,8 @@ public class Field
 
     private void sendNewBoardsizeToOther(int ro, int co)
     {
-        System.out.println(ro + " " + co);
+        game.resizeField(ro,co);
     }
-
     private void buttonController()
     {
         boolean b = isMyTurn;
@@ -450,8 +452,6 @@ public class Field
         won = true;
         buttonController();
         setLabelText();
-        
-
     }
 
     public void lost()
@@ -473,8 +473,8 @@ public class Field
         won = false;
         lost = false;
         drawn = false;
-        //Gegner informieren, dass ein neues Spiel gestartet wurde!
         resizeBoard(rows, columns);
+        game.resizeField(rows,columns);
     }
 
     //Check each entry in "board", create a new circle
