@@ -18,7 +18,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.*;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -104,17 +103,15 @@ public class Field
         frame = new JFrame("Connect four");
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
-        //frame.setDefaultCloseOperation(this.exitGame());
         frame.setLayout(null);
         frame.setResizable(false);
-
         frame.addWindowListener(new WindowListener()
         {
 
             @Override
             public void windowOpened(WindowEvent e)
             {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
             }
 
             @Override
