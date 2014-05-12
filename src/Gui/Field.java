@@ -67,7 +67,6 @@ public class Field
     {
         game = ga;
         isMyTurn = myTurn;
-
         this.isMyTurn = isMyTurn;
         if (isMyTurn)
         {
@@ -79,11 +78,9 @@ public class Field
             myColor = Color.YELLOW;
             otherColor = Color.RED;
         }
-
         won = false;
         lost = false;
         drawn = false;
-
         stones = new Stone[rows][columns];
         board = new State[rows][columns];
         for (int r = 0; r < rows; r++)
@@ -93,9 +90,9 @@ public class Field
                 board[r][c] = EMPTY;
             }
         }
-
         createGUI();
         createBoard(rows, columns);
+        buttonController();
     }
 
     private void createGUI()
@@ -158,7 +155,9 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                System.exit(0);
+                //System.exit(0);
+                frame.setVisible(false);
+                
             }
         });
         menuFile.add(menuItemExit);
