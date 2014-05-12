@@ -35,7 +35,7 @@ public class Game
     public Game()
     {
         ai = new Ghost();
-        Init(false);
+        init(false);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Game
         {
             myTurn = true;
         }
-        Init(myTurn);
+        init(myTurn);
     }
 
     /**
@@ -63,13 +63,22 @@ public class Game
      *
      * @author Yves Studer
      */
-    private void Init(boolean myTurn)
+    private void init(boolean myTurn)
     {
         gameDecided = false;
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
         ui = new Field(this, myTurn);
         //ui.setStone(field);
+    }
+
+    public boolean againstAi()
+    {
+        if (ai != null)
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -103,8 +112,7 @@ public class Game
         {
             aObjectOutputStream.writeObject(field);
             aObjectOutputStream.close();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println("Exception: " + e.getMessage() + "\nvoid storeGame(final String path)");
         }
@@ -131,8 +139,7 @@ public class Game
 
             field = (GameState) o;
             ui.setStone(field);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println("Exception: " + e.getMessage() + "\nvoid restoreGame(final String path)");
         }
@@ -215,7 +222,7 @@ public class Game
      */
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
-        System.out.println("TcpTurnPreformed "+tcpTurn.toString());
+        System.out.println("TcpTurnPreformed " + tcpTurn.toString());
         field.setMyTurn(true);
         TurnPreformed(tcpTurn, State.OTHER);
         ui.setStone(field);
