@@ -37,6 +37,7 @@ public class Field
     private JMenu menuHelp;
     private JMenuItem menuItemNew;
     private JMenuItem menuItemExit;
+    private JMenuItem menuItemBackToLobby;
     private JMenuItem menuItemOpen;
     private JMenuItem menuItemSave;
     private JMenuItem menuItemSize1;
@@ -200,6 +201,20 @@ public class Field
                 }
             });
         }
+        
+        menuItemBackToLobby = new JMenuItem("Back to lobby");
+        menuItemBackToLobby.addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                frame.setVisible(false);
+                game.finish();
+            }
+            
+        });
+        menuFile.add(menuItemBackToLobby);
 
         //Separate exit from the other items
         menuFile.addSeparator();
@@ -214,8 +229,7 @@ public class Field
                     public void actionPerformed(ActionEvent e
                     )
                     {
-                        frame.setVisible(false);
-                        exitGame();
+                        System.exit(0);
 
                     }
                 }
