@@ -132,7 +132,7 @@ public class Field
         });
 
         //Save if game against AI   
-        if (true)  //Info, dass gegen AI gespielt wird   game.isAiOpponent();
+        if (game.againstAi())
         {
             menuItemSave = new JMenuItem("Save");
             menuFile.add(menuItemSave);
