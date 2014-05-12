@@ -158,6 +158,7 @@ public class Field
             {
                 //System.exit(0);
                 frame.setVisible(false);
+                //game.finish()
                 
             }
         });
