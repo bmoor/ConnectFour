@@ -67,7 +67,7 @@ public class Field
     {
         game = ga;
         isMyTurn = myTurn;
-        this.isMyTurn = isMyTurn;
+        //isMyTurn = game.getIsMyTurn();
         if (isMyTurn)
         {
             myColor = Color.RED;
@@ -132,7 +132,7 @@ public class Field
         });
 
         //Save if game against AI   
-        if (true)  //Info, dass gegen AI gespielt wird
+        if (game.againstAi())
         {
             menuItemSave = new JMenuItem("Save");
             menuFile.add(menuItemSave);
@@ -173,7 +173,7 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                resizeBoard(6, 7);
+                resizeBoard(6,7);
             }
         });
         menuResize.add(menuItemSize1);
@@ -183,7 +183,7 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                resizeBoard(9, 10);
+                resizeBoard(9,10);
             }
         });
         menuResize.add(menuItemSize2);
@@ -193,7 +193,7 @@ public class Field
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                resizeBoard(12, 13);
+                resizeBoard(12,13);
             }
         });
         menuResize.add(menuItemSize3);
@@ -229,15 +229,14 @@ public class Field
     private void createSaveDialog()
     {
         JFileChooser chooser = new JFileChooser(); 
-        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.cofo)", "cofo"));
+        chooser.setFileFilter(new FileNameExtensionFilter("Connect four game (*.c4)", "c4"));
         int r = chooser.showSaveDialog(dialogSave); 
         String s = "no File!";
         if (r == JFileChooser.APPROVE_OPTION) 
         {          
             s = chooser.getSelectedFile().getPath();
             System.out.println(s);
-            Game g= new Game();
-            g.restoreGame(s);
+            game.storeGame(s);
             dialogSave.setVisible(false);
         } 
     }
@@ -531,6 +530,8 @@ public class Field
                     (int) ((BOARD_HEIGHT / rows) * 0.1),
                     (int) ((BOARD_WIDTH / columns) * 0.75),
                     (int) ((BOARD_WIDTH / columns) * 0.75));
+            repaint();
+            
         }
 
         public void setColor(Color col)
