@@ -164,6 +164,7 @@ public class Game
             aObjectInputStream.close();
 
             field = (GameState) o;
+            field.setMyTurn(true);
             ui.setStone(field);
         } catch (Exception e)
         {
