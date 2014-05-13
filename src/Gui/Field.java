@@ -64,6 +64,7 @@ public class Field
     private boolean lost;
     private boolean drawn;
     private boolean isMyTurn;
+    private boolean running = false;
     private String messageText;
 
     public Field(Game ga, boolean myTurn)
@@ -191,13 +192,11 @@ public class Field
                 new ActionListener()
                 {
                     @Override
-                    public void actionPerformed(ActionEvent e
-                    )
+                    public void actionPerformed(ActionEvent e)
                     {
                         createNewGame();
                     }
-                }
-        );
+                });
 
         //Save if game against AI   
         if (game.againstAi())
@@ -454,6 +453,9 @@ public class Field
     {
         rows = ro;
         columns = co;
+        won = false;
+        lost = false;
+        drawn = false;
         stones = new Stone[rows][columns];
         board = new State[rows][columns];
         for (int r = 0; r < rows; r++)
@@ -527,7 +529,6 @@ public class Field
                 labelTurn.setForeground(Color.RED);
             }
         }
-
     }
 
     private void sendMyStone(int col)
@@ -536,6 +537,8 @@ public class Field
         isMyTurn = false;
         buttonController();
         setLabelText();
+        running = true;
+        menuResize.setEnabled(false);
         game.UiTurnPreformed(dt);
     }
 
@@ -561,6 +564,8 @@ public class Field
         updateBoard();
         buttonController();
         setLabelText();
+        running = true;
+        menuResize.setEnabled(false);
     }
 
     public void won()
@@ -591,11 +596,8 @@ public class Field
 
     private void createNewGame()
     {
-        won = false;
-        lost = false;
-        drawn = false;
         resizeBoard(rows,columns);
-        game.resizeField(rows, columns);
+        sendNewBoardsizeToOther(rows, columns);
     }
 
     //Check each entry in "board", create a new circle
@@ -617,7 +619,6 @@ public class Field
                 else if (board[r][c] == OTHER)
                 {
                     stones[r][c].setColor(otherColor);
-
                 }
             }
         }
