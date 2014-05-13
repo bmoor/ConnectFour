@@ -39,6 +39,8 @@ public class Game
         ai = new Ghost();
         lobby = aLobby;
         init(true);
+        field.setMyTurn(true);
+        ui.resizeBoard(9,10);
     }
 
     /**
