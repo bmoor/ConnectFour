@@ -465,17 +465,17 @@ public class Field
         }
         panelButtons.setVisible(false);
         createButtons();
+        buttonController();
+        setLabelText();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
-        System.gc();
+        //System.gc();
     }
 
     private void sendNewBoardsizeToOther(int ro, int co)
     {
         game.resizeField(ro, co);
     }
-    
-    
 
     private void buttonController()
     {
