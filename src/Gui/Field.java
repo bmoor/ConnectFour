@@ -467,6 +467,7 @@ public class Field
             }
         }
         panelButtons.setVisible(false);
+        resizeMenuController();
         createButtons();
         buttonController();
         setLabelText();
