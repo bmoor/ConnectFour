@@ -194,6 +194,7 @@ public class Field
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
+                        running = false;
                         createNewGame(rows, columns);
                     }
                 });
