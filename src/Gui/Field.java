@@ -194,7 +194,7 @@ public class Field
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
-                        createNewGame();
+                        createNewGame(rows, columns);
                     }
                 });
 
@@ -478,6 +478,12 @@ public class Field
     {
         game.resizeField(ro, co);
     }
+    
+    private void createNewGame(int ro, int co)
+    {
+        resizeBoard(ro, co);
+        sendNewBoardsizeToOther(ro, co);
+    }
 
     private void buttonController()
     {
@@ -565,7 +571,12 @@ public class Field
         buttonController();
         setLabelText();
         running = true;
-        menuResize.setEnabled(false);
+        resizeMenuController();
+    }
+    
+    private void resizeMenuController()
+    {
+        menuResize.setEnabled(!running || won || lost || drawn);
     }
 
     public void won()
@@ -594,11 +605,7 @@ public class Field
 
     }
 
-    private void createNewGame()
-    {
-        resizeBoard(rows,columns);
-        sendNewBoardsizeToOther(rows, columns);
-    }
+    
 
     //Check each entry in "board", create a new circle
     //in the specific color and add it to the board
