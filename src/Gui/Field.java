@@ -440,14 +440,14 @@ public class Field
                 panelBoard.add(stones[r][c]);
             }
         }
-        updateBoard();
+        //updateBoard();
         panelBoard.setVisible(true);
     }
     
     private void resizePressed(int ro, int co)
     {
         resizeBoard(ro, co);
-        sendNewBoardsizeToOther(rows, columns);
+        sendNewBoardsizeToOther(ro, co);
     }
 
     public void resizeBoard(int ro, int co)
