@@ -39,8 +39,6 @@ public class Game
         ai = new Ghost();
         lobby = aLobby;
         init(true);
-        field.setMyTurn(true);
-        ui.resizeBoard(9,10);
     }
 
     /**
@@ -232,7 +230,6 @@ public class Game
         }
         if (opponent != null)
         {
-            //ToDo send to TCP
             opponent.sendMessage(uiTurn);
         }
     }
@@ -247,7 +244,7 @@ public class Game
     {
         if (tcpTurn.getxSize() != 0)
         {
-            field = new GameState(tcpTurn.getxSize(), tcpTurn.getySize());
+            field = new GameState(tcpTurn.getySize(), tcpTurn.getxSize());
             field.setMyTurn(false);
             ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getxSize());
         }
