@@ -20,8 +20,7 @@ public class Ghost
         do
         {
             z = (int) (Math.random() * (to - from + 1) + from);
-        }
-        while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
+        } while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
         System.out.println("Random " + z);
         return z;
     }
@@ -74,7 +73,63 @@ public class Ghost
         }
     }
 
-    private DataTransport checkXaxisPattern(final GameState field, final State stone)
+    private DataTransport checkDoublePatternX(final GameState field, final State stone)
+    {
+        for (int y = 0; y < field.getYsize(); y++)
+        {
+            //y-axis loop
+            if (isRowFull(field, y))
+            {
+                continue;
+            }
+            for (int x = 0; x < field.getXsize() - 3; x++)
+            {
+                // x-axis loop 
+                int stoneP = 0;
+                int stoneEmpty = 0;
+                for (int xx = x; xx < x + 4; xx++)
+                {
+                    //x-axis pattern loop
+                    if (isThisStone(field, stone, y, xx))
+                    {
+                        // count all human stone
+                        stoneP++;
+                    }
+                    else if (isEmptyStone(field, y, xx))
+                    {
+                        // count all human stone
+                        stoneEmpty++;
+                    }
+                }
+                // stoneP contains the count of human stones
+                if (stoneP == 2)
+                {
+                    int first = 0;
+                    int xx = x;
+                    for (; xx < x + 4; xx++)
+                    {
+                        if (!isThisStone(field, stone, y, xx))
+                        {
+                            if (isEmptyStone(field, y, xx))
+                            {
+                                if (first == 0)
+                                {
+                                    first = xx;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private DataTransport checkTripplePatternX(final GameState field, final State stone)
     {
         for (int y = 0; y < field.getYsize(); y++)
         {
@@ -119,7 +174,7 @@ public class Ghost
         return null;
     }
 
-    private DataTransport checkYaxisPattern(final GameState field, final State stone)
+    private DataTransport checkTripplePatternY(final GameState field, final State stone)
     {
         for (int x = 0; x < field.getXsize(); x++)
         {
@@ -157,7 +212,7 @@ public class Ghost
         return null;
     }
 
-    private DataTransport checkXYaxisPattern(final GameState field, final State stone)
+    private DataTransport checkTripplePatternXY(final GameState field, final State stone)
     {
         for (int i = 0; i < 2; i++)
         {
@@ -226,32 +281,37 @@ public class Ghost
     public DataTransport DoTurn(final GameState field)
     {
         DataTransport tmp;
-        tmp = checkXaxisPattern(field,State.OTHER);
+        tmp = checkTripplePatternX(field, State.OTHER);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkYaxisPattern(field,State.OTHER);
+        tmp = checkTripplePatternY(field, State.OTHER);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkXYaxisPattern(field,State.OTHER);
+        tmp = checkTripplePatternXY(field, State.OTHER);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkXaxisPattern(field,State.MINE);
+        tmp = checkTripplePatternX(field, State.MINE);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkYaxisPattern(field,State.MINE);
+        tmp = checkTripplePatternY(field, State.MINE);
         if (tmp != null)
         {
             return tmp;
         }
-        tmp = checkXYaxisPattern(field,State.MINE);
+        tmp = checkTripplePatternXY(field, State.MINE);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkDoublePatternX(field, State.MINE);
         if (tmp != null)
         {
             return tmp;
