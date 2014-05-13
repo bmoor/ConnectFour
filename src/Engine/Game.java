@@ -62,8 +62,8 @@ public class Game
             myTurn = true;
         }
         init(myTurn);
-    }
-
+            }
+    
     /**
      * Common initialization method
      *
@@ -247,6 +247,7 @@ public class Game
     {
         if (tcpTurn.getxSize() != 0)
         {
+            field = new GameState(tcpTurn.getxSize(), tcpTurn.getySize());
             field.setMyTurn(false);
             ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getxSize());
         }
