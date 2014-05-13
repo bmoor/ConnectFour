@@ -60,8 +60,8 @@ public class Game
             myTurn = true;
         }
         init(myTurn);
-            }
-    
+    }
+
     /**
      * Common initialization method
      *
@@ -90,8 +90,7 @@ public class Game
      */
     public void resizeField(final int newY, final int newX)
     {
-        field = new GameState(newY, newX);
-        gameDecided = false;
+        resizeMyField(newY, newX);
         if (opponent != null)
         {
             DataTransport configMob = new DataTransport(0);
@@ -99,6 +98,12 @@ public class Game
             configMob.setySize(newY);
             opponent.sendMessage(configMob);
         }
+    }
+
+    private void resizeMyField(final int newY, final int newX)
+    {
+        field = new GameState(newY, newX);
+        gameDecided = false;
     }
 
     public void finish()
@@ -244,8 +249,7 @@ public class Game
     {
         if (tcpTurn.getxSize() != 0)
         {
-            field = new GameState(tcpTurn.getySize(), tcpTurn.getxSize());
-            field.setMyTurn(false);
+            resizeMyField(tcpTurn.getySize(), tcpTurn.getxSize());
             ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getxSize());
         }
         else
