@@ -245,8 +245,8 @@ public class Game
     {
         if (tcpTurn.getxSize() != 0)
         {
-            field.setMyTurn(false);
             field = new GameState(tcpTurn.getxSize(), tcpTurn.getySize());
+            field.setMyTurn(false);
             ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getxSize());
         }
         else
