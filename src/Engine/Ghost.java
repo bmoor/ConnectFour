@@ -109,11 +109,17 @@ public class Ghost
                         // count all human stone
                         stonePlayer++;
                     }
+                    else
+                    {
+                        stonePlayer = 0;
+                    }
                 
                     if (stonePlayer == 2)
                     {
+                        // check are the two stones already blocked
                         if (isEmptyStone(field, yy + 1, x))
                         {
+                            // the third stone is free
                             return new DataTransport(x);
                         }
                     }
@@ -278,8 +284,10 @@ public class Ghost
                     }
                     if (c == 3)
                     {
+                        // check are the three stones already blocked
                         if (isEmptyStone(field, yy + 1, x))
                         {
+                            // the fourth stone is free
                             return new DataTransport(x);
                         }
                     }
