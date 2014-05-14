@@ -406,6 +406,16 @@ public class Ghost
         {
             return tmp;
         }
+        tmp = checkDoublePatternX(field, State.OTHER);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkDoublePatternY(field, State.OTHER);
+        if (tmp != null)
+        {
+            return tmp;
+        }
         return new DataTransport(random(field, 0, field.getYsize()));
     }
 }
