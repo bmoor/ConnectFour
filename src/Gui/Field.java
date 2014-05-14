@@ -29,8 +29,11 @@ public class Field
     private JFrame frame;
     private JPanel panelBoard;
     private JPanel panelButtons;
+    private JPanel panelMyColor;
     private JScrollPane scrollPane;
     private JTextPane messageTextPane;
+    private JTextField messageEnterField;
+    private JButton buttonSend;
     private JButton[] buttonSelectList;
     private JMenuBar menuBar;
     private JMenu menuFile;
@@ -49,6 +52,7 @@ public class Field
     private JDialog dialogInfo;
     private JLabel infoText;
     private JLabel labelTurn;
+    private JLabel labelMyColor;
 
     private Stone[][] stones;
     private State[][] board;
@@ -65,13 +69,12 @@ public class Field
     private boolean drawn;
     private boolean isMyTurn;
     private boolean running = false;
-    private String messageText;
+    private String textChat = "";
 
     public Field(Game ga, boolean myTurn)
     {
         game = ga;
         isMyTurn = myTurn;
-        //isMyTurn = game.getIsMyTurn();
         if (isMyTurn)
         {
             myColor = Color.RED;
@@ -104,13 +107,12 @@ public class Field
     {
         //Create frame
         frame = new JFrame("Connect four");
-        frame.setSize(1000, 700);
+        frame.setSize(1010, 750);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setResizable(false);
         frame.addWindowListener(new WindowListener()
         {
-
             @Override
             public void windowOpened(WindowEvent e)
             {
@@ -152,22 +154,46 @@ public class Field
             {
 
             }
-
         });
-        
+
         //Create ScrollPane with white TextPane
         messageTextPane = new JTextPane();
-        
-        
         scrollPane = new JScrollPane(messageTextPane);
-        scrollPane.setBounds(680,150,250,370);
-        messageTextPane.setBounds(0,0,250,370);
+        scrollPane.setBounds(680, 150, 300, 370);
+        messageTextPane.setBounds(0, 0, 250, 370);
         messageTextPane.setBackground(Color.WHITE);
-        
-        
-        
-        
+        messageTextPane.setEditable(false);
         frame.add(scrollPane);
+
+        //Create a text field to enter messages
+        messageEnterField = new JTextField();
+        messageEnterField.setBounds(680, 530, 250, 30);
+        messageEnterField.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                String s = messageEnterField.getText();
+                messageEnterField.setText("");
+                sendMessage(s);
+            }
+        });
+        frame.add(messageEnterField);
+
+        //Create button to send a message
+        buttonSend = new JButton("Send");
+        buttonSend.setBounds(935, 530, 45, 30);
+        buttonSend.setMargin(new Insets(1, 1, 1, 1));
+        buttonSend.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                String s = messageEnterField.getText();
+                messageEnterField.setText("");
+                sendMessage(s);
+            }
+        });
+        frame.add(buttonSend);
 
         //Create menubar
         menuBar = new JMenuBar();
@@ -199,7 +225,7 @@ public class Field
                     }
                 });
 
-        //Save if game against AI   
+        //Create save-item if game against AI   
         if (game.againstAi())
         {
             menuItemSave = new JMenuItem("Save");
@@ -223,6 +249,7 @@ public class Field
             {
                 frame.setVisible(false);
                 game.finish();
+                System.gc();
             }
 
         });
@@ -306,13 +333,23 @@ public class Field
 
         //Create the label, that indicates who has to play
         labelTurn = new JLabel();
-        labelTurn.setBounds(
-                680, 100, 300, 35);
+        labelTurn.setBounds(680, 100, 300, 35);
         Font schrift = new Font("Serif", Font.BOLD + Font.ITALIC, 25);
         labelTurn.setFont(schrift);
         setLabelText();
         frame.add(labelTurn);
 
+        //Shows the player his own color
+        labelMyColor = new JLabel("My color:");
+        labelMyColor.setFont(new Font("Arial", 0, 20));
+        labelMyColor.setBounds(680, 35, 90, 30);
+        panelMyColor = new JPanel();
+        panelMyColor.setBackground(myColor);
+        panelMyColor.setBounds(775, 35, 30, 30);
+        frame.add(labelMyColor);
+        frame.add(panelMyColor);
+
+        //Create the buttons on the frame
         createButtons();
 
         //Set visibility
@@ -380,11 +417,10 @@ public class Field
                 }
             });
             panelButtons.add(buttonSelectList[i]);
-
         }
         frame.add(panelButtons);
-        //buttonController();
         panelButtons.setVisible(true);
+        System.gc();
     }
 
     private void columnSelected(int col)
@@ -440,10 +476,9 @@ public class Field
                 panelBoard.add(stones[r][c]);
             }
         }
-        //updateBoard();
         panelBoard.setVisible(true);
     }
-    
+
     private void resizePressed(int ro, int co)
     {
         resizeBoard(ro, co);
@@ -473,14 +508,14 @@ public class Field
         setLabelText();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
-        //System.gc();
+        System.gc();
     }
 
     private void sendNewBoardsizeToOther(int ro, int co)
     {
         game.resizeField(ro, co);
     }
-    
+
     private void createNewGame(int ro, int co)
     {
         resizeBoard(ro, co);
@@ -521,7 +556,7 @@ public class Field
         }
         else if (drawn)
         {
-            labelTurn.setText("Drawn");
+            labelTurn.setText("Drawn!");
             labelTurn.setForeground(Color.BLACK);
         }
         else
@@ -550,10 +585,18 @@ public class Field
         game.UiTurnPreformed(dt);
     }
 
-    private void sendMessage()
+    private void sendMessage(String text)
     {
-        DataTransport dt = new DataTransport(messageText);
+        textChat += "You:\n" + text + "\n\n";
+        messageTextPane.setText(textChat);
+        DataTransport dt = new DataTransport(text);
         game.UiTurnPreformed(dt);
+    }
+
+    public void receiveMessage(String text)
+    {
+        textChat += "Opponent:\n" + text + "\n\n";
+        messageTextPane.setText(textChat);
     }
 
     public void setStone(GameState gs)
@@ -575,7 +618,7 @@ public class Field
         running = true;
         resizeMenuController();
     }
-    
+
     private void resizeMenuController()
     {
         menuResize.setEnabled(!running || won || lost || drawn);
@@ -601,13 +644,6 @@ public class Field
         buttonController();
         setLabelText();
     }
-
-    public void receiveMessage(String text)
-    {
-
-    }
-
-    
 
     //Check each entry in "board", create a new circle
     //in the specific color and add it to the board
@@ -654,8 +690,6 @@ public class Field
                     (int) ((BOARD_HEIGHT / rows) * 0.1),
                     (int) ((BOARD_WIDTH / columns) * 0.75),
                     (int) ((BOARD_WIDTH / columns) * 0.75));
-            //repaint();
-
         }
 
         public void setColor(Color col)
