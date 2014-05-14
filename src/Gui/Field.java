@@ -1,8 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+
+
 package Gui;
 
 import Engine.DataTransport;
@@ -170,6 +168,7 @@ public class Field
         messageEnterField.setBounds(680, 530, 250, 30);
         messageEnterField.addActionListener(new ActionListener()
         {
+            @Override
             public void actionPerformed(ActionEvent e)
             {
                 String s = messageEnterField.getText();
