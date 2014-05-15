@@ -93,7 +93,7 @@ public class Game
         resizeMyField(newY, newX);
         if (opponent != null)
         {
-            DataTransport configMob = new DataTransport(0);
+            DataTransport configMob = new DataTransport(newY, newX);
             configMob.setxSize(newX);
             configMob.setySize(newY);
             opponent.sendMessage(configMob);
@@ -138,7 +138,8 @@ public class Game
         {
             aObjectOutputStream.writeObject(field);
             aObjectOutputStream.close();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             System.out.println("Exception: " + e.getMessage() + "\nvoid storeGame(final String path)");
         }
@@ -166,7 +167,8 @@ public class Game
             field = (GameState) o;
             field.setMyTurn(true);
             ui.setStone(field);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             System.out.println("Exception: " + e.getMessage() + "\nvoid restoreGame(final String path)");
         }
@@ -225,19 +227,36 @@ public class Game
             return;
         }
 
-        field.setMyTurn(false);
-        TurnPreformed(uiTurn, State.MINE);
-        if ((ai != null) && (gameDecided == false))
+        final DataTransport.MobType type = uiTurn.GetMobType();
+        switch (type)
         {
-            final DataTransport tmp = ai.DoTurn(field);
-            TurnPreformed(tmp, State.OTHER);
-            field.setMyTurn(true);
-            ui.setStone(field);
+            case TURN:
+                field.setMyTurn(false);
+                TurnPreformed(uiTurn, State.MINE);
+                if ((ai != null) && (gameDecided == false))
+                {
+                    final DataTransport tmp = ai.DoTurn(field);
+                    TurnPreformed(tmp, State.OTHER);
+                    field.setMyTurn(true);
+                    ui.setStone(field);
+                }
+                if (opponent != null)
+                {
+                    opponent.sendMessage(uiTurn);
+                }
+                break;
+
+            case CHAT:
+                if (opponent != null)
+                {
+                    opponent.sendMessage(uiTurn);
+                }
+                break;
+                
+            default:
+                break;
         }
-        if (opponent != null)
-        {
-            opponent.sendMessage(uiTurn);
-        }
+
     }
 
     /**
@@ -248,16 +267,26 @@ public class Game
      */
     public void TcpTurnPreformed(final DataTransport tcpTurn)
     {
-        if (tcpTurn.getxSize() != 0)
+        final DataTransport.MobType type = tcpTurn.GetMobType();
+        switch (type)
         {
-            resizeMyField(tcpTurn.getySize(), tcpTurn.getxSize());
-            ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getxSize());
-        }
-        else
-        {
-            field.setMyTurn(true);
-            TurnPreformed(tcpTurn, State.OTHER);
-            ui.setStone(field);
+            case CONFIG:
+                resizeMyField(tcpTurn.getySize(), tcpTurn.getxSize());
+                ui.resizeBoard(tcpTurn.getySize(), tcpTurn.getxSize());
+                break;
+
+            case TURN:
+                field.setMyTurn(true);
+                TurnPreformed(tcpTurn, State.OTHER);
+                ui.setStone(field);
+                break;
+
+            case CHAT:
+                ui.receiveMessage(tcpTurn.getChat());
+                break;
+                
+            default:
+                break;
         }
     }
 

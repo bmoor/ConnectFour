@@ -12,26 +12,47 @@ package Engine;
 public class DataTransport implements java.io.Serializable
 {
 
+    public enum MobType
+    {
+
+        TURN, CHAT, CONFIG
+    }
+
     private int x;
     private String chat;
     private int xSize = 0;
     private int ySize = 0;
-    
+    private MobType type;
+
     public DataTransport(int x)
     {
         this.x = x;
+        type = MobType.TURN;
     }
-    
+
+    public DataTransport(int y, int x)
+    {
+        xSize = x;
+        ySize = y;
+        type = MobType.CONFIG;
+    }
+
     public DataTransport(String text)
     {
         chat = text;
+        type = MobType.CHAT;
+    }
+    
+    public MobType GetMobType()
+    {
+        return type;
     }
 
     public int getX()
     {
         return x;
     }
-    
+
     public String getChat()
     {
         return chat;
@@ -60,12 +81,14 @@ public class DataTransport implements java.io.Serializable
     public void setySize(int ySize)
     {
         this.ySize = ySize;
-    }    
+    }
 
     @Override
     public String toString()
     {
-        return "DataTransport: " + x;
+        return "DataTransport type = " + type + " \n"
+                + "Turn : = " + x + "\nChat-Text = " + chat
+                + "\nConfig: x = " + xSize + " y = " + ySize;
     }
 
 }
