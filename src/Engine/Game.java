@@ -108,6 +108,10 @@ public class Game
 
     public void finish()
     {
+        if (opponent != null)
+        {
+            opponent.sendMessage(new DataTransport("Opponent closed the game instance"));
+        }
         lobby.destroyOldGame();
     }
 
