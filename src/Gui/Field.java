@@ -23,7 +23,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class Field
 {
-
     private JFrame frame;
     private JPanel panelBoard;
     private JPanel panelButtons;
@@ -105,7 +104,7 @@ public class Field
     {
         //Create frame
         frame = new JFrame("Connect four");
-        frame.setSize(1010, 750);
+        frame.setSize(1010, 700);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setResizable(false);
@@ -503,6 +502,7 @@ public class Field
         panelButtons.setVisible(false);
         resizeMenuController();
         createButtons();
+        isMyTurn = myColor.equals(Color.RED);
         buttonController();
         setLabelText();
         panelBoard.setVisible(false);
