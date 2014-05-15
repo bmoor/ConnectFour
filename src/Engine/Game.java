@@ -94,8 +94,6 @@ public class Game
         if (opponent != null)
         {
             DataTransport configMob = new DataTransport(newY, newX);
-            configMob.setxSize(newX);
-            configMob.setySize(newY);
             opponent.sendMessage(configMob);
         }
     }

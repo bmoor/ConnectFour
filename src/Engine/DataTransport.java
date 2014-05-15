@@ -68,19 +68,9 @@ public class DataTransport implements java.io.Serializable
         return xSize;
     }
 
-    public void setxSize(int xSize)
-    {
-        this.xSize = xSize;
-    }
-
     public int getySize()
     {
         return ySize;
-    }
-
-    public void setySize(int ySize)
-    {
-        this.ySize = ySize;
     }
 
     @Override
