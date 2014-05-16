@@ -17,8 +17,8 @@ public class GameState implements Serializable
     {
         EMPTY, MINE, OTHER
     }
-    private State[][] field;
-    private boolean myTurn = false;
+    private final State[][] field;
+    private boolean myTurn;
     private final int x;
     private final int y;
     private int turnsCounter;
@@ -28,6 +28,7 @@ public class GameState implements Serializable
         this.x=x;
         this.y=y;
         turnsCounter = 0;
+        myTurn = false;
         field = new State[y][x];
         for(int i=0 ; i<x ; i++)
         {

@@ -14,6 +14,15 @@ import Engine.GameState.State;
 public class Ghost
 {
 
+    /**
+     * Create a random number between the given borders
+     *
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param from lower boarder of random range
+     * @param to upper boarder of random range
+     * @return A random number between the given boraders
+     */
     private int random(final GameState field, final int from, final int to)
     {
         int z;
@@ -26,10 +35,17 @@ public class Ghost
         return z;
     }
 
+    /**
+     * Create a random number with the value of the first or second argument
+     *
+     * @author Yves Studer
+     * @param first first number
+     * @param second second number
+     * @return Randomly the first or the second number
+     */
     private int random(final int first, final int second)
     {
         int z = (int) (Math.random() * 2 + 1);
-        System.out.println("Random spez");
         if (z == 1)
         {
             return first;
@@ -40,6 +56,14 @@ public class Ghost
         }
     }
 
+    /**
+     * Check if the given row empty
+     *
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param y specified row number
+     * @return true if the row is empty
+     */
     private boolean isRowFull(final GameState field, final int y)
     {
         for (int x = 0; x < field.getXsize(); x++)
@@ -52,6 +76,14 @@ public class Ghost
         return true;
     }
 
+    /**
+     * Check if the given column empty
+     *
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param x specified row number
+     * @return true if the colomn is empty
+     */
     private boolean isColumnFull(final GameState field, final int x)
     {
         for (int y = 0; y < field.getYsize(); y++)
@@ -64,30 +96,42 @@ public class Ghost
         return true;
     }
 
+    /**
+     *
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param stone owner of the stone
+     * @param y y-position
+     * @param x x-position
+     * @return true if the stone matchs with the given stone argument
+     */
     private boolean isThisStone(final GameState field, final State stone, final int y, final int x)
     {
-        if (field.getStone(y, x) == stone)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return field.getStone(y, x) == stone;
     }
 
+    /**
+     * Check if a stone place is empty
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param y y-position
+     * @param x x-position
+     * @return true if specified stone place is empty
+     */
     private boolean isEmptyStone(final GameState field, final int y, final int x)
     {
-        if (field.getStone(y, x) == State.EMPTY)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return field.getStone(y, x) == State.EMPTY;
     }
     
+    /**
+     * Check are two stones of the same owner in a fourth-pattern (y-direction)
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param stone owner
+     * @return a DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     */
     private DataTransport checkDoublePatternY(final GameState field, final State stone)
     {
         for (int x = 0; x < field.getXsize(); x++)
@@ -129,6 +173,14 @@ public class Ghost
         return null;        
     }
     
+    /**
+     * Check are two stones of the same owner in a fourth-pattern (x-direction)
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param stone owner
+     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     */
     private DataTransport checkDoublePatternX(final GameState field, final State stone)
     {
         for (int y = 0; y < field.getYsize(); y++)
@@ -212,6 +264,14 @@ public class Ghost
         return null;
     }
 
+    /**
+     * Check are three stones of the same owner in a fourth-pattern (x-direction)
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param stone owner
+     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     */
     private DataTransport checkTripplePatternX(final GameState field, final State stone)
     {
         for (int y = 0; y < field.getYsize(); y++)
@@ -257,6 +317,14 @@ public class Ghost
         return null;
     }
 
+    /**
+     * Check are three stones of the same owner in a fourth-pattern (y-direction)
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param stone owner
+     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     */
     private DataTransport checkTripplePatternY(final GameState field, final State stone)
     {
         for (int x = 0; x < field.getXsize(); x++)
@@ -297,6 +365,14 @@ public class Ghost
         return null;
     }
 
+    /**
+     * Check are three stones of the same owner in a fourth-pattern (both diagonals)
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @param stone owner
+     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     */
     private DataTransport checkTripplePatternXY(final GameState field, final State stone)
     {
         for (int i = 0; i < 2; i++)
@@ -363,6 +439,17 @@ public class Ghost
         return null;
     }
 
+    /**
+     * Method to call the AI. The order of calculation for a turn is: 
+     * - AI try to win in x-, y- and both diagonal-directions
+     * - AI tries to prevent the gain of the player
+     * - If only two stones of the player is in a foursome pattern, a stone is set in. So the player is blocked
+     * - If only two stones of the AI is in a foursome pattern, a stone is set in to try to win
+     * 
+     * @author Yves Studer
+     * @param field representation of the current field
+     * @return DataTransoprt object with the x-value
+     */
     public DataTransport DoTurn(final GameState field)
     {
         DataTransport tmp;

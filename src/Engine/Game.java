@@ -76,6 +76,12 @@ public class Game
         //ui.setStone(field);
     }
 
+    /**
+     * Common initialization method
+     *
+     * @author Yves Studer
+     * @return true, if we are playing against the artificial intelligence
+     */
     public boolean againstAi()
     {
         return ai != null;
@@ -98,12 +104,23 @@ public class Game
         }
     }
 
+
+    /**
+     * Method to resize the internal representation of the gaming-field
+     * 
+     * @author Yves Studer
+     * @param newY new y size
+     * @param newX new x size
+     */
     private void resizeMyField(final int newY, final int newX)
     {
         field = new GameState(newY, newX);
         gameDecided = false;
     }
 
+    /**
+     * Method is used to inform, the current gamining-field is closed
+     */
     public void finish()
     {
         if (opponent != null)
@@ -168,6 +185,7 @@ public class Game
 
             field = (GameState) o;
             field.setMyTurn(true);
+            ui.resizeBoard(field.getYsize(), field.getXsize());
             ui.setStone(field);
         }
         catch (Exception e)
@@ -195,7 +213,7 @@ public class Game
             }
         }
         field.setStone(y, x, actor);
-        final int decision = TestIfWon();
+        final int decision = WinnerChecker.Run(field);// TestIfWon();
         switch (decision)
         {
             case -2:
@@ -290,220 +308,5 @@ public class Game
             default:
                 break;
         }
-    }
-
-    /**
-     * Method to detect if a player has won. This method tests all cobinations:
-     * on X-Axis, on Y-Axis and both diagonal-directions
-     *
-     * @author Yves Studer
-     * @return returns -1 if we lost, 1 if we won -2 if the game ended tie and
-     * otherwise 0
-     */
-    private int TestIfWon()
-    {
-        int tmp = TestWinOnXaxis();
-        if (tmp == 0)
-        {
-            tmp = TestWinOnYaxis();
-            if (tmp == 0)
-            {
-                tmp = TestWinOnDiagAxis();
-                if (tmp == 0)
-                {
-                    if (field.getRemainingTurns() <= 0)
-                    {
-                        tmp = -2;
-                        System.out.println("------------------------------\nUnentschieden\n------------------------------------");
-                    }
-                }
-            }
-        }
-        return tmp;
-    }
-
-    /**
-     * Method to detect if a player has won with 4 in series on X-axis
-     *
-     * @author Yves Studer
-     * @return returns -1 if we lost, 1 if we won and otherwise 0
-     */
-    private int TestWinOnXaxis()
-    {
-        int mySuccessCounter = 0;
-        int otherSuccessCounter = 0;
-        for (int y = 0; y < field.getYsize(); y++)
-        {
-            otherSuccessCounter = 0;
-            mySuccessCounter = 0;
-            for (int x = 0; x < field.getXsize(); x++)
-            {
-                State currentFieldPart = field.getStone(y, x);
-                if (currentFieldPart == State.OTHER)
-                {
-                    otherSuccessCounter++;
-                    mySuccessCounter = 0;
-                }
-                else if (currentFieldPart == State.MINE)
-                {
-                    otherSuccessCounter = 0;
-                    mySuccessCounter++;
-                }
-                else
-                {
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                }
-                if (mySuccessCounter == 4)
-                {
-                    System.out.println("I won");
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                    return 1;
-                }
-                if (otherSuccessCounter == 4)
-                {
-                    System.out.println("I lost");
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                    return -1;
-                }
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Method to detect if a player has won with 4 in series on Y-axis
-     *
-     * @author Yves Studer
-     * @return returns -1 if we lost, 1 if we won and otherwise 0
-     */
-    private int TestWinOnYaxis()
-    {
-        int mySuccessCounter = 0;
-        int otherSuccessCounter = 0;
-        for (int x = 0; x < field.getXsize(); x++)
-        {
-            otherSuccessCounter = 0;
-            mySuccessCounter = 0;
-            for (int y = 0; y < field.getYsize(); y++)
-            {
-                State currentFieldPart = field.getStone(y, x);
-                if (currentFieldPart == State.OTHER)
-                {
-                    otherSuccessCounter++;
-                    mySuccessCounter = 0;
-                }
-                else if (currentFieldPart == State.MINE)
-                {
-                    otherSuccessCounter = 0;
-                    mySuccessCounter++;
-                }
-                else
-                {
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                }
-                if (mySuccessCounter == 4)
-                {
-                    System.out.println("I won");
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                    return 1;
-                }
-                if (otherSuccessCounter == 4)
-                {
-                    System.out.println("I lost");
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                    return -1;
-                }
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Method to detect if a player has won with 4 in diagonal direction. This
-     * Method tests both diagonal directions.
-     *
-     * @author Yves Studer
-     * @return returns -1 if we lost, 1 if we won and otherwise 0
-     */
-    private int TestWinOnDiagAxis()
-    {
-        final int xSize = field.getXsize();
-        final int ySize = field.getYsize();
-        int mySuccessCounter = 0;
-        int otherSuccessCounter = 0;
-        for (int i = 0; i < 2; i++)
-        {
-            //used for both diagonal directions
-            otherSuccessCounter = 0;
-            mySuccessCounter = 0;
-            for (int yt = 0; yt < ySize - 3; yt++)
-            {
-                // y-loop
-                otherSuccessCounter = 0;
-                mySuccessCounter = 0;
-                for (int xt = 0; xt < xSize - 3; xt++)
-                {
-                    // x-loop
-                    otherSuccessCounter = 0;
-                    mySuccessCounter = 0;
-                    for (int y = yt, x = xt; x < xSize; x++, y++)
-                    {
-                        // diagonal-loop
-                        int yy = y;
-                        int xx;
-                        if (i == 0)
-                        {
-                            xx = x;
-                        }
-                        else
-                        {
-                            xx = (xSize - 1) - x;
-                        }
-
-                        if (y > (ySize - 1))
-                        {
-                            continue;
-                        }
-                        State currentFieldPart = field.getStone(yy, xx);
-                        if (currentFieldPart == State.OTHER)
-                        {
-                            otherSuccessCounter++;
-                            mySuccessCounter = 0;
-                        }
-                        else if (currentFieldPart == State.MINE)
-                        {
-                            otherSuccessCounter = 0;
-                            mySuccessCounter++;
-                        }
-                        else
-                        {
-                            otherSuccessCounter = 0;
-                            mySuccessCounter = 0;
-                        }
-                        if (mySuccessCounter == 4)
-                        {
-                            System.out.println("I won");
-                            otherSuccessCounter = 0;
-                            mySuccessCounter = 0;
-                            return 1;
-                        }
-                        if (otherSuccessCounter == 4)
-                        {
-                            System.out.println("I lost");
-                            otherSuccessCounter = 0;
-                            mySuccessCounter = 0;
-                            return -1;
-                        }
-                    }
-                }
-            }
-        }
-        return 0;
     }
 }
