@@ -112,7 +112,7 @@ public class Ghost
 
     /**
      * Check if a stone place is empty
-     * 
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param y y-position
@@ -123,14 +123,15 @@ public class Ghost
     {
         return field.getStone(y, x) == State.EMPTY;
     }
-    
+
     /**
      * Check are two stones of the same owner in a fourth-pattern (y-direction)
-     * 
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param stone owner
-     * @return a DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     * @return a DataTransoprt object with the x-value, if the pattern was
+     * found, otherwise a null pointer will be returned
      */
     private DataTransport checkDoublePatternY(final GameState field, final State stone)
     {
@@ -157,7 +158,7 @@ public class Ghost
                     {
                         stonePlayer = 0;
                     }
-                
+
                     if (stonePlayer == 2)
                     {
                         // check are the two stones already blocked
@@ -170,16 +171,17 @@ public class Ghost
                 }
             }
         }
-        return null;        
+        return null;
     }
-    
+
     /**
      * Check are two stones of the same owner in a fourth-pattern (x-direction)
-     * 
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param stone owner
-     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     * @return DataTransoprt object with the x-value, if the pattern was found,
+     * otherwise a null pointer will be returned
      */
     private DataTransport checkDoublePatternX(final GameState field, final State stone)
     {
@@ -250,11 +252,11 @@ public class Ghost
                         {
                             if (isEmptyStone(field, y - 1, second))
                             {
-                                return new DataTransport(first);                                
+                                return new DataTransport(first);
                             }
                             else
                             {
-                                return new DataTransport(random(first,second));
+                                return new DataTransport(random(first, second));
                             }
                         }
                     }
@@ -265,12 +267,14 @@ public class Ghost
     }
 
     /**
-     * Check are three stones of the same owner in a fourth-pattern (x-direction)
-     * 
+     * Check are three stones of the same owner in a fourth-pattern
+     * (x-direction)
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param stone owner
-     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     * @return DataTransoprt object with the x-value, if the pattern was found,
+     * otherwise a null pointer will be returned
      */
     private DataTransport checkTripplePatternX(final GameState field, final State stone)
     {
@@ -318,12 +322,14 @@ public class Ghost
     }
 
     /**
-     * Check are three stones of the same owner in a fourth-pattern (y-direction)
-     * 
+     * Check are three stones of the same owner in a fourth-pattern
+     * (y-direction)
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param stone owner
-     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     * @return DataTransoprt object with the x-value, if the pattern was found,
+     * otherwise a null pointer will be returned
      */
     private DataTransport checkTripplePatternY(final GameState field, final State stone)
     {
@@ -366,12 +372,14 @@ public class Ghost
     }
 
     /**
-     * Check are three stones of the same owner in a fourth-pattern (both diagonals)
-     * 
+     * Check are three stones of the same owner in a fourth-pattern (both
+     * diagonals)
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param stone owner
-     * @return DataTransoprt object with the x-value, if the pattern was found, otherwise a null pointer will be returned
+     * @return DataTransoprt object with the x-value, if the pattern was found,
+     * otherwise a null pointer will be returned
      */
     private DataTransport checkTripplePatternXY(final GameState field, final State stone)
     {
@@ -440,12 +448,12 @@ public class Ghost
     }
 
     /**
-     * Method to call the AI. The order of calculation for a turn is: 
-     * - AI try to win in x-, y- and both diagonal-directions
-     * - AI tries to prevent the gain of the player
-     * - If only two stones of the player is in a foursome pattern, a stone is set in. So the player is blocked
-     * - If only two stones of the AI is in a foursome pattern, a stone is set in to try to win
-     * 
+     * Method to call the AI. The order of calculation for a turn is: - AI try
+     * to win in x-, y- and both diagonal-directions - AI tries to prevent the
+     * gain of the player - If only two stones of the player is in a foursome
+     * pattern, a stone is set in. So the player is blocked - If only two stones
+     * of the AI is in a foursome pattern, a stone is set in to try to win
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @return DataTransoprt object with the x-value
@@ -454,35 +462,35 @@ public class Ghost
     {
         DataTransport tmp;
         tmp = checkTripplePatternX(field, State.OTHER);
-         if (tmp != null)
-         {
-         return tmp;
-         }
-         tmp = checkTripplePatternY(field, State.OTHER);
-         if (tmp != null)
-         {
-         return tmp;
-         }
-         tmp = checkTripplePatternXY(field, State.OTHER);
-         if (tmp != null)
-         {
-         return tmp;
-         }
-         tmp = checkTripplePatternX(field, State.MINE);
-         if (tmp != null)
-         {
-         return tmp;
-         }
-         tmp = checkTripplePatternY(field, State.MINE);
-         if (tmp != null)
-         {
-         return tmp;
-         }
-         tmp = checkTripplePatternXY(field, State.MINE);
-         if (tmp != null)
-         {
-         return tmp;
-         }
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkTripplePatternY(field, State.OTHER);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkTripplePatternXY(field, State.OTHER);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkTripplePatternX(field, State.MINE);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkTripplePatternY(field, State.MINE);
+        if (tmp != null)
+        {
+            return tmp;
+        }
+        tmp = checkTripplePatternXY(field, State.MINE);
+        if (tmp != null)
+        {
+            return tmp;
+        }
         tmp = checkDoublePatternX(field, State.MINE);
         if (tmp != null)
         {
