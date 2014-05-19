@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.DefaultCaret;
 
 /**
  * @author Mario
@@ -160,6 +161,7 @@ public class Field
         messageTextPane.setBounds(0, 0, 250, 370);
         messageTextPane.setBackground(Color.WHITE);
         messageTextPane.setEditable(false);
+       
         frame.add(scrollPane);
 
         //Create a text field to enter messages
@@ -247,7 +249,6 @@ public class Field
             {
                 frame.setVisible(false);
                 game.finish();
-                System.gc();
             }
 
         });
@@ -383,7 +384,6 @@ public class Field
         dialogInfo.setLocationRelativeTo(frame);
 
         infoText = new JLabel();
-        //infoText.setLayout(new BorderLayout());
         infoText.setText("alsduihgfajh asdlkfjh kjh sdfj");
         dialogInfo.add(infoText);
         infoText.setBounds(50, 50, 300, 200);
@@ -418,7 +418,6 @@ public class Field
         }
         frame.add(panelButtons);
         panelButtons.setVisible(true);
-        System.gc();
     }
 
     private void columnSelected(int col)
@@ -507,7 +506,8 @@ public class Field
         setLabelText();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
-        System.gc();
+        panelBoard.setVisible(false);
+        panelBoard.setVisible(true);
     }
 
     private void sendNewBoardsizeToOther(int ro, int co)
