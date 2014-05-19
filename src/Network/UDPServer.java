@@ -14,7 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
- *
+ * as host: waits for other players
+ * as client: Search for available Games, in hole netowrk or by broadcast
  * 
  */
 public class UDPServer implements Runnable {
@@ -28,6 +29,11 @@ public class UDPServer implements Runnable {
     private DatagramSocket socket;
     private Thread thread;
     
+    
+    /*
+     * Constructor
+     * set sockets
+     */
     public UDPServer(Lobby lobbyPtr, boolean broadcastServer) {
         this.lobbyPtr = lobbyPtr;
         try {
@@ -44,8 +50,10 @@ public class UDPServer implements Runnable {
             
     }
     
+    /*
+     * start to listen on broadcast
+     */
     public void startServer(String gameName) {
-        // start as broadcast listener
         if(running) {
             return;
         }
@@ -55,12 +63,13 @@ public class UDPServer implements Runnable {
         start(); 
     }
     
-    public void startServerBroadcast() {
-        // send broadcast and start as response listener
+    /*
+     * sends a broadcast and start listen for response
+     */
+    public void startServerBroadcast() {        
         if(running) {
             return;
-        }
-        
+        }        
         running = true;
         byte[] buffer = initCode.getBytes();
         try {
@@ -74,16 +83,17 @@ public class UDPServer implements Runnable {
         responseListenTimer = new Timer(responseWaitTime, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stopServer();
-                
+                stopServer();                
             }
         });
         responseListenTimer.setRepeats(false);
         responseListenTimer.start();
     }
     
-    public void startServerIPTest() {
-        // send broadcast and start as response listener
+    /*
+     * search for hosts in network
+     */
+    public void startServerIPTest() {        
         if(running) 
             return;
         
@@ -95,6 +105,7 @@ public class UDPServer implements Runnable {
             
             InetAddress   in  = InetAddress.getLocalHost();  
             InetAddress[] all = InetAddress.getAllByName(in.getHostName());  
+            //get ip
             InetAddress ret = (InetAddress)JOptionPane.showInputDialog(null, "Select own IP", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, all, initCode);
             byte[] ownIPBuf = ret.getAddress();
             int ownIP = 0;
@@ -103,6 +114,7 @@ public class UDPServer implements Runnable {
             }
 
             NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ret);
+            //get correct interface
             InterfaceAddress netI = (InterfaceAddress)JOptionPane.showInputDialog(null, "Select Interface", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, networkInterface.getInterfaceAddresses().toArray(), null);
             int subnetPrefix = netI.getNetworkPrefixLength();
             int subnetMask = 0;
@@ -112,6 +124,7 @@ public class UDPServer implements Runnable {
                 Integer ii = new Integer(str);
                 subnetPrefix = ii.intValue();
             }
+            //calculate neighbour hosts
             int nbHosts = (int)Math.pow(2, (32-subnetPrefix)) -2;
             for(int i = 0; i < 32; i++) {
                 subnetMask = subnetMask << 1;
@@ -120,6 +133,7 @@ public class UDPServer implements Runnable {
                 }
             }
             networkAdr = ownIP & subnetMask;
+            //ask every ip in range for available games
             for(int i = 1; i <= nbHosts; i++) {
                 int newAdr = networkAdr+i;
                 byte[] adrBuf = BigInteger.valueOf(newAdr).toByteArray();
@@ -152,7 +166,9 @@ public class UDPServer implements Runnable {
             thread.start(); 
         } 
     }
-    
+    /*
+     * listen for incoming datagram packets
+     */
     @Override
     public void run() {
         try {

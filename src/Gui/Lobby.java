@@ -10,6 +10,7 @@ import Network.Player;
 import Network.UDPServer;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.List;
 import java.awt.event.ActionEvent;
@@ -76,20 +77,20 @@ public class Lobby extends JFrame
         
         //List Games
         lstGames = new List();
-        lstGames.setSize(250, 250);
+        lstGames.setSize(200, 200);
         pnlLobby.add(lstGames, BorderLayout.WEST);
         
         //ButtonPanel
         pnlButtons = new JPanel();
-        pnlButtons.setLayout(new BoxLayout(pnlButtons, BoxLayout.Y_AXIS));
+        pnlButtons.setLayout(new BoxLayout(pnlButtons, BoxLayout.Y_AXIS));        
         pnlLobby.add(pnlButtons, BorderLayout.EAST);
         
         //Button CreateGame / Cancel
-        btnCreateGame = new JButton("Create Game");
+        btnCreateGame = new JButton("Create Game");                
         btnCreateGame.setSize(50, 250);
         btnCreateGame.addActionListener(new ActionListener(){ 
             @Override
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e){                
                 if(waitMode) {
                     try {                        
                         broadcastServer.stopServer();                                                
@@ -108,7 +109,7 @@ public class Lobby extends JFrame
         pnlButtons.add(btnCreateGame, BorderLayout.EAST);
         
         //Button JoinGame
-        btnJoinGame = new JButton("Join Game");
+        btnJoinGame = new JButton("Join Game");        
         btnJoinGame.setSize(50, 250);
         btnJoinGame.addActionListener(new ActionListener() {
             @Override
@@ -168,7 +169,7 @@ public class Lobby extends JFrame
         pnlButtons.add(btnLoadGame, BorderLayout.EAST);
         
         // Button Refresh List
-        btnRefresh = new JButton("Refresh List using Broadcast");
+        btnRefresh = new JButton("List games by broadcast");
         btnRefresh.setSize(50, 250);
         btnRefresh.addActionListener(new ActionListener() {
             @Override
@@ -179,7 +180,7 @@ public class Lobby extends JFrame
         pnlButtons.add(btnRefresh, BorderLayout.SOUTH);
         
         // Button Refresh List IP
-        btnRefreshIP = new JButton("Refresh List using IP Test");
+        btnRefreshIP = new JButton("List games in network");
         btnRefreshIP.setSize(50, 250);
         btnRefreshIP.addActionListener(new ActionListener() {
             @Override

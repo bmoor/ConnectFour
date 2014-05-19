@@ -10,7 +10,9 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 /**
- *
+ * Listen for incoming Datatransport objects
+ * on accepted ip
+ * 
  * @author bmoor
  */
 public class TcpRead extends Thread {

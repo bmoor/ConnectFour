@@ -108,7 +108,11 @@ public class Player extends Thread {
         playing = false;        
     }
     
-     public void run() {
+    /*
+     * Wait for connection
+     * 
+     */
+    public void run() {
         try {
             while(running) {
                 Thread.sleep(10);
@@ -178,6 +182,11 @@ public class Player extends Thread {
     public boolean isHost(){
         return this.ishost;
     }
+    
+    /*
+     * Register a Game
+     * prevent null pointer exception
+     */
     
     public void registerGame(Game game){
         this.game = game;
