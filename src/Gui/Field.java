@@ -1,6 +1,3 @@
-
-
-
 package Gui;
 
 import Engine.DataTransport;
@@ -13,22 +10,23 @@ import java.awt.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.DefaultCaret;
 
 /**
  * @author Mario
  */
 public class Field
 {
+
     private JFrame frame;
     private JPanel panelBoard;
     private JPanel panelButtons;
     private JPanel panelMyColor;
-    private JScrollPane scrollPane;
+    private JScrollPane chatScrollPane;
     private JTextPane messageTextPane;
     private JTextField messageEnterField;
     private JButton buttonSend;
@@ -48,7 +46,7 @@ public class Field
     private JMenuItem menuItemInfo;
     private JDialog dialogSave;
     private JDialog dialogInfo;
-    private JLabel infoText;
+    private JTextArea infoText;
     private JLabel labelTurn;
     private JLabel labelMyColor;
 
@@ -109,95 +107,61 @@ public class Field
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setResizable(false);
-        frame.addWindowListener(new WindowListener()
+        frame.addWindowListener(new WindowAdapter()
         {
-            @Override
-            public void windowOpened(WindowEvent e)
-            {
-
-            }
-
             @Override
             public void windowClosing(WindowEvent e)
             {
-                exitGame();
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e)
-            {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e)
-            {
-
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e)
-            {
-
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e)
-            {
-
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e)
-            {
-
+                frame.setVisible(false);
+                game.finish();
             }
         });
 
-        //Create ScrollPane with white TextPane
-        messageTextPane = new JTextPane();
-        scrollPane = new JScrollPane(messageTextPane);
-        scrollPane.setBounds(680, 150, 300, 370);
-        messageTextPane.setBounds(0, 0, 250, 370);
-        messageTextPane.setBackground(Color.WHITE);
-        messageTextPane.setEditable(false);
-       
-        frame.add(scrollPane);
-
-        //Create a text field to enter messages
-        messageEnterField = new JTextField();
-        messageEnterField.setBounds(680, 530, 250, 30);
-        messageEnterField.addActionListener(new ActionListener()
+        //Create ScrollPane with white TextPane, if game against AI
+        if (!game.againstAi())
         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                String s = messageEnterField.getText();
-                messageEnterField.setText("");
-                sendMessage(s);
-            }
-        });
-        frame.add(messageEnterField);
+            messageTextPane = new JTextPane();
+            chatScrollPane = new JScrollPane(messageTextPane);
+            chatScrollPane.setBounds(680, 150, 300, 370);
+            messageTextPane.setBounds(0, 0, 250, 370);
+            messageTextPane.setBackground(Color.WHITE);
+            messageTextPane.setEditable(false);
+            frame.add(chatScrollPane);
 
-        //Create button to send a message
-        buttonSend = new JButton("Send");
-        buttonSend.setBounds(935, 530, 45, 30);
-        buttonSend.setMargin(new Insets(1, 1, 1, 1));
-        buttonSend.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+            //Create a text field to enter messages
+            messageEnterField = new JTextField();
+            messageEnterField.setBounds(680, 530, 250, 30);
+            messageEnterField.addActionListener(new ActionListener()
             {
-                String s = messageEnterField.getText();
-                messageEnterField.setText("");
-                sendMessage(s);
-            }
-        });
-        frame.add(buttonSend);
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    String s = messageEnterField.getText();
+                    messageEnterField.setText("");
+                    sendMessage(s);
+                }
+            });
+            frame.add(messageEnterField);
+
+            //Create button to send a message
+            buttonSend = new JButton("Send");
+            buttonSend.setBounds(935, 530, 45, 30);
+            buttonSend.setMargin(new Insets(1, 1, 1, 1));
+            buttonSend.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    String s = messageEnterField.getText();
+                    messageEnterField.setText("");
+                    sendMessage(s);
+                }
+            });
+            frame.add(buttonSend);
+        }
 
         //Create menubar
         menuBar = new JMenuBar();
-
         frame.setJMenuBar(menuBar);
 
         //Create menus in the menubar
@@ -209,22 +173,6 @@ public class Field
         menuBar.add(menuHelp);
 
         //Create items in menu "File"
-        //New
-        menuItemNew = new JMenuItem("New");
-
-        menuFile.add(menuItemNew);
-
-        menuItemNew.addActionListener(
-                new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        running = false;
-                        createNewGame(rows, columns);
-                    }
-                });
-
         //Create save-item if game against AI   
         if (game.againstAi())
         {
@@ -250,7 +198,6 @@ public class Field
                 frame.setVisible(false);
                 game.finish();
             }
-
         });
         menuFile.add(menuItemBackToLobby);
 
@@ -271,6 +218,22 @@ public class Field
         menuFile.add(menuItemExit);
 
         //Create menu "Game"
+        //New
+        menuItemNew = new JMenuItem("New");
+        menuGame.add(menuItemNew);
+
+        menuItemNew.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        running = false;
+                        createNewGame(rows, columns);
+                    }
+                });
+
+        //Resize
         menuResize = new JMenu("Resize Field");
         menuGame.add(menuResize);
 
@@ -298,8 +261,7 @@ public class Field
                     {
                         resizePressed(9, 10);
                     }
-                }
-        );
+                });
         menuResize.add(menuItemSize2);
 
         menuItemSize3 = new JMenuItem("12 x 13");
@@ -355,11 +317,6 @@ public class Field
         frame.setVisible(true);
     }
 
-    private void exitGame()
-    {
-        game.finish();
-    }
-
     //Create dialog when "Save" was pressed in "File"
     private void createSaveDialog()
     {
@@ -380,15 +337,35 @@ public class Field
     {
         dialogInfo = new JDialog();
         dialogInfo.setTitle("Information");
-        dialogInfo.setSize(400, 300);
+        dialogInfo.setSize(450, 400);
+        dialogInfo.setLayout(null);
         dialogInfo.setLocationRelativeTo(frame);
 
-        infoText = new JLabel();
-        infoText.setText("alsduihgfajh asdlkfjh kjh sdfj");
+        infoText = new JTextArea();
+        infoText.setEditable(false);
+        infoText.setBackground(null);
+        infoText.setText(
+                "Regeln:\n"
+                + "Die Spieler legen nacheinander Steine in das Spielfeld.\n"
+                + "Hierfür müssen die Buttons oberhalb der entspechenden Kolonne\n"
+                + "angecklickt werden. Ist eine Kolonne voll, kann kein Stein\n"
+                + "mehr hineingelegt werden.\n"
+                + "Wer zuerst vier Steine horizontal, vertikal oder diagonal\n"
+                + "nebeneinander hat gewinnt das Spiel.\n\n"
+                + "Hinweise:\n"
+                + "An Anfang eines Spiels kann die Grösse des Spielfeldes unter\n"
+                + "\"Game\" -> \"Resize\" festgelegt werden. Sobald der erste\n"
+                + "Spielzug gemacht wurde, kann die Grösse nicht mehr verändert\n"
+                + "werden.\n"
+                + "Mit \"Game\" -> \"New\" kann jederzeit ein neues Spiel gestartet\n"
+                + "werden.\n"
+                + "Wird gengen den Computer gespielt, kann das Spiel jederzeit unter\n"
+                + "\"File\" -> \"Save\" gespeichert werden.\n\n"
+                + "Autoren:\n"
+                + "Leonini Mario, Moor Boris, Studer Yves");
         dialogInfo.add(infoText);
-        infoText.setBounds(50, 50, 300, 200);
+        infoText.setBounds(20, 20, 430, 380);
         dialogInfo.setVisible(true);
-
     }
 
     private void createButtons()
@@ -411,7 +388,6 @@ public class Field
                 public void actionPerformed(ActionEvent e)
                 {
                     columnSelected(j);
-
                 }
             });
             panelButtons.add(buttonSelectList[i]);
@@ -442,6 +418,12 @@ public class Field
         sendMyStone(col);
     }
 
+    /**
+     * Method to check if a column is full.
+     *
+     * @param col Number of the selectet column.
+     * @return true if the column is full.
+     */
     private boolean isColumnFull(int col)
     {
         boolean isFull = true;
@@ -506,6 +488,7 @@ public class Field
         setLabelText();
         panelBoard.setVisible(false);
         createBoard(rows, columns);
+        //
         panelBoard.setVisible(false);
         panelBoard.setVisible(true);
     }
@@ -677,7 +660,6 @@ public class Field
         {
             color = c;
             this.setBackground(Color.BLUE);
-
         }
 
         @Override
