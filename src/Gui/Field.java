@@ -189,7 +189,6 @@ public class Field
         menuItemBackToLobby = new JMenuItem("Back to lobby");
         menuItemBackToLobby.addActionListener(new ActionListener()
         {
-
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -237,25 +236,21 @@ public class Field
 
         //Create submenus in "Resize"
         menuItemSize1 = new JMenuItem("6 x 7");
-        menuItemSize1.addActionListener(
-                new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e
-                    )
-                    {
-                        resizePressed(6, 7);
-                    }
-                });
+        menuItemSize1.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                resizePressed(6, 7);
+            }
+        });
         menuResize.add(menuItemSize1);
 
         menuItemSize2 = new JMenuItem("9 x 10");
-        menuItemSize2.addActionListener(
-                new ActionListener()
+        menuItemSize2.addActionListener(new ActionListener()
                 {
                     @Override
-                    public void actionPerformed(ActionEvent e
-                    )
+                    public void actionPerformed(ActionEvent e)
                     {
                         resizePressed(9, 10);
                     }
@@ -263,32 +258,28 @@ public class Field
         menuResize.add(menuItemSize2);
 
         menuItemSize3 = new JMenuItem("12 x 13");
-        menuItemSize3.addActionListener(
-                new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e
-                    )
-                    {
-                        resizePressed(12, 13);
-                    }
-                });
+        menuItemSize3.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                resizePressed(12, 13);
+            }
+        });
         menuResize.add(menuItemSize3);
 
         //Create items in menu "Help"
         //Info
         menuItemInfo = new JMenuItem("Info");
         menuHelp.add(menuItemInfo);
-        menuItemInfo.addActionListener(
-                new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e
-                    )
-                    {
-                        createInfoDialog();
-                    }
-                });
+        menuItemInfo.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                createInfoDialog();
+            }
+        });
 
         //Create the label, that indicates who has to play
         labelTurn = new JLabel();
