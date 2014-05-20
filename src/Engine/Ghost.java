@@ -125,10 +125,13 @@ public class Ghost
     }
 
     /**
-     * Create a random number. When the random turn provide a win for the human
-     * in the next turn, it will calculate an other random number.
+     * Create a random number from two given possibilities. When the random turn 
+     * provide a win for the human in the next turn, it will calculate an other 
+     * random number.
      *
      * @param field representation of the current field
+     * @param first first number
+     * @param second second number
      * @return a random number
      */
     private DataTransport createRandomTurn(final GameState field, final int first, final int second)
@@ -209,6 +212,13 @@ public class Ghost
         return new DataTransport(tmp);
     }
 
+    /**
+     * Create a random number. When the random turn provide a win for the human
+     * in the next turn, it will calculate an other random number.
+     *
+     * @param field representation of the current field
+     * @return a random number
+     */
     private DataTransport createRandomTurn(final GameState field)
     {
         return createRandomTurn(field, -1, -1);
