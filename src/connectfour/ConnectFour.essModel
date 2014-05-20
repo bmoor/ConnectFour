@@ -1,0 +1,98 @@
+[Box: ::Engine - ::Gui::Field]
+X=891
+Y=685
+
+[Box: ::Engine - ::Gui::Lobby]
+X=423
+Y=1638
+
+[Box: ::Engine - ::Network::Player]
+X=686
+Y=685
+
+[Box: ::Gui - ::<<Unknown>>::JFrame]
+X=20
+Y=40
+
+[Box: ::Gui - ::<<Unknown>>::JPanel]
+X=225
+Y=40
+
+[Box: ::Gui - ::Gui::Field]
+X=430
+Y=40
+
+[Box: ::Gui - ::Gui::Field.Stone]
+X=224
+Y=172
+
+[Box: ::Gui - ::Gui::Lobby]
+X=19
+Y=170
+
+[Diagram: ::Gui]
+OffsetX=209
+OffsetY=0
+Visibility=0
+ShowAssoc=0
+
+[Box: ::Network - ::<<Unknown>>::Runnable]
+X=20
+Y=356
+
+[Box: ::Network - ::<<Unknown>>::Thread]
+X=327
+Y=40
+
+[Box: ::Network - ::Network::GameInfo]
+X=532
+Y=40
+
+[Box: ::Network - ::Network::Player]
+X=239
+Y=233
+
+[Box: ::Network - ::Network::TcpRead]
+X=444
+Y=233
+
+[Box: ::Network - ::Network::UDPServer]
+X=20
+Y=40
+
+[Diagram: ::Network]
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowAssoc=0
+
+[Box: ::Engine - ::<<Unknown>>::java.io.Serializable]
+X=573
+Y=348
+
+[Box: ::Engine - ::Engine::DataTransport]
+X=631
+Y=32
+
+[Box: ::Engine - ::Engine::Game]
+X=33
+Y=30
+
+[Box: ::Engine - ::Engine::GameState]
+X=426
+Y=32
+
+[Box: ::Engine - ::Engine::Ghost]
+X=228
+Y=31
+
+[Box: ::Engine - ::Engine::WinnerChecker]
+X=229
+Y=249
+
+[Diagram: ::Engine]
+OffsetX=0
+OffsetY=0
+Visibility=0
+ShowAssoc=1
+
