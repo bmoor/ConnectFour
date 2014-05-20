@@ -39,9 +39,9 @@ public class Field
     private JMenuItem menuItemExit;
     private JMenuItem menuItemBackToLobby;
     private JMenuItem menuItemSave;
-    private JMenuItem menuItemSize1;
-    private JMenuItem menuItemSize2;
-    private JMenuItem menuItemSize3;
+    private JMenuItem menuItemSizeA;
+    private JMenuItem menuItemSizeB;
+    private JMenuItem menuItemSizeC;
     private JMenuItem menuItemInfo;
     private JDialog dialogSave;
     private JDialog dialogInfo;
@@ -53,8 +53,8 @@ public class Field
     private State[][] board;
     private final Color myColor;
     private final Color otherColor;
-    private final int BOARD_WIDTH = 600;
-    private final int BOARD_HEIGHT = 500;
+    private static final int BOARD_WIDTH = 600;
+    private static final int BOARD_HEIGHT = 500;
     private int rows = 6;
     private int columns = 7;
     private final Game game;
@@ -65,20 +65,16 @@ public class Field
     private boolean running = false;
     private String textChat = "";
 
+    /**
+     * Constructor
+     *
+     * @param game Reference to the Game class
+     * @param myTurn True if it's my turn
+     */
     public Field(Game game, boolean myTurn)
     {
         this.game = game;
         isMyTurn = myTurn;
-        if (isMyTurn)
-        {
-            myColor = Color.RED;
-            otherColor = Color.YELLOW;
-        }
-        else
-        {
-            myColor = Color.YELLOW;
-            otherColor = Color.RED;
-        }
         won = false;
         lost = false;
         drawn = false;
@@ -91,15 +87,29 @@ public class Field
                 board[r][c] = EMPTY;
             }
         }
+        //Set myColor red, if myTurn is true, else set myColor yellow
+        if (isMyTurn)
+        {
+            myColor = Color.RED;
+            otherColor = Color.YELLOW;
+        }
+        else
+        {
+            myColor = Color.YELLOW;
+            otherColor = Color.RED;
+        }
         createGUI();
         createBoard(rows, columns);
         buttonController();
         setLabelText();
     }
 
+    /**
+     * Method to create the whole GUI. The default size of the board is 6 x 7
+     */
     private void createGUI()
     {
-        //Create frame
+        //Create the mainframe
         frame = new JFrame("Connect four");
         frame.setSize(1010, 700);
         frame.setLocationRelativeTo(null);
@@ -164,14 +174,14 @@ public class Field
 
         //Create menus in the menubar
         menuFile = new JMenu("File");
-        menuGame = new JMenu("Game");
-        menuHelp = new JMenu("Help");
         menuBar.add(menuFile);
+        menuGame = new JMenu("Game");
         menuBar.add(menuGame);
+        menuHelp = new JMenu("Help");
         menuBar.add(menuHelp);
 
         //Create items in menu "File"
-        //Create save-item if game against AI   
+        //Save, if game against AI   
         if (game.againstAi())
         {
             menuItemSave = new JMenuItem("Save");
@@ -186,6 +196,7 @@ public class Field
             });
         }
 
+        //Back to lobby
         menuItemBackToLobby = new JMenuItem("Back to lobby");
         menuItemBackToLobby.addActionListener(new ActionListener()
         {
@@ -198,13 +209,12 @@ public class Field
         });
         menuFile.add(menuItemBackToLobby);
 
-        //Separate exit from the other items
+        //Separate the exit item from the other items
         menuFile.addSeparator();
 
         //Exit
         menuItemExit = new JMenuItem("Exit");
-        menuItemExit.addActionListener(
-                new ActionListener()
+        menuItemExit.addActionListener(new ActionListener()
                 {
                     @Override
                     public void actionPerformed(ActionEvent e)
@@ -214,29 +224,27 @@ public class Field
                 });
         menuFile.add(menuItemExit);
 
-        //Create menu "Game"
+        //Create items in menu "Game"
         //New
         menuItemNew = new JMenuItem("New");
+        menuItemNew.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                running = false;
+                createNewGame(rows, columns);
+            }
+        });
         menuGame.add(menuItemNew);
-
-        menuItemNew.addActionListener(
-                new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        running = false;
-                        createNewGame(rows, columns);
-                    }
-                });
 
         //Resize
         menuResize = new JMenu("Resize Field");
         menuGame.add(menuResize);
 
         //Create submenus in "Resize"
-        menuItemSize1 = new JMenuItem("6 x 7");
-        menuItemSize1.addActionListener(new ActionListener()
+        menuItemSizeA = new JMenuItem("6 x 7");
+        menuItemSizeA.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -244,21 +252,21 @@ public class Field
                 resizePressed(6, 7);
             }
         });
-        menuResize.add(menuItemSize1);
+        menuResize.add(menuItemSizeA);
 
-        menuItemSize2 = new JMenuItem("9 x 10");
-        menuItemSize2.addActionListener(new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        resizePressed(9, 10);
-                    }
-                });
-        menuResize.add(menuItemSize2);
+        menuItemSizeB = new JMenuItem("9 x 10");
+        menuItemSizeB.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                resizePressed(9, 10);
+            }
+        });
+        menuResize.add(menuItemSizeB);
 
-        menuItemSize3 = new JMenuItem("12 x 13");
-        menuItemSize3.addActionListener(new ActionListener()
+        menuItemSizeC = new JMenuItem("12 x 13");
+        menuItemSizeC.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -266,12 +274,11 @@ public class Field
                 resizePressed(12, 13);
             }
         });
-        menuResize.add(menuItemSize3);
+        menuResize.add(menuItemSizeC);
 
         //Create items in menu "Help"
         //Info
         menuItemInfo = new JMenuItem("Info");
-        menuHelp.add(menuItemInfo);
         menuItemInfo.addActionListener(new ActionListener()
         {
             @Override
@@ -280,8 +287,9 @@ public class Field
                 createInfoDialog();
             }
         });
+        menuHelp.add(menuItemInfo);
 
-        //Create the label, that indicates who has to play
+        //Create the label that indicates who has to play
         labelTurn = new JLabel();
         labelTurn.setBounds(680, 100, 300, 35);
         Font schrift = new Font("Serif", Font.BOLD + Font.ITALIC, 25);
@@ -289,14 +297,14 @@ public class Field
         setLabelText();
         frame.add(labelTurn);
 
-        //Shows the player his own color
+        //Create the label that shows the players color
         labelMyColor = new JLabel("My color:");
         labelMyColor.setFont(new Font("Arial", 0, 20));
         labelMyColor.setBounds(680, 35, 90, 30);
+        frame.add(labelMyColor);
         panelMyColor = new JPanel();
         panelMyColor.setBackground(myColor);
         panelMyColor.setBounds(775, 35, 30, 30);
-        frame.add(labelMyColor);
         frame.add(panelMyColor);
 
         //Create the buttons on the frame
@@ -306,7 +314,9 @@ public class Field
         frame.setVisible(true);
     }
 
-    //Create dialog when "Save" was pressed in "File"
+    /**
+     * Method to create the save dialog, when "Save" was pressed in "File"
+     */
     private void createSaveDialog()
     {
         JFileChooser chooser = new JFileChooser();
@@ -321,18 +331,24 @@ public class Field
         }
     }
 
-    //Create dialog when "Info" was pressed in "Help"
+    /**
+     * Method to create the info dialog, when "Info" was pressed in "Help"
+     */
     private void createInfoDialog()
     {
+        //Create the info dialog
         dialogInfo = new JDialog();
         dialogInfo.setTitle("Information");
         dialogInfo.setSize(450, 400);
         dialogInfo.setLayout(null);
         dialogInfo.setLocationRelativeTo(frame);
+        dialogInfo.setResizable(false);
 
+        //Create the text on the info dialog
         infoText = new JTextArea();
         infoText.setEditable(false);
         infoText.setBackground(null);
+        infoText.setBounds(20, 20, 430, 380);
         infoText.setText(
                 "Regeln:\n"
                 + "Die Spieler legen nacheinander Steine in das Spielfeld.\n"
@@ -353,10 +369,12 @@ public class Field
                 + "Autoren:\n"
                 + "Leonini Mario, Moor Boris, Studer Yves");
         dialogInfo.add(infoText);
-        infoText.setBounds(20, 20, 430, 380);
         dialogInfo.setVisible(true);
     }
 
+    /**
+     * Mehtod to create the buttons to select a column.
+     */
     private void createButtons()
     {
         //Create panel 
@@ -368,8 +386,8 @@ public class Field
         buttonSelectList = new JButton[columns];
         for (int i = 0; i < columns; i++)
         {
-            final int j = i;
-            buttonSelectList[i] = new JButton("\u21E9");
+            final int j = i; //satisfying the compiler
+            buttonSelectList[i] = new JButton("\u21E9"); //Uni-Code for an arrow down
             buttonSelectList[i].setMargin(new Insets(1, 1, 1, 1));
             buttonSelectList[i].addActionListener(new ActionListener()
             {
@@ -385,6 +403,10 @@ public class Field
         panelButtons.setVisible(true);
     }
 
+    /**
+     * Method to set a stone in the selected column.
+     * @param col Index of the selectet column
+     */
     private void columnSelected(int col)
     {
         int index = rows - 1;
@@ -397,19 +419,15 @@ public class Field
                 done = true;
             }
             index--;
-            if (isColumnFull(col))
-            {
-                buttonSelectList[col].setEnabled(false);
-            }
         }
         while (!done && !isColumnFull(col));
         updateBoard();
+        buttonController();
         sendMyStone(col);
     }
 
     /**
      * Method to check if a column is full.
-     *
      * @param col Number of the selectet column.
      * @return true if the column is full.
      */
@@ -426,13 +444,18 @@ public class Field
         return isFull;
     }
 
+    /**
+     * Method to reate the play board.
+     * @param ro Number of rows
+     * @param co Number of columns
+     */
     private void createBoard(int ro, int co)
     {
-        //create a blue panel
+        //Create a blue panel
         panelBoard = new JPanel();
         panelBoard.setBounds(50, 100, BOARD_WIDTH, BOARD_HEIGHT);
         panelBoard.setBackground(Color.BLUE);
-        panelBoard.setLayout(new GridLayout(ro, co, 0, 0));
+        panelBoard.setLayout(new GridLayout(ro, co));
         frame.add(panelBoard);
 
         //Add white circles to panel
@@ -447,12 +470,22 @@ public class Field
         panelBoard.setVisible(true);
     }
 
+    /**
+     * Method that is called, if "Resize" in menu "Game" was pressed.
+     * @param ro New numbers of rows
+     * @param co New numbers of columns
+     */
     private void resizePressed(int ro, int co)
     {
         resizeBoard(ro, co);
         sendNewBoardsizeToOther(ro, co);
     }
 
+    /**
+     * Method to resize the board.
+     * @param ro New numbers of rows
+     * @param co New numbers of columns
+     */
     public void resizeBoard(int ro, int co)
     {
         rows = ro;
@@ -482,17 +515,30 @@ public class Field
         panelBoard.setVisible(true);
     }
 
+    /**
+     * Method to send the new boardsize to the opponent.
+     * @param ro New number of rows 
+     * @param co New number of columns
+     */
     private void sendNewBoardsizeToOther(int ro, int co)
     {
         game.resizeField(ro, co);
     }
 
+    /**
+     * Method to create a new game
+     * @param ro Number of rows
+     * @param co Number of columns
+     */
     private void createNewGame(int ro, int co)
     {
         resizeBoard(ro, co);
         sendNewBoardsizeToOther(ro, co);
     }
 
+    /**
+     * Method to enable and disable the buttons.
+     */
     private void buttonController()
     {
         boolean b = isMyTurn;
@@ -513,6 +559,9 @@ public class Field
         }
     }
 
+    /**
+     * Method to change the text
+     */
     private void setLabelText()
     {
         if (won)
@@ -545,6 +594,11 @@ public class Field
         }
     }
 
+    /**
+     * Method to send a DataTransport object with the number of the 
+     * selected column
+     * @param col Number of the selected column
+     */
     private void sendMyStone(int col)
     {
         DataTransport dt = new DataTransport(col);
@@ -556,6 +610,10 @@ public class Field
         game.UiTurnPreformed(dt);
     }
 
+    /**
+     * Method to send a DataTransport object with a text message
+     * @param text Text message
+     */
     private void sendMessage(String text)
     {
         textChat += "You:\n" + text + "\n\n";
@@ -564,15 +622,22 @@ public class Field
         game.UiTurnPreformed(dt);
     }
 
+    /**
+     * Method to recieve and display a text message
+     * @param text Text message
+     */
     public void receiveMessage(String text)
     {
         textChat += "Opponent:\n" + text + "\n\n";
         messageTextPane.setText(textChat);
     }
 
+    /**
+     * Method to recieve a new stone from the opponent by a GameState object
+     * @param gs Object containing the number of the selected column by the opponent
+     */
     public void setStone(GameState gs)
     {
-
         int myRow = rows - 1;
         for (int r = 0; r < rows; r++)
         {
@@ -580,7 +645,7 @@ public class Field
             {
                 board[myRow][c] = gs.getStone(r, c);
             }
-            myRow--;// Wüescht i weiss
+            myRow--;  // Wüescht i weiss
         }
         isMyTurn = gs.isMyTurn();
         updateBoard();
@@ -590,11 +655,17 @@ public class Field
         resizeMenuController();
     }
 
+    /**
+     * Method to enable and disable the menu item "Resize".
+     */
     private void resizeMenuController()
     {
         menuResize.setEnabled(!running || won || lost || drawn);
     }
 
+    /**
+     * Methot which is called from the game class if player won
+     */
     public void won()
     {
         won = true;
@@ -602,6 +673,9 @@ public class Field
         setLabelText();
     }
 
+    /**
+     * Methot which is called from the game class if player lost
+     */
     public void lost()
     {
         lost = true;
@@ -609,6 +683,9 @@ public class Field
         setLabelText();
     }
 
+    /**
+     * Methot which is called from the game class if nobody won
+     */
     public void drawn()
     {
         drawn = true;
@@ -616,8 +693,9 @@ public class Field
         setLabelText();
     }
 
-    //Check each entry in "board", create a new circle
-    //in the specific color and add it to the board
+    /**
+     * Method to update the colors of the stones on the board.
+     */
     private void updateBoard()
     {
         for (int r = 0; r < rows; r++)
@@ -640,17 +718,28 @@ public class Field
         }
     }
 
+    /**
+     * Inner class. 
+     * Each object of this class represents a stone on the board.
+     */
     private class Stone extends JPanel
     {
 
         private Color color;
 
-        public Stone(Color c)
+        /**
+         * Constructor
+         * @param color Color of the stone
+         */
+        public Stone(Color color)
         {
-            color = c;
+            this.color = color;
             this.setBackground(Color.BLUE);
         }
 
+        /**
+         * Inherithed method from JPanel to paint circles on the JPanel
+         */
         @Override
         public void paint(Graphics g)
         {
@@ -662,9 +751,13 @@ public class Field
                     (int) ((BOARD_WIDTH / columns) * 0.75));
         }
 
-        public void setColor(Color col)
+        /**
+         * Method to  chance the color of the stone.
+         * @param color New color object
+         */
+        public void setColor(Color color)
         {
-            color = col;
+            this.color = color;
             super.repaint();
         }
     }
