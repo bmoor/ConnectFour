@@ -29,8 +29,7 @@ public class Ghost
         do
         {
             z = (int) (Math.random() * (to - from + 1) + from);
-        }
-        while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
+        } while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
         System.out.println("Random " + z);
         return z;
     }
@@ -122,6 +121,71 @@ public class Ghost
     private boolean isEmptyStone(final GameState field, final int y, final int x)
     {
         return field.getStone(y, x) == State.EMPTY;
+    }
+
+    /**
+     * Create a random number. When the random turn provide a win for the human
+     * in the next turn, it will calculate an other random number.
+     *
+     * @param field representation of the current field
+     * @return a random number
+     */
+    private DataTransport createRandomTurn(final GameState field)
+    {
+        int breaker = 0;
+        do
+        {
+            final int x = random(field, 0, field.getYsize());
+            int y = 0;
+            for (; y < field.getYsize(); y++)
+            {
+                if (isEmptyStone(field, y, x))
+                {
+                    break;
+                }
+            }
+            if (y == field.getYsize() - 1)
+            {
+                return new DataTransport(x);
+            }
+            y++;// we have to check on the next y-level
+
+            int c1 = 1;
+            for (int xx = x - 1; (xx > x) && (xx > 0); xx--)
+            {
+                if (isThisStone(field, State.MINE, y, xx))
+                {
+                    c1++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            int c2 = 0;
+            for (int xx = x + 1; (xx < field.getXsize()) && (xx < x + 3); xx++)
+            {
+                if (isThisStone(field, State.MINE, y, xx))
+                {
+                    c2++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (c1 + c2 == 3)
+            {
+                // random number is bad, because the human can win in the next turn
+                continue;
+            }
+
+            breaker++;
+            return new DataTransport(x);
+        } while (breaker < 50);
+        System.out.println("schlaufe wurde abgebrochen");
+        return new DataTransport(random(field, 0, field.getYsize()));
     }
 
     /**
@@ -511,6 +575,6 @@ public class Ghost
         {
             return tmp;
         }
-        return new DataTransport(random(field, 0, field.getYsize()));
+        return createRandomTurn(field);
     }
 }
