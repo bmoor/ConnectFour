@@ -82,7 +82,7 @@ public class Lobby extends JFrame
         
         //ButtonPanel
         pnlButtons = new JPanel();
-        pnlButtons.setLayout(new BoxLayout(pnlButtons, BoxLayout.Y_AXIS));        
+        pnlButtons.setLayout(new GridLayout(7,1,0,3));  
         pnlLobby.add(pnlButtons, BorderLayout.EAST);
         
         //Button CreateGame / Cancel
@@ -106,7 +106,7 @@ public class Lobby extends JFrame
                 }
             }
         });
-        pnlButtons.add(btnCreateGame, BorderLayout.EAST);
+        pnlButtons.add(btnCreateGame);
         
         //Button JoinGame
         btnJoinGame = new JButton("Join Game");        
@@ -125,7 +125,7 @@ public class Lobby extends JFrame
                 }
             }
         });
-        pnlButtons.add(btnJoinGame, BorderLayout.EAST);
+        pnlButtons.add(btnJoinGame);
         
         // Button Join Game Through IP
         btnJoinGameIP = new JButton("Join Game Through IP");
@@ -144,7 +144,7 @@ public class Lobby extends JFrame
                 }
             }
         });
-        pnlButtons.add(btnJoinGameIP, BorderLayout.EAST);
+        pnlButtons.add(btnJoinGameIP);
         
         // Button Start Game with AI
         btnJoinGameAI = new JButton("Start Game with AI");
@@ -155,7 +155,7 @@ public class Lobby extends JFrame
                 startAi();                
             }
         });
-        pnlButtons.add(btnJoinGameAI, BorderLayout.EAST);
+        pnlButtons.add(btnJoinGameAI);
         
         // Button Load Game
         btnLoadGame = new JButton("Load Game");
@@ -166,7 +166,7 @@ public class Lobby extends JFrame
                LoadGame();      
             }
         });
-        pnlButtons.add(btnLoadGame, BorderLayout.EAST);
+        pnlButtons.add(btnLoadGame);
         
         // Button Refresh List
         btnRefresh = new JButton("List games by broadcast");
@@ -177,7 +177,7 @@ public class Lobby extends JFrame
                 PerformBroadcast();
             }
         });
-        pnlButtons.add(btnRefresh, BorderLayout.SOUTH);
+        pnlButtons.add(btnRefresh);
         
         // Button Refresh List IP
         btnRefreshIP = new JButton("List games in network");
@@ -188,7 +188,7 @@ public class Lobby extends JFrame
                 PerformIPTest();
             }
         });
-        pnlButtons.add(btnRefreshIP, BorderLayout.SOUTH);
+        pnlButtons.add(btnRefreshIP);
         
                 
         //Set visibility
