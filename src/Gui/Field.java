@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -59,7 +58,6 @@ public class Field
     private int rows = 6;
     private int columns = 7;
     private final Game game;
-
     private boolean won;
     private boolean lost;
     private boolean drawn;
@@ -67,9 +65,9 @@ public class Field
     private boolean running = false;
     private String textChat = "";
 
-    public Field(Game ga, boolean myTurn)
+    public Field(Game game, boolean myTurn)
     {
-        game = ga;
+        this.game = game;
         isMyTurn = myTurn;
         if (isMyTurn)
         {
