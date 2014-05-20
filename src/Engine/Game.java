@@ -26,7 +26,7 @@ public class Game
     private Ghost ai = null;
     private boolean gameDecided;
     private Player opponent = null;
-    private Lobby lobby;
+    private final Lobby lobby;
 
     /**
      * Constructor for a game against AI
@@ -73,7 +73,6 @@ public class Game
         field = new GameState(6, 7);
         field.setMyTurn(myTurn);
         ui = new Field(this, myTurn);
-        //ui.setStone(field);
     }
 
     /**
