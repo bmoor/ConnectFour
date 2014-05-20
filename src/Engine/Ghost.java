@@ -23,13 +23,14 @@ public class Ghost
      * @param to upper boarder of random range
      * @return A random number between the given boraders
      */
-    private int random(final GameState field, final int from, final int to)
+    private int random(final GameState field)
     {
         int z;
         do
         {
-            z = (int) (Math.random() * (to - from + 1) + from);
-        } while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
+            z = (int) (Math.random() * field.getXsize());
+        }
+        while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
         System.out.println("Random " + z);
         return z;
     }
@@ -130,28 +131,38 @@ public class Ghost
      * @param field representation of the current field
      * @return a random number
      */
-    private DataTransport createRandomTurn(final GameState field)
+    private DataTransport createRandomTurn(final GameState field, final int first, final int second)
     {
         int breaker = 0;
         do
         {
-            final int x = random(field, 0, field.getYsize());
-            int y = 0;
-            for (; y < field.getYsize(); y++)
+            int tmp;
+            if (first < 0)
             {
-                if (isEmptyStone(field, y, x))
+                tmp = random(field);
+            }
+            else
+            {
+                tmp = random(first, second);
+            }
+            final int x = tmp;
+            int yt = 0;
+            for (; yt < field.getYsize(); yt++)
+            {
+                if (isEmptyStone(field, yt, x))
                 {
                     break;
                 }
             }
-            if (y == field.getYsize() - 1)
+            if (yt == field.getYsize() - 1)
             {
+                // we are on top of the game field. There is nothing to check
                 return new DataTransport(x);
             }
-            y++;// we have to check on the next y-level
+            final int y = yt + 1;// we have to check on the next y-level
 
-            int c1 = 1;
-            for (int xx = x - 1; (xx > x) && (xx > 0); xx--)
+            int c1 = 0;
+            for (int xx = x - 1; (xx > x - 4) && (xx >= 0); xx--)
             {
                 if (isThisStone(field, State.MINE, y, xx))
                 {
@@ -164,7 +175,7 @@ public class Ghost
             }
 
             int c2 = 0;
-            for (int xx = x + 1; (xx < field.getXsize()) && (xx < x + 3); xx++)
+            for (int xx = x + 1; (xx < field.getXsize()) && (xx < x + 4 - c1); xx++)
             {
                 if (isThisStone(field, State.MINE, y, xx))
                 {
@@ -175,17 +186,32 @@ public class Ghost
                     break;
                 }
             }
-            if (c1 + c2 == 3)
+            if (c1 + c2 + 1 == 4)
             {
                 // random number is bad, because the human can win in the next turn
                 continue;
             }
-
+            // common statemant
             breaker++;
             return new DataTransport(x);
-        } while (breaker < 50);
+        }
+        while (breaker < 50);
         System.out.println("schlaufe wurde abgebrochen");
-        return new DataTransport(random(field, 0, field.getYsize()));
+        int tmp;
+        if (first < 0)
+        {
+            tmp = random(field);
+        }
+        else
+        {
+            tmp = random(first, second);
+        }
+        return new DataTransport(tmp);
+    }
+
+    private DataTransport createRandomTurn(final GameState field)
+    {
+        return createRandomTurn(field, -1, -1);
     }
 
     /**
@@ -297,7 +323,7 @@ public class Ghost
                     }
                     if (y == 0)
                     {
-                        return new DataTransport(random(first, second));
+                        return createRandomTurn(field, first, second);
                     }
                     else
                     {
@@ -320,7 +346,7 @@ public class Ghost
                             }
                             else
                             {
-                                return new DataTransport(random(first, second));
+                                return createRandomTurn(field, first, second);
                             }
                         }
                     }
