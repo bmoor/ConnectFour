@@ -66,8 +66,7 @@ public class Field
     private String textChat = "";
 
     /**
-     * Constructor
-     *
+     * Constructor. 
      * @param game Reference to the Game class
      * @param myTurn True if it's my turn
      */
