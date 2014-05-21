@@ -39,6 +39,9 @@ public class Ghost
             z =randomGenerator.nextInt(field.getYsize()+1);
             if (z == 0)
             {
+                // this code is needed to pimp the random-generator. 
+                // The uniformly distribution is not so nice and with this 
+                // modification it's better
                 if (counter % 13 != 0)
                 {
                     do
@@ -64,7 +67,6 @@ public class Ghost
      */
     private int random(final int first, final int second)
     {
-        //int z = (int) (Math.random() * 2 + 1);
         if (randomGenerator.nextBoolean())
         {
             return first;
