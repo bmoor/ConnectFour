@@ -6,6 +6,7 @@
 package Engine;
 
 import Engine.GameState.State;
+import java.util.Random;
 
 /**
  *
@@ -14,24 +15,42 @@ import Engine.GameState.State;
 public class Ghost
 {
 
+    private int counter = 0;
+    private final Random randomGenerator;
+
+    public Ghost()
+    {
+        randomGenerator = new Random();
+        counter = 0;
+    }
+
     /**
-     * Create a random number between the given borders
+     * Create a random uniformly distributed number
      *
      * @author Yves Studer
      * @param field representation of the current field
-     * @param from lower boarder of random range
-     * @param to upper boarder of random range
      * @return A random number between the given boraders
      */
-    private int random(final GameState field)
+    public int random(final GameState field)
     {
         int z;
         do
         {
-            z = (int) (Math.random() * field.getXsize());
+            z =randomGenerator.nextInt(field.getYsize()+1);
+            if (z == 0)
+            {
+                if (counter % 13 != 0)
+                {
+                    do
+                    {
+                        z =randomGenerator.nextInt(field.getYsize()+1);
+                    }
+                    while (z == 0);
+                }
+                counter++;
+            }
         }
         while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
-        System.out.println("Random " + z);
         return z;
     }
 
@@ -45,8 +64,8 @@ public class Ghost
      */
     private int random(final int first, final int second)
     {
-        int z = (int) (Math.random() * 2 + 1);
-        if (z == 1)
+        //int z = (int) (Math.random() * 2 + 1);
+        if (randomGenerator.nextBoolean())
         {
             return first;
         }
@@ -125,8 +144,8 @@ public class Ghost
     }
 
     /**
-     * Create a random number from two given possibilities. When the random turn 
-     * provide a win for the human in the next turn, it will calculate an other 
+     * Create a random number from two given possibilities. When the random turn
+     * provide a win for the human in the next turn, it will calculate an other
      * random number.
      *
      * @param field representation of the current field
