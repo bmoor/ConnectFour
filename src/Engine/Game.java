@@ -8,8 +8,11 @@ import Engine.GameState.State;
 import Gui.Field;
 import Gui.Lobby;
 import Network.Player;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.regex.Pattern;
@@ -39,6 +42,28 @@ public class Game
         ai = new Ghost();
         lobby = aLobby;
         init(true);
+
+        String st = "\"rand\"\n";
+        int n = 2000;
+        for (int i = 0; i < n; i++)
+        {
+            st += ai.random(field);
+            if (i != n - 1)
+            {
+                st += "\n";
+            }
+        }
+
+        File file = new File("C:\\tmp\\random.txt");
+        try (FileWriter writer = new FileWriter(file))
+        {
+            writer.write(st);
+            writer.flush();
+            writer.close();
+        }
+        catch (IOException e)
+        {
+        }
     }
 
     /**
@@ -103,10 +128,9 @@ public class Game
         }
     }
 
-
     /**
      * Method to resize the internal representation of the gaming-field
-     * 
+     *
      * @author Yves Studer
      * @param newY new y size
      * @param newX new x size
@@ -271,7 +295,7 @@ public class Game
                     opponent.sendMessage(uiTurn);
                 }
                 break;
-                
+
             default:
                 break;
         }
@@ -303,7 +327,7 @@ public class Game
             case CHAT:
                 ui.receiveMessage(tcpTurn.getChat());
                 break;
-                
+
             default:
                 break;
         }
