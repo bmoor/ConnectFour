@@ -200,16 +200,14 @@ public class Ghost
         }
         while (breaker < 50);
         System.out.println("schlaufe wurde abgebrochen");
-        int tmp;
         if (first < 0)
         {
-            tmp = random(field);
+            return new DataTransport(random(field));
         }
         else
         {
-            tmp = random(first, second);
+            return null;
         }
-        return new DataTransport(tmp);
     }
 
     /**
