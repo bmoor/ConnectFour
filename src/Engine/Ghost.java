@@ -37,23 +37,24 @@ public class Ghost
         do
         {
             z =randomGenerator.nextInt(field.getYsize()+1);
-            if (z == 0)
-            {
-                // this code is needed to pimp the random-generator. 
-                // The uniformly distribution is not so nice and with this 
-                // modification it's better
-                if (counter % 13 != 0)
-                {
-                    do
-                    {
-                        z =randomGenerator.nextInt(field.getYsize()+1);
-                    }
-                    while (z == 0);
-                }
-                counter++;
-            }
+//            if (z == 0)
+//            {
+//                // this code is needed to pimp the random-generator. 
+//                // The uniformly distribution is not so nice and with this 
+//                // modification it's better
+//                if (counter % 2 != 0)
+//                {
+//                    do
+//                    {
+//                        z =randomGenerator.nextInt(field.getYsize()+1);
+//                    }
+//                    while (z == 0);
+//                }
+//                counter++;
+//            }
         }
         while (field.getStone(field.getYsize() - 1, z) != State.EMPTY);
+        System.out.println("Random-Zahl" + z);
         return z;
     }
 
