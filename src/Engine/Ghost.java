@@ -34,7 +34,7 @@ public class Ghost
      * @param field representation of the current field
      * @return A random number between the given boraders
      */
-    public int random(final GameState field)
+    private int random(final GameState field)
     {
         int z;
         do
