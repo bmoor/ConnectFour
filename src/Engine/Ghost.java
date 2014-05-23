@@ -133,7 +133,7 @@ public class Ghost
     }
 
     /**
-     * 
+     *
      * @author Yves Studer
      * @param field representation of the current field
      * @param stone owner of the stone
@@ -159,13 +159,13 @@ public class Ghost
     {
         return field.getStone(y, x) == State.EMPTY;
     }
-    
+
     /**
-     * Check the position, if the human can win on the next turn, the method will
-     * return false
-     * 
+     * Check the position, if the human can win on the next turn, the method
+     * will return false
+     *
      * @param field representation of the current field
-     * @param x specified x position 
+     * @param x specified x position
      * @return true if the turn is good otherwise false
      */
     private boolean checkNumberIsIntelligence(final GameState field, final int x)
@@ -213,7 +213,7 @@ public class Ghost
         if (c1 + c2 + 1 == 4)
         {
             // random number is bad, because the human can win in the next turn
-            // return false; ToDo
+            return false;
         }
 
         for (int i = 0; i < 2; i++)
