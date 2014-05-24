@@ -36,7 +36,6 @@ public class WinnerChecker
                     if (field.getRemainingTurns() <= 0)
                     {
                         tmp = -2;
-                        System.out.println("------------------------------\nUnentschieden\n------------------------------------");
                     }
                 }
             }
