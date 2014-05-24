@@ -6,10 +6,15 @@
 package Engine;
 
 import Engine.GameState.State;
+import java.lang.reflect.InvocationTargetException;
 //import java.io.BufferedReader;
 //import java.io.IOException;
 //import java.io.InputStreamReader;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,11 +25,33 @@ public class Ghost
 
     private int counter = 0;
     private final Random randomGenerator;
+    private final ArrayList<String> methodList = new ArrayList<>();
+    private final ArrayList<State> methodArgs = new ArrayList<>();
 
     public Ghost()
     {
         randomGenerator = new Random();
         counter = 0;
+        methodList.add("checkTripplePatternX");
+        methodArgs.add(State.OTHER);
+        methodList.add("checkTripplePatternY");
+        methodArgs.add(State.OTHER);
+        methodList.add("checkTripplePatternXY");
+        methodArgs.add(State.OTHER);
+        methodList.add("checkTripplePatternX");
+        methodArgs.add(State.MINE);
+        methodList.add("checkTripplePatternY");
+        methodArgs.add(State.MINE);
+        methodList.add("checkTripplePatternXY");
+        methodArgs.add(State.MINE);
+        methodList.add("checkDoublePatternX");
+        methodArgs.add(State.MINE);
+        methodList.add("checkDoublePatternY");
+        methodArgs.add(State.MINE);
+        methodList.add("checkDoublePatternX");
+        methodArgs.add(State.OTHER);
+        methodList.add("checkDoublePatternY");
+        methodArgs.add(State.OTHER);
     }
 
     /**
@@ -699,6 +726,12 @@ public class Ghost
         return null;
     }
 
+    private DataTransport methodCaller(final Method method, final GameState field, final State stone)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+    {
+        return (DataTransport) method.invoke(this, field, stone);
+    }
+
     /**
      * Method to call the AI. The order of calculation for a turn is: - AI try
      * to win in x-, y- and both diagonal-directions - AI tries to prevent the
@@ -712,56 +745,21 @@ public class Ghost
      */
     public DataTransport DoTurn(final GameState field)
     {
-        DataTransport tmp;
-        tmp = checkTripplePatternX(field, State.OTHER);
-        if (tmp != null)
+        try
         {
-            return tmp;
+            for (int i = 0; i < methodList.size(); i++)
+            {
+                final Method method = Ghost.class.getDeclaredMethod(methodList.get(i), GameState.class, GameState.State.class);
+                DataTransport tmp = (DataTransport) methodCaller(method, field, methodArgs.get(i));
+                if (tmp != null)
+                {
+                    return tmp;
+                }
+            }
         }
-        tmp = checkTripplePatternY(field, State.OTHER);
-        if (tmp != null)
+        catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex)
         {
-            return tmp;
-        }
-        tmp = checkTripplePatternXY(field, State.OTHER);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkTripplePatternX(field, State.MINE);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkTripplePatternY(field, State.MINE);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkTripplePatternXY(field, State.MINE);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkDoublePatternX(field, State.MINE);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkDoublePatternY(field, State.MINE);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkDoublePatternX(field, State.OTHER);
-        if (tmp != null)
-        {
-            return tmp;
-        }
-        tmp = checkDoublePatternY(field, State.OTHER);
-        if (tmp != null)
-        {
-            return tmp;
+            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
         }
         return createRandomTurn(field);
     }
