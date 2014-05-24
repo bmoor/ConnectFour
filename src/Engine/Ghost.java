@@ -743,7 +743,7 @@ public class Ghost
      * @param field representation of the current field
      * @return DataTransoprt object with the x-value
      */
-    public DataTransport DoTurn(final GameState field)
+    public DataTransport DoTurn(final GameState field) throws GhostException
     {
         try
         {
@@ -760,6 +760,11 @@ public class Ghost
         catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex)
         {
             Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (methodList.size() != methodArgs.size())
+        {
+            throw new GhostException("Method lists doesn't match to the args list");
         }
         return createRandomTurn(field);
     }
