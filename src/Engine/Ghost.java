@@ -745,6 +745,10 @@ public class Ghost
      */
     public DataTransport DoTurn(final GameState field) throws GhostException
     {
+        if (methodList.size() != methodArgs.size())
+        {
+            throw new GhostException("Method lists doesn't match to the args list");
+        }
         try
         {
             for (int i = 0; i < methodList.size(); i++)
@@ -762,10 +766,6 @@ public class Ghost
             Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (methodList.size() != methodArgs.size())
-        {
-            throw new GhostException("Method lists doesn't match to the args list");
-        }
         return createRandomTurn(field);
     }
 }
