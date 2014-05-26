@@ -8,8 +8,11 @@ import Engine.GameState.State;
 import Gui.Field;
 import Gui.Lobby;
 import Network.Player;
+//import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+//import java.io.FileWriter;
+//import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.regex.Pattern;
@@ -39,6 +42,28 @@ public class Game
         ai = new Ghost();
         lobby = aLobby;
         init(true);
+//
+//        String st = "\"rand\"\n";
+//        int n = 10;
+//        for (int i = 0; i < n; i++)
+//        {
+//            st += ai.random(field);
+//            if (i != n - 1)
+//            {
+//                st += "\n";
+//            }
+//        }
+//
+//        File file = new File("C:\\tmp\\random.txt");
+//        try (FileWriter writer = new FileWriter(file))
+//        {
+//            writer.write(st);
+//            writer.flush();
+//            writer.close();
+//        }
+//        catch (IOException e)
+//        {
+//        }
     }
 
     /**
@@ -100,6 +125,7 @@ public class Game
         {
             DataTransport configMob = new DataTransport(newY, newX);
             opponent.sendMessage(configMob);
+            opponent.sendMessage(new DataTransport("Opponent modified field"));
         }
     }
 
