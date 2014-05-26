@@ -103,10 +103,9 @@ public class Game
         }
     }
 
-
     /**
      * Method to resize the internal representation of the gaming-field
-     * 
+     *
      * @author Yves Studer
      * @param newY new y size
      * @param newX new x size
@@ -271,7 +270,7 @@ public class Game
                     opponent.sendMessage(uiTurn);
                 }
                 break;
-                
+
             default:
                 break;
         }
@@ -303,7 +302,7 @@ public class Game
             case CHAT:
                 ui.receiveMessage(tcpTurn.getChat());
                 break;
-                
+
             default:
                 break;
         }
