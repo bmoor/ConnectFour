@@ -188,6 +188,7 @@ public class Lobby extends JFrame
         });
         pnlButtons.add(btnRefreshIP);
         
+        setResizable(false);
                 
         //Set visibility
         setVisible(true);
