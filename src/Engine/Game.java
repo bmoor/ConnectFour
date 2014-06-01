@@ -4,6 +4,7 @@
  */
 package Engine;
 
+import Engine.Ai.Ghost;
 import Engine.GameState.State;
 import Gui.Field;
 import Gui.Lobby;
